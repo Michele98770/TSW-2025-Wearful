@@ -5,7 +5,7 @@ use Wearful;
 create table Utente(
 	email varchar(255) primary key,
     username varchar(50) not null,
-    telfono varchar(13) not null,
+    telefono varchar(13) not null,
     password varchar(255) not null,
     isAdmin boolean not null,
     constraint check_password check(char_length(password)>=8)

@@ -38,7 +38,6 @@ public class ProdottoBean implements Serializable {
         this.gruppo = gruppo;
     }
 
-    // Getters e Setters (abbreviato per brevità)
     public Long getId() {
         return id;
     }
@@ -55,6 +54,77 @@ public class ProdottoBean implements Serializable {
         this.nome = nome;
     }
 
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public String getTaglia() {
+        return taglia;
+    }
+
+    public void setTaglia(String taglia) {
+        this.taglia = taglia;
+    }
+
+    public String getColore() {
+        return colore;
+    }
+
+    public void setColore(String colore) {
+        this.colore = colore;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public float getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(float prezzo) {
+        this.prezzo = prezzo;
+    }
+
+    public boolean isPersonalizzabile() {
+        return personalizzabile;
+    }
+
+    public void setPersonalizzabile(boolean personalizzabile) {
+        this.personalizzabile = personalizzabile;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public Long getGruppo() {
+        return gruppo;
+    }
+
+    public void setGruppo(Long gruppo) {
+        this.gruppo = gruppo;
+    }
 
     public int getIva() {
         return iva;
@@ -64,7 +134,7 @@ public class ProdottoBean implements Serializable {
         this.iva = iva;
     }
 
-    // Metodo per calcolare il prezzo con IVA
+
     public float getPrezzoConIva() {
         return prezzo+(((float)(iva)/100) * prezzo);
     }
