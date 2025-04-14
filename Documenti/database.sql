@@ -23,17 +23,26 @@ CREATE TABLE InfoConsegna
     FOREIGN KEY (idUtente) REFERENCES Utente (email)
 );
 
+create table GruppoProdotti (
+    id bigint unsigned auto_increment primary key,
+    nome varchar(255) not null
+);
+
+
 create table Prodotto(
 	id bigint unsigned not null auto_increment primary key,
     nome varchar(255) not null,
 	descrizione varchar(4096) not null,
     taglia enum('XXXS','XXS','XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL') not null,
+    colore varchar(50) not null,
     categoria varchar(50) not null,
     prezzo decimal(7,2) not null,
     IVA enum ('4', '10', '22'),
     personalizzabile boolean not null,
     imgPath varchar(255) not null,
     publisher varchar(255) not null,
+    gruppo bigint unsigned not null,
+    foreign key (gruppo) references GruppoProdotti(id),
     foreign key(publisher)  references Utente(email)
 );
 
