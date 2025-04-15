@@ -13,7 +13,7 @@ create table Utente(
 
 CREATE TABLE InfoConsegna
 (
-    id bigint unsigned auto_increment primary key not null,
+    id bigint unsigned auto_increment primary key,
     citta varchar(255) not null,
     cap int not null,
     via varchar(255) not null,
@@ -30,10 +30,10 @@ create table GruppoProdotti (
 
 
 create table Prodotto(
-	id bigint unsigned not null auto_increment primary key,
+	id bigint unsigned auto_increment primary key,
     nome varchar(255) not null,
 	descrizione varchar(4096) not null,
-    taglia enum('XXXS','XXS','XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL') not null,
+    taglia enum('XXS','XS','S', 'M', 'L', 'XL', 'XXL') not null,
     colore varchar(50) not null,
     categoria varchar(50) not null,
     prezzo decimal(7,2) not null,
@@ -47,14 +47,28 @@ create table Prodotto(
 );
 
 create table Carrello(
-	id bigint unsigned not null auto_increment,
-    idUtente varchar(255),
-    primary key (id, idUtente),
-    foreign key (idUtente) references Utente (email) on delete cascade
+     id bigint unsigned auto_increment primary key,
+     idUtente varchar(255),
+     primary key (id, idUtente),
+     foreign key (idUtente) references Utente (email) on delete cascade
 );
 
+
+create table CartItem(
+     id bigint unsigned auto_increment primary key ,
+     idProdotto bigint unsigned not null,
+     idCarrello bigint unsigned not null,
+     quantita int unsigned not null,
+     personalizzato boolean not null,
+     imgPath varchar(256),
+     primary key (id,idProdotto,idCarrello),
+     foreign key (idCarrello) references Carrello(id) on delete cascade,
+     foreign key (idProdotto) references Prodotto(id) on delete cascade
+);
+
+
 CREATE TABLE Ordine (
-    id bigint unsigned auto_increment not null,
+    id bigint unsigned auto_increment not null primary key ,
     idUtente varchar(255) not null,
     infoConsegna bigint unsigned not null,
     dataOrdine   datetime default current_timestamp,
@@ -64,7 +78,7 @@ CREATE TABLE Ordine (
 );
 
 create table OrderItem(
-	id bigint unsigned auto_increment not null,
+    id bigint unsigned auto_increment not null primary key ,
     nome varchar(255) not null,
     idProdotto bigint unsigned not null,
     idOrdine bigint unsigned not null,
@@ -74,19 +88,9 @@ create table OrderItem(
     primary key (id,idProdotto,idOrdine),
     foreign key (idOrdine) references Ordine(id) on delete cascade,
     foreign key (idProdotto) references Prodotto(id)
-    );
-    
-create table CartItem(
-	id bigint unsigned auto_increment not null,
-    idProdotto bigint unsigned not null,
-    idCarrello bigint unsigned not null,
-    quantita int unsigned not null,
-    personalizzato boolean not null,
-    imgPath varchar(256),
-    primary key (id,idProdotto,idCarrello),
-    foreign key (idCarrello) references Carrello(id) on delete cascade,
-    foreign key (idProdotto) references Prodotto(id) on delete cascade
-);    
+);
+
+
 
 
 
