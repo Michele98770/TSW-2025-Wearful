@@ -1,96 +1,83 @@
-drop database if exists Wearful;
-create database Wearful;
-use Wearful;
+DROP DATABASE IF EXISTS Wearful;
+CREATE DATABASE Wearful;
+USE Wearful;
 
-create table Utente(
-	email varchar(255) primary key,
-    username varchar(50) not null,
-    telefono varchar(13) not null,
-    password varchar(255) not null,
-    isAdmin boolean not null,
-    constraint check_password check(char_length(password)>=8)
+CREATE TABLE Utente (
+    email    VARCHAR(255) PRIMARY KEY,
+    username VARCHAR(50)  NOT NULL,
+    telefono VARCHAR(13)  NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    isAdmin  BOOLEAN      NOT NULL,
+    CONSTRAINT check_password CHECK (CHAR_LENGTH(password) >= 8)
 );
 
-CREATE TABLE InfoConsegna
-(
-    id bigint unsigned auto_increment primary key,
-    citta varchar(255) not null,
-    cap int not null,
-    via varchar(255) not null,
-    altro varchar(255),
-    destinatario varchar(255) not null,
-    idUtente varchar(255) not null,
-    FOREIGN KEY (idUtente) REFERENCES Utente (email)
+CREATE TABLE InfoConsegna (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    citta VARCHAR(255) NOT NULL,
+    cap INT NOT NULL,
+    via VARCHAR(255) NOT NULL,
+    altro VARCHAR(255),
+    destinatario VARCHAR(255) NOT NULL,
+    idUtente VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idUtente) REFERENCES Utente(email)
 );
 
-create table GruppoProdotti (
-    id bigint unsigned auto_increment primary key,
-    nome varchar(255) not null
+CREATE TABLE GruppoProdotti (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
 );
 
-
-create table Prodotto(
-	id bigint unsigned auto_increment primary key,
-    nome varchar(255) not null,
-	descrizione varchar(4096) not null,
-    taglia enum('XXS','XS','S', 'M', 'L', 'XL', 'XXL') not null,
-    colore varchar(50) not null,
-    categoria varchar(50) not null,
-    prezzo decimal(7,2) not null,
-    IVA enum ('4', '10', '22'),
-    personalizzabile boolean not null,
-    imgPath varchar(255) not null,
-    publisher varchar(255) not null,
-    gruppo bigint unsigned not null,
-    foreign key (gruppo) references GruppoProdotti(id),
-    foreign key(publisher)  references Utente(email)
+CREATE TABLE Prodotto (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descrizione VARCHAR(4096) NOT NULL,
+    taglia ENUM('XXS','XS','S', 'M', 'L', 'XL', 'XXL') NOT NULL,
+    colore VARCHAR(50) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    prezzo DECIMAL(7,2) NOT NULL,
+    IVA ENUM ('4', '10', '22'),
+    personalizzabile BOOLEAN NOT NULL,
+    imgPath VARCHAR(255) NOT NULL,
+    publisher VARCHAR(255) NOT NULL,
+    gruppo BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (gruppo) REFERENCES GruppoProdotti(id),
+    FOREIGN KEY (publisher) REFERENCES Utente(email)
 );
 
-create table Carrello(
-     id bigint unsigned auto_increment primary key,
-     idUtente varchar(255),
-     primary key (id, idUtente),
-     foreign key (idUtente) references Utente (email) on delete cascade
+CREATE TABLE Carrello (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    idUtente VARCHAR(255),
+    FOREIGN KEY (idUtente) REFERENCES Utente(email) ON DELETE CASCADE
 );
 
-
-create table CartItem(
-     id bigint unsigned auto_increment primary key ,
-     idProdotto bigint unsigned not null,
-     idCarrello bigint unsigned not null,
-     quantita int unsigned not null,
-     personalizzato boolean not null,
-     imgPath varchar(256),
-     primary key (id,idProdotto,idCarrello),
-     foreign key (idCarrello) references Carrello(id) on delete cascade,
-     foreign key (idProdotto) references Prodotto(id) on delete cascade
+CREATE TABLE CartItem (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    idProdotto BIGINT UNSIGNED NOT NULL,
+    idCarrello BIGINT UNSIGNED NOT NULL,
+    quantita INT UNSIGNED NOT NULL,
+    personalizzato BOOLEAN NOT NULL,
+    imgPath VARCHAR(256),
+    FOREIGN KEY (idCarrello) REFERENCES Carrello(id) ON DELETE CASCADE,
+    FOREIGN KEY (idProdotto) REFERENCES Prodotto(id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE Ordine (
-    id bigint unsigned auto_increment not null primary key ,
-    idUtente varchar(255) not null,
-    infoConsegna bigint unsigned not null,
-    dataOrdine   datetime default current_timestamp,
-    PRIMARY KEY (id, idUtente),
-    FOREIGN KEY (idUtente) REFERENCES Utente (email),
-    FOREIGN KEY (infoConsegna) REFERENCES InfoConsegna (id)
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    idUtente VARCHAR(255) NOT NULL,
+    infoConsegna BIGINT UNSIGNED NOT NULL,
+    dataOrdine DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idUtente) REFERENCES Utente(email),
+    FOREIGN KEY (infoConsegna) REFERENCES InfoConsegna(id)
 );
 
-create table OrderItem(
-    id bigint unsigned auto_increment not null primary key ,
-    nome varchar(255) not null,
-    idProdotto bigint unsigned not null,
-    idOrdine bigint unsigned not null,
-    prezzo decimal(7,2) not null,
-    quantita int not null,
-    IVA enum('4', '10', '22'),
-    primary key (id,idProdotto,idOrdine),
-    foreign key (idOrdine) references Ordine(id) on delete cascade,
-    foreign key (idProdotto) references Prodotto(id)
+CREATE TABLE OrderItem (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    idProdotto BIGINT UNSIGNED NOT NULL,
+    idOrdine BIGINT UNSIGNED NOT NULL,
+    prezzo DECIMAL(7,2) NOT NULL,
+    quantita INT NOT NULL,
+    IVA ENUM('4', '10', '22'),
+    FOREIGN KEY (idOrdine) REFERENCES Ordine(id) ON DELETE CASCADE,
+    FOREIGN KEY (idProdotto) REFERENCES Prodotto(id)
 );
-
-
-
-
-
