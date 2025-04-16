@@ -174,7 +174,7 @@
         <tr>
             <td><%= prodotto.getId() %></td>
             <td>
-                <img src="<%= prodotto.getImgPath() %>" alt="<%= prodotto.getNome() %>" class="product-img">
+                <img src="img/wide_logo.png" alt="<%= prodotto.getNome() %>" class="product-img">
             </td>
             <td>
                 <strong><%= prodotto.getNome() %></strong><br>
