@@ -1,5 +1,8 @@
 package control;
+import model.ConnectionPool;
+
 import java.io.*;
+import java.sql.Connection;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
