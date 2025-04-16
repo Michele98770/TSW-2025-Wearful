@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ConnectionPool {
-
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/wearful"
             + "?useUnicode=true&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimecode=false&serverTimezone=UTC";
@@ -14,71 +13,101 @@ public class ConnectionPool {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "miky";
     private static List<Connection> freeDbConnections;
+    private static boolean initialized = false;
 
-    // Inizializzazione (da chiamare nel context)
-    public static void init(int poolSize) {
+    // Inizializzazione esplicita
+    public static synchronized void init(int poolSize) throws SQLException {
+        if (initialized) {
+            return;
+        }
+
         freeDbConnections = new LinkedList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
             for (int i = 0; i < poolSize; i++) {
                 freeDbConnections.add(createDBConnection());
             }
+
+            initialized = true;
+            System.out.println("Connection pool initialized with " + poolSize + " connections");
         } catch (ClassNotFoundException e) {
-            System.out.println("DB driver not found:"+ e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("DB access error:"+ e.getMessage());
+            throw new SQLException("MySQL JDBC Driver not found", e);
         }
-        System.out.println("Created " + freeDbConnections.size() + " DB connections");
     }
 
-    private static synchronized Connection createDBConnection() throws SQLException {
-        // newConnection.setAutoCommit(false);
+    private static Connection createDBConnection() throws SQLException {
         return DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
     }
 
-    public static synchronized Connection getConnection() throws EmptyPoolException {
-        if (freeDbConnections.isEmpty()) {
-            throw new EmptyPoolException("Connection pool vuota");
+    public static synchronized Connection getConnection()  {
+
+        Connection conn = freeDbConnections.remove(0);
+
+        try {
+            if (!conn.isValid(1)) {
+                conn.close();
+                return getConnection(); // Ricorsione per ottenere una nuova connessione valida
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
-        System.out.println("Getting connection from pool(" + (freeDbConnections.size() - 1) + ")"); // TODO: log
-        return freeDbConnections.remove(0);
+
+        return conn;
     }
 
     public static synchronized void releaseConnection(Connection connection) {
-        if (connection != null) {
-            freeDbConnections.add(connection);
-            System.out.println("Releasing connection from pool(" + freeDbConnections.size() + ")"); // TODO: log
+        if (connection != null && initialized) {
+            try {
+                if (!connection.isClosed() && connection.isValid(1)) {
+                    freeDbConnections.add(connection);
+                } else {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error while releasing connection: " + e.getMessage());
+            }
         }
     }
 
-    public static void releaseResources() {
-        for (Connection connection : freeDbConnections) {
+    public static synchronized void shutdown() {
+        if (!initialized) {
+            return;
+        }
+
+        for (Connection conn : freeDbConnections) {
             try {
-
-                Enumeration<Driver> drivers = DriverManager.getDrivers();
-
-                Driver driver = null;
-
-                // clear drivers
-                while(drivers.hasMoreElements()) {
-                    try {
-                        driver = drivers.nextElement();
-                        DriverManager.deregisterDriver(driver);
-
-                    } catch (SQLException ex) {
-                        // TODO: log
-                    }
+                if (!conn.isClosed()) {
+                    conn.close();
                 }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+            }
+        }
+        freeDbConnections.clear();
+        initialized = false;
 
-                try {
-                    Class<?> clazz = Class.forName("com.mysql.cj.jdbc.AbandonedConnectionCleanupThread");
-                    java.lang.reflect.Method method = clazz.getMethod("checkedShutdown");
-                    method.invoke(null);
-                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
-                    System.out.println("Non riesco a trovare la classe"); // TODO: log
-                }
-                connection.close();
-            } catch (SQLException ignored) {}
+        // Pulizia driver MySQL
+        releaseResources();
+    }
+
+    public static void releaseResources() {
+
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+            } catch (SQLException e) {
+                System.err.println("Error deregistering driver: " + e.getMessage());
+            }
+        }
+
+        try {
+            Class<?> clazz = Class.forName("com.mysql.cj.jdbc.AbandonedConnectionCleanupThread");
+            clazz.getMethod("checkedShutdown").invoke(null);
+        } catch (Exception e) {
+
         }
     }
 }
