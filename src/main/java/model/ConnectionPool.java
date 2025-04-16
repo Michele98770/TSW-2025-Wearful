@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ConnectionPool {
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/Wearful"
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/wearful"
             + "?useUnicode=true&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimecode=false&serverTimezone=UTC";
 
