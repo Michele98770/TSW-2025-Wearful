@@ -1,5 +1,5 @@
 # Wearful👕
-![logo Wearful](./src/main/webapp/wide_logo.png)
+![logo Wearful](./src/main/webapp/img/wide_logo.png)
 TSW-Wearful è un progetto sviluppato per il corso "Tecnologie e Software per il Web" presso l'Università degli Studi di Salerno. L'obiettivo del progetto è la creazione di un e-commerce di vestiti a tema nerd utilizzando il modello architetturale MVC (Model-View-Controller).
 
 ## Struttura del Progetto🏗️
