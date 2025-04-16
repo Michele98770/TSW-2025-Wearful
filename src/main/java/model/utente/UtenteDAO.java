@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UtenteDAO implements DAOInterface<UtenteBean, String> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public UtenteDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public UtenteDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
 
     @Override
     public UtenteBean doRetrieveByKey(String email) throws SQLException {
         String sql = "SELECT * FROM Utente WHERE email = ?";
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);
@@ -41,7 +41,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
         List<UtenteBean> utenti = new ArrayList<>();
         String sql = "SELECT * FROM Utente";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -62,7 +62,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
     public void doSave(UtenteBean utente) throws SQLException {
         String sql = "INSERT INTO Utente (email, username, telefono, password, isAdmin) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, utente.getEmail());
@@ -79,7 +79,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
     public void doUpdate(UtenteBean utente) throws SQLException {
         String sql = "UPDATE Utente SET username = ?, telefono = ?, password = ?, isAdmin = ? WHERE email = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, utente.getUsername());
@@ -96,7 +96,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
     public void doDelete(String email) throws SQLException {
         String sql = "DELETE FROM Utente WHERE email = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);
@@ -108,7 +108,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
     public UtenteBean doLogin(String email, String password) throws SQLException {
         String sql = "SELECT * FROM Utente WHERE email = ? AND password = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);

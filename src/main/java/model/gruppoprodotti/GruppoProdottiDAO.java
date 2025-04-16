@@ -8,17 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public GruppoProdottiDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public GruppoProdottiDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
-
     @Override
     public GruppoProdottiBean doRetrieveByKey(Long id) throws SQLException {
         String sql = "SELECT * FROM GruppoProdotti WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -39,7 +38,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
         List<GruppoProdottiBean> gruppi = new ArrayList<>();
         String sql = "SELECT * FROM GruppoProdotti";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -57,7 +56,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
     public void doSave(GruppoProdottiBean gruppo) throws SQLException {
         String sql = "INSERT INTO GruppoProdotti (nome) VALUES (?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, gruppo.getNome());
@@ -75,7 +74,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
     public void doUpdate(GruppoProdottiBean gruppo) throws SQLException {
         String sql = "UPDATE GruppoProdotti SET nome = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, gruppo.getNome());
@@ -88,7 +87,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
     public void doDelete(Long id) throws SQLException {
         String sql = "DELETE FROM GruppoProdotti WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);

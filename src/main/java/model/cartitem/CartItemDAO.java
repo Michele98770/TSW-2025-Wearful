@@ -8,17 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public CartItemDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public CartItemDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
-
     @Override
     public CartItemBean doRetrieveByKey(Long id) throws SQLException {
         String sql = "SELECT * FROM CartItem WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -43,7 +42,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
         List<CartItemBean> cartItems = new ArrayList<>();
         String sql = "SELECT * FROM CartItem";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -66,7 +65,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
         String sql = "INSERT INTO CartItem (idProdotto, idCarrello, quantita, personalizzato, imgPath) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setLong(1, cartItem.getIdProdotto());
@@ -90,7 +89,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
         String sql = "UPDATE CartItem SET idProdotto = ?, idCarrello = ?, quantita = ?, "
                 + "personalizzato = ?, imgPath = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, cartItem.getIdProdotto());
@@ -108,7 +107,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
     public void doDelete(Long id) throws SQLException {
         String sql = "DELETE FROM CartItem WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -121,7 +120,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
         List<CartItemBean> cartItems = new ArrayList<>();
         String sql = "SELECT * FROM CartItem WHERE idCarrello = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, idCarrello);

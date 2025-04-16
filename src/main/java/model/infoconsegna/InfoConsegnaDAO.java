@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public InfoConsegnaDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public InfoConsegnaDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
 
     @Override
     public InfoConsegnaBean doRetrieveByKey(Long id) throws SQLException {
         String sql = "SELECT * FROM InfoConsegna WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -44,7 +44,7 @@ public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
         List<InfoConsegnaBean> infoConsegne = new ArrayList<>();
         String sql = "SELECT * FROM InfoConsegna";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -68,7 +68,7 @@ public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
         String sql = "INSERT INTO InfoConsegna (citta, cap, via, altro, destinatario, idUtente) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, infoConsegna.getCitta());
@@ -93,7 +93,7 @@ public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
         String sql = "UPDATE InfoConsegna SET citta = ?, cap = ?, via = ?, altro = ?, "
                 + "destinatario = ?, idUtente = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, infoConsegna.getCitta());
@@ -112,7 +112,7 @@ public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
     public void doDelete(Long id) throws SQLException {
         String sql = "DELETE FROM InfoConsegna WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -125,7 +125,7 @@ public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
         List<InfoConsegnaBean> infoConsegne = new ArrayList<>();
         String sql = "SELECT * FROM InfoConsegna WHERE idUtente = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, idUtente);

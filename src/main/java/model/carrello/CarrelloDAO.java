@@ -8,17 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public CarrelloDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public CarrelloDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
-
     @Override
     public CarrelloBean doRetrieveByKey(Long id) throws SQLException {
         String sql = "SELECT * FROM Carrello WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -39,7 +38,7 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
         List<CarrelloBean> carrelli = new ArrayList<>();
         String sql = "SELECT * FROM Carrello";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -57,7 +56,7 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
     public void doSave(CarrelloBean carrello) throws SQLException {
         String sql = "INSERT INTO Carrello (idUtente) VALUES (?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, carrello.getIdUtente());
@@ -75,7 +74,7 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
     public void doUpdate(CarrelloBean carrello) throws SQLException {
         String sql = "UPDATE Carrello SET idUtente = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, carrello.getIdUtente());
@@ -88,7 +87,7 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
     public void doDelete(Long id) throws SQLException {
         String sql = "DELETE FROM Carrello WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -100,7 +99,7 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
     public CarrelloBean doRetrieveByUtente(String idUtente) throws SQLException {
         String sql = "SELECT * FROM Carrello WHERE idUtente = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, idUtente);

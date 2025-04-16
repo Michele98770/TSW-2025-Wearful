@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
-    private ConnectionPool connectionPool;
+    private Connection connectionPool;
 
-    public ProdottoDAO(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public ProdottoDAO() {
+        this.connectionPool = ConnectionPool.getConnection();
     }
 
     @Override
     public ProdottoBean doRetrieveByKey(Long id) throws SQLException {
         String sql = "SELECT * FROM Prodotto WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -33,6 +33,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
                             resultSet.getString("categoria"),
                             resultSet.getFloat("prezzo"),
                             resultSet.getInt("IVA"),
+                            resultSet.getInt("disponibilita"),
                             resultSet.getBoolean("personalizzabile"),
                             resultSet.getString("imgPath"),
                             resultSet.getString("publisher"),
@@ -49,7 +50,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         List<ProdottoBean> prodotti = new ArrayList<>();
         String sql = "SELECT * FROM Prodotto";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
@@ -63,6 +64,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
                         resultSet.getString("categoria"),
                         resultSet.getFloat("prezzo"),
                         resultSet.getInt("IVA"),
+                        resultSet.getInt("disponibilita"),
                         resultSet.getBoolean("personalizzabile"),
                         resultSet.getString("imgPath"),
                         resultSet.getString("publisher"),
@@ -76,10 +78,10 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
     @Override
     public void doSave(ProdottoBean prodotto) throws SQLException {
         String sql = "INSERT INTO Prodotto (nome, descrizione, taglia, colore, categoria, "
-                + "prezzo, IVA, personalizzabile, imgPath, publisher, gruppo) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, prodotto.getNome());
@@ -89,10 +91,11 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             statement.setString(5, prodotto.getCategoria());
             statement.setFloat(6, prodotto.getPrezzo());
             statement.setInt(7, prodotto.getIva());
-            statement.setBoolean(8, prodotto.isPersonalizzabile());
-            statement.setString(9, prodotto.getImgPath());
-            statement.setString(10, prodotto.getPublisher());
-            statement.setLong(11, prodotto.getGruppo());
+            statement.setInt(8, prodotto.getDisponibilita());
+            statement.setBoolean(9, prodotto.isPersonalizzabile());
+            statement.setString(10, prodotto.getImgPath());
+            statement.setString(11, prodotto.getPublisher());
+            statement.setLong(12, prodotto.getGruppo());
 
             statement.executeUpdate();
 
@@ -107,10 +110,10 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
     @Override
     public void doUpdate(ProdottoBean prodotto) throws SQLException {
         String sql = "UPDATE Prodotto SET nome = ?, descrizione = ?, taglia = ?, colore = ?, "
-                + "categoria = ?, prezzo = ?, IVA = ?, personalizzabile = ?, imgPath = ?, "
-                + "publisher = ?, gruppo = ? WHERE id = ?";
+                + "categoria = ?, prezzo = ?, IVA = ?, disponibilita = ?, personalizzabile = ?, "
+                + "imgPath = ?, publisher = ?, gruppo = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, prodotto.getNome());
@@ -120,11 +123,12 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             statement.setString(5, prodotto.getCategoria());
             statement.setFloat(6, prodotto.getPrezzo());
             statement.setInt(7, prodotto.getIva());
-            statement.setBoolean(8, prodotto.isPersonalizzabile());
-            statement.setString(9, prodotto.getImgPath());
-            statement.setString(10, prodotto.getPublisher());
-            statement.setLong(11, prodotto.getGruppo());
-            statement.setLong(12, prodotto.getId());
+            statement.setInt(8, prodotto.getDisponibilita());
+            statement.setBoolean(9, prodotto.isPersonalizzabile());
+            statement.setString(10, prodotto.getImgPath());
+            statement.setString(11, prodotto.getPublisher());
+            statement.setLong(12, prodotto.getGruppo());
+            statement.setLong(13, prodotto.getId());
 
             statement.executeUpdate();
         }
@@ -134,7 +138,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
     public void doDelete(Long id) throws SQLException {
         String sql = "DELETE FROM Prodotto WHERE id = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, id);
@@ -147,7 +151,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         List<ProdottoBean> prodotti = new ArrayList<>();
         String sql = "SELECT * FROM Prodotto WHERE gruppo = ?";
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = connectionPool;
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setLong(1, gruppoId);
@@ -162,6 +166,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
                             resultSet.getString("categoria"),
                             resultSet.getFloat("prezzo"),
                             resultSet.getInt("IVA"),
+                            resultSet.getInt("disponibilita"),
                             resultSet.getBoolean("personalizzabile"),
                             resultSet.getString("imgPath"),
                             resultSet.getString("publisher"),
@@ -171,5 +176,48 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             }
         }
         return prodotti;
+    }
+
+    public List<ProdottoBean> doRetrieveDisponibili() throws SQLException {
+        List<ProdottoBean> prodotti = new ArrayList<>();
+        String sql = "SELECT * FROM Prodotto WHERE disponibilita > 0";
+
+        try (Connection connection = connectionPool;
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                prodotti.add(new ProdottoBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("descrizione"),
+                        resultSet.getString("taglia"),
+                        resultSet.getString("colore"),
+                        resultSet.getString("categoria"),
+                        resultSet.getFloat("prezzo"),
+                        resultSet.getInt("IVA"),
+                        resultSet.getInt("disponibilita"),
+                        resultSet.getBoolean("personalizzabile"),
+                        resultSet.getString("imgPath"),
+                        resultSet.getString("publisher"),
+                        resultSet.getLong("gruppo")
+                ));
+            }
+        }
+        return prodotti;
+    }
+
+    public boolean updateDisponibilita(Long idProdotto, int quantita) throws SQLException {
+        String sql = "UPDATE Prodotto SET disponibilita = disponibilita + ? WHERE id = ?";
+
+        try (Connection connection = connectionPool;
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, quantita);
+            statement.setLong(2, idProdotto);
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+        }
     }
 }

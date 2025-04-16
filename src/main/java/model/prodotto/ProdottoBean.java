@@ -15,6 +15,7 @@ public class ProdottoBean implements Serializable {
     private String categoria;
     private float prezzo;
     private int iva;
+    private int disponibilita;
     private boolean personalizzabile;
     private String imgPath;
     private String publisher;
@@ -22,7 +23,7 @@ public class ProdottoBean implements Serializable {
 
 
     public ProdottoBean(Long id, String nome, String descrizione, String taglia,
-                    String colore, String categoria, float prezzo, int iva,
+                    String colore, String categoria, float prezzo, int iva,int disponibilita,
                     boolean personalizzabile, String imgPath, String publisher, Long gruppo) {
         this.id = id;
         this.nome = nome;
@@ -32,6 +33,7 @@ public class ProdottoBean implements Serializable {
         this.categoria = categoria;
         this.prezzo = prezzo;
         this.iva = iva;
+        this.disponibilita = disponibilita;
         this.personalizzabile = personalizzabile;
         this.imgPath = imgPath;
         this.publisher = publisher;
@@ -134,6 +136,13 @@ public class ProdottoBean implements Serializable {
         this.iva = iva;
     }
 
+    public int getDisponibilita() {
+        return disponibilita;
+    }
+
+    public void setDisponibilita(int disponibilita) {
+        this.disponibilita = disponibilita;
+    }
 
     public float getPrezzoConIva() {
         return prezzo+(((float)(iva)/100) * prezzo);

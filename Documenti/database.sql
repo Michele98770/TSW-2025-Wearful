@@ -36,6 +36,7 @@ CREATE TABLE Prodotto (
     categoria VARCHAR(50) NOT NULL,
     prezzo DECIMAL(7,2) NOT NULL,
     IVA ENUM ('4', '10', '22'),
+    disponibilita INT NOT NULL DEFAULT 0,
     personalizzabile BOOLEAN NOT NULL,
     imgPath VARCHAR(255) NOT NULL,
     publisher VARCHAR(255) NOT NULL,
