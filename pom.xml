@@ -6,7 +6,6 @@
 
     <groupId>Control</groupId>
     <artifactId>Wearful</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <name>Wearful</name>
     <packaging>war</packaging>
 
