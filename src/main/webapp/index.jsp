@@ -10,7 +10,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="stylesheets/admin.css">
+    <link rel="icon" type="image/png" href="img/small_logo.png">
+    <link rel="stylesheet" href="./stylesheets/admin.css">
 </head>
 <body>
 <div class="container">
