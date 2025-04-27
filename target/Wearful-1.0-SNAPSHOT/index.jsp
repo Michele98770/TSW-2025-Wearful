@@ -7,12 +7,28 @@
 <%@ page import="java.sql.SQLException" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="stylesheets/admin.css">
+    <title>Catalogo Prodotti</title>
+    <link rel="icon" type="image/png" href="img/small_logo.png">
+    <link rel="stylesheet" href="./stylesheets/admin.css">
+
+    <link rel="stylesheet" href="./stylesheets/stileheader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheets/stilefooter.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
+
+
+
 </head>
 <body>
+
+<jsp:include page="header.jsp" />
+
+<br>
 <div class="container">
     <h1>Catalogo Prodotti</h1>
 
@@ -64,7 +80,7 @@
         <tr>
             <td><%= prodotto.getId() %></td>
             <td>
-                <img src="img/wide_logo.png" alt="<%= prodotto.getNome() %>" class="product-img">
+                <img src="img/small_logo.png" alt="<%= prodotto.getNome() %>" class="product-img">
             </td>
             <td>
                 <strong><%= prodotto.getNome() %></strong><br>
@@ -77,12 +93,13 @@
             </td>
             <td><%= gruppo != null ? gruppo.getNome() : "N/A" %></td>
             <td><%= prodotto.getTaglia() %></td>
+
             <td><%= prodotto.getColore() %></td>
             <td class="price"><%= String.format("€%.2f", prodotto.getPrezzo()) %></td>
             <td>
-        <span class="availability <%= disponibilitaClass %>">
-            <%= disponibilitaText %>
-        </span>
+                <span class="availability <%= disponibilitaClass %>">
+                    <%= disponibilitaText %>
+                </span>
             </td>
             <td class="action-buttons">
                 <button class="btn btn-details"
@@ -102,11 +119,12 @@
             </td>
         </tr>
         <%
-                } // Fine del ciclo for
-            } // Fine dell'else
+                } // Fine for
+            } // Fine else
         %>
         </tbody>
     </table>
 </div>
+<jsp:include page="footer.jsp" />
 </body>
 </html>
