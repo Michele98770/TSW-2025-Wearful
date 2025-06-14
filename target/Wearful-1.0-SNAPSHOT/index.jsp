@@ -12,13 +12,14 @@
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
     <link rel="icon" type="image/png" href="img/small_logo.png">
-    <link rel="stylesheet" href="./stylesheets/admin.css">
+    <link rel="stylesheet" href="stylesheets/admin.css">
 
     <link rel="stylesheet" href="./stylesheets/stileheader.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/stilefooter.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./stylesheets/common.css">
     <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
 
 
@@ -127,4 +128,5 @@
 </div>
 <jsp:include page="footer.jsp" />
 </body>
+<script src="scripts/menu.js"></script>
 </html>
