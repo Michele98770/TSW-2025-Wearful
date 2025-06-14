@@ -20,6 +20,10 @@ public class UtenteBean implements Serializable {
         this.isAdmin = isAdmin;
     }
 
+    public UtenteBean() {
+
+    }
+
     // Getters e Setters
     public String getEmail() {
         return email;

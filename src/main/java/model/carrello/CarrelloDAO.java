@@ -2,45 +2,69 @@ package model.carrello;
 
 import model.ConnectionPool;
 import model.DAOInterface;
-import model.carrello.CarrelloBean;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
-    private Connection connectionPool;
 
     public CarrelloDAO() {
-        this.connectionPool = ConnectionPool.getConnection();
+
     }
+
     @Override
     public CarrelloBean doRetrieveByKey(Long id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        CarrelloBean carrello = null;
+
         String sql = "SELECT * FROM Carrello WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new CarrelloBean(
-                            resultSet.getLong("id"),
-                            resultSet.getString("idUtente")
-                    );
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                carrello = new CarrelloBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("idUtente")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
-        return null;
+        return carrello;
     }
 
     @Override
     public List<CarrelloBean> doRetrieveAll() throws SQLException {
         List<CarrelloBean> carrelli = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
         String sql = "SELECT * FROM Carrello";
 
-        try (Connection connection = connectionPool;
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 carrelli.add(new CarrelloBean(
@@ -48,23 +72,47 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
                         resultSet.getString("idUtente")
                 ));
             }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
         }
         return carrelli;
     }
 
     @Override
     public void doSave(CarrelloBean carrello) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet generatedKeys = null;
+
         String sql = "INSERT INTO Carrello (idUtente) VALUES (?)";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, carrello.getIdUtente());
             statement.executeUpdate();
 
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    carrello.setId(generatedKeys.getLong(1));
+            generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                carrello.setId(generatedKeys.getLong(1));
+            }
+        } finally {
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -72,46 +120,81 @@ public class CarrelloDAO implements DAOInterface<CarrelloBean, Long> {
 
     @Override
     public void doUpdate(CarrelloBean carrello) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "UPDATE Carrello SET idUtente = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, carrello.getIdUtente());
             statement.setLong(2, carrello.getId());
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
     @Override
     public void doDelete(Long id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "DELETE FROM Carrello WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
-    // Metodo aggiuntivo per ottenere il carrello di un utente
     public CarrelloBean doRetrieveByUtente(String idUtente) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        CarrelloBean carrello = null;
+
         String sql = "SELECT * FROM Carrello WHERE idUtente = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, idUtente);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new CarrelloBean(
-                            resultSet.getLong("id"),
-                            resultSet.getString("idUtente")
-                    );
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                carrello = new CarrelloBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("idUtente")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
-        return null;
+        return carrello;
     }
 }

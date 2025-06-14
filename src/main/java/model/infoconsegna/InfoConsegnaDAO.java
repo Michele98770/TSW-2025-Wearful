@@ -10,7 +10,7 @@ import java.util.List;
 public class InfoConsegnaDAO implements DAOInterface<InfoConsegnaBean, Long> {
     private Connection connectionPool;
 
-    public InfoConsegnaDAO() {
+    public InfoConsegnaDAO() throws SQLException {
         this.connectionPool = ConnectionPool.getConnection();
     }
 

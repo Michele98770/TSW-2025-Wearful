@@ -1,52 +1,75 @@
 package model.orderitem;
 
-
 import model.ConnectionPool;
 import model.DAOInterface;
-import model.orderitem.OrderItemBean;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
-    private Connection connectionPool;
 
     public OrderItemDAO() {
-        this.connectionPool = ConnectionPool.getConnection();
+
     }
+
     @Override
     public OrderItemBean doRetrieveByKey(Long id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        OrderItemBean orderItem = null;
+
         String sql = "SELECT * FROM OrderItem WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new OrderItemBean(
-                            resultSet.getLong("id"),
-                            resultSet.getString("nome"),
-                            resultSet.getLong("idProdotto"),
-                            resultSet.getLong("idOrdine"),
-                            resultSet.getFloat("prezzo"),
-                            resultSet.getInt("quantita"),
-                            resultSet.getInt("IVA")
-                    );
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                orderItem = new OrderItemBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getLong("idProdotto"),
+                        resultSet.getLong("idOrdine"),
+                        resultSet.getFloat("prezzo"),
+                        resultSet.getInt("quantita"),
+                        resultSet.getInt("IVA")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
-        return null;
+        return orderItem;
     }
 
     @Override
     public List<OrderItemBean> doRetrieveAll() throws SQLException {
         List<OrderItemBean> orderItems = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
         String sql = "SELECT * FROM OrderItem";
 
-        try (Connection connection = connectionPool;
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 orderItems.add(new OrderItemBean(
@@ -59,17 +82,32 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
                         resultSet.getInt("IVA")
                 ));
             }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
         }
         return orderItems;
     }
 
     @Override
     public void doSave(OrderItemBean orderItem) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet generatedKeys = null;
+
         String sql = "INSERT INTO OrderItem (nome, idProdotto, idOrdine, prezzo, quantita, IVA) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, orderItem.getNome());
             statement.setLong(2, orderItem.getIdProdotto());
@@ -80,9 +118,18 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
 
             statement.executeUpdate();
 
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    orderItem.setId(generatedKeys.getLong(1));
+            generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                orderItem.setId(generatedKeys.getLong(1));
+            }
+        } finally {
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -90,11 +137,15 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
 
     @Override
     public void doUpdate(OrderItemBean orderItem) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "UPDATE OrderItem SET nome = ?, idProdotto = ?, idOrdine = ?, "
                 + "prezzo = ?, quantita = ?, IVA = ? WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, orderItem.getNome());
             statement.setLong(2, orderItem.getIdProdotto());
@@ -105,41 +156,71 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
             statement.setLong(7, orderItem.getId());
 
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
     @Override
     public void doDelete(Long id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "DELETE FROM OrderItem WHERE id = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
-    // Metodi aggiuntivi specifici per OrderItem
     public List<OrderItemBean> doRetrieveByOrdine(Long idOrdine) throws SQLException {
         List<OrderItemBean> orderItems = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         String sql = "SELECT * FROM OrderItem WHERE idOrdine = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setLong(1, idOrdine);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    orderItems.add(new OrderItemBean(
-                            resultSet.getLong("id"),
-                            resultSet.getString("nome"),
-                            resultSet.getLong("idProdotto"),
-                            resultSet.getLong("idOrdine"),
-                            resultSet.getFloat("prezzo"),
-                            resultSet.getInt("quantita"),
-                            resultSet.getInt("IVA")
-                    ));
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                orderItems.add(new OrderItemBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getLong("idProdotto"),
+                        resultSet.getLong("idOrdine"),
+                        resultSet.getFloat("prezzo"),
+                        resultSet.getInt("quantita"),
+                        resultSet.getInt("IVA")
+                ));
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }

@@ -2,48 +2,72 @@ package model.utente;
 
 import model.ConnectionPool;
 import model.DAOInterface;
-import model.utente.UtenteBean;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UtenteDAO implements DAOInterface<UtenteBean, String> {
-    private Connection connectionPool;
 
     public UtenteDAO() {
-        this.connectionPool = ConnectionPool.getConnection();
+
     }
 
     @Override
     public UtenteBean doRetrieveByKey(String email) throws SQLException {
+        Connection connection = null; // Dichiarazione qui per il finally
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        UtenteBean utente = null;
+
         String sql = "SELECT * FROM Utente WHERE email = ?";
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, email);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new UtenteBean(
-                            resultSet.getString("email"),
-                            resultSet.getString("username"),
-                            resultSet.getString("telefono"),
-                            resultSet.getString("password"),
-                            resultSet.getBoolean("isAdmin")
-                    );
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                utente = new UtenteBean(
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("telefono"),
+                        resultSet.getString("password"),
+                        resultSet.getBoolean("isAdmin")
+                );
+            }
+        } finally {
+            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
                 }
             }
         }
-        return null;
+        return utente;
     }
 
     @Override
     public List<UtenteBean> doRetrieveAll() throws SQLException {
         List<UtenteBean> utenti = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
         String sql = "SELECT * FROM Utente";
 
-        try (Connection connection = connectionPool;
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 utenti.add(new UtenteBean(
@@ -54,16 +78,30 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
                         resultSet.getBoolean("isAdmin")
                 ));
             }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
         }
         return utenti;
     }
 
     @Override
     public void doSave(UtenteBean utente) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "INSERT INTO Utente (email, username, telefono, password, isAdmin) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, utente.getEmail());
             statement.setString(2, utente.getUsername());
@@ -72,15 +110,25 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
             statement.setBoolean(5, utente.isAdmin());
 
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
     @Override
     public void doUpdate(UtenteBean utente) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "UPDATE Utente SET username = ?, telefono = ?, password = ?, isAdmin = ? WHERE email = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, utente.getUsername());
             statement.setString(2, utente.getTelefono());
@@ -89,43 +137,75 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
             statement.setString(5, utente.getEmail());
 
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
     @Override
     public void doDelete(String email) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
         String sql = "DELETE FROM Utente WHERE email = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, email);
             statement.executeUpdate();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } finally {
+                ConnectionPool.releaseConnection(connection);
+            }
         }
     }
 
     // Metodo aggiuntivo per il login
     public UtenteBean doLogin(String email, String password) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        UtenteBean utente = null;
+
         String sql = "SELECT * FROM Utente WHERE email = ? AND password = ?";
 
-        try (Connection connection = connectionPool;
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, email);
-            statement.setString(2, password);
+            statement.setString(2, password); // Qui la password deve essere già hashata per il confronto
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new UtenteBean(
-                            resultSet.getString("email"),
-                            resultSet.getString("username"),
-                            resultSet.getString("telefono"),
-                            resultSet.getString("password"),
-                            resultSet.getBoolean("isAdmin")
-                    );
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                utente = new UtenteBean(
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("telefono"),
+                        resultSet.getString("password"),
+                        resultSet.getBoolean("isAdmin")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
-        return null;
+        return utente;
     }
 }

@@ -22,7 +22,11 @@ public class HelloServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>"+message+"</h1>");
-        System.out.println(ConnectionPool.getConnection());
+        try {
+            System.out.println(ConnectionPool.getConnection());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         out.println("</body></html>");
     }
 
