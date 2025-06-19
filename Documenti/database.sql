@@ -84,3 +84,5 @@ CREATE TABLE OrderItem (
 );
 
 
+INSERT INTO Utente (email, username, telefono, password, isAdmin)
+VALUES ('admin@wearful.com', 'adminUser', '1234567890', 'CcV0rNKcBuduhNc5BLywbuFP+TGvMLEPmqCp2jrpxok=', TRUE);

@@ -40,6 +40,10 @@ public class ProdottoBean implements Serializable {
         this.gruppo = gruppo;
     }
 
+    public ProdottoBean() {
+
+    }
+
     public Long getId() {
         return id;
     }

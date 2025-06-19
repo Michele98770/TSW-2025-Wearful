@@ -108,8 +108,7 @@
                     Dettagli
                 </button>
                 <% if (prodotto.getDisponibilita() > 0) { %>
-                <button class="btn btn-add"
-                        onclick="addToCart(<%= prodotto.getId() %>, '<%= prodotto.getNome() %>')">
+                <button class="btn btn-add">
                     Aggiungi
                 </button>
                 <% } else { %>
@@ -120,12 +119,13 @@
             </td>
         </tr>
         <%
-                } // Fine for
-            } // Fine else
+                }
+            }
         %>
         </tbody>
     </table>
 </div>
+
 <jsp:include page="footer.jsp" />
 </body>
 <script src="scripts/menu.js"></script>

@@ -14,6 +14,10 @@ public class GruppoProdottiBean implements Serializable {
         this.nome = nome;
     }
 
+    public GruppoProdottiBean() {
+
+    }
+
     public Long getId() {
         return id;
     }
