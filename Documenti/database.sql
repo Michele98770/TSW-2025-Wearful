@@ -35,7 +35,7 @@ CREATE TABLE Prodotto (
     colore VARCHAR(50) NOT NULL,
     categoria VARCHAR(50) NOT NULL,
     prezzo DECIMAL(7,2) NOT NULL,
-    IVA ENUM ('4', '10', '22'),
+    IVA TINYINT UNSIGNED NOT NULL,
     disponibilita INT NOT NULL DEFAULT 0,
     personalizzabile BOOLEAN NOT NULL,
     imgPath VARCHAR(255) NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE OrderItem (
     idOrdine BIGINT UNSIGNED NOT NULL,
     prezzo DECIMAL(7,2) NOT NULL,
     quantita INT NOT NULL,
-    IVA ENUM('4', '10', '22'),
+    IVA TINYINT UNSIGNED NOT NULL ,
     FOREIGN KEY (idOrdine) REFERENCES Ordine(id) ON DELETE CASCADE,
     FOREIGN KEY (idProdotto) REFERENCES Prodotto(id)
 );

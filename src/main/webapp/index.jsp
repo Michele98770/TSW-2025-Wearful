@@ -1,132 +1,173 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.utente.UtenteBean" %>
 <%@ page import="model.gruppoprodotti.GruppoProdottiBean" %>
 <%@ page import="model.gruppoprodotti.GruppoProdottiDAO" %>
-<%@ page import="model.prodotto.ProdottoBean" %>
-<%@ page import="model.prodotto.ProdottoDAO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.sql.SQLException" %>
+
+<%
+    String errorMessage = (String) request.getAttribute("errorMessage");
+    String successMessage = (String) request.getAttribute("successMessage");
+
+    List<String> validationErrors = null;
+    Object errorsAttribute = request.getAttribute("validationErrors");
+    if (errorsAttribute instanceof List<?>) {
+        validationErrors = (List<String>) errorsAttribute;
+    }
+    if (validationErrors == null) {
+        validationErrors = new ArrayList<>();
+    }
+
+    GruppoProdottiBean currentSelectedGroup = (GruppoProdottiBean) request.getAttribute("currentSelectedGroup");
+    boolean groupExists = (currentSelectedGroup != null && currentSelectedGroup.getId() != null);
+
+    // Variabili per mantenere i valori del form in caso di errore
+    String oldProductName = (String) request.getAttribute("oldProductName");
+    String oldProductDescription = (String) request.getAttribute("oldProductDescription");
+    String oldProductTaglia = (String) request.getAttribute("oldProductTaglia");
+    String oldProductColore = (String) request.getAttribute("oldProductColore");
+    String oldProductCategory = (String) request.getAttribute("oldProductCategory");
+    String oldProductPrice = (String) request.getAttribute("oldProductPrice");
+    String oldProductIva = (String) request.getAttribute("oldProductIva");
+    String oldProductDisponibilita = (String) request.getAttribute("oldProductDisponibilita");
+    boolean oldProductPersonalizzabile = (Boolean) (request.getAttribute("oldProductPersonalizzabile") != null ? request.getAttribute("oldProductPersonalizzabile") : false);
+%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Catalogo Prodotti</title>
-    <link rel="icon" type="image/png" href="img/small_logo.png">
-    <link rel="stylesheet" href="stylesheets/admin.css">
-
-    <link rel="stylesheet" href="stylesheets/stileheader.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amministrazione Prodotti</title>
+    <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stilefooter.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stileheader.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/common.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/form.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/stilefooter.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/common.css">
     <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
-
-
-
 </head>
 <body>
 
 <jsp:include page="header.jsp" />
 
-<br>
-<div class="container">
-    <h1>Catalogo Prodotti</h1>
+<div class="main-admin-content">
+    <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+    <div class="feedback-messages error">
+        <p><%= errorMessage %></p>
+    </div>
+    <% } %>
+    <% if (successMessage != null && !successMessage.isEmpty()) { %>
+    <div class="feedback-messages success">
+        <p><%= successMessage %></p>
+    </div>
+    <% } %>
+    <% if (!validationErrors.isEmpty()) { %>
+    <div class="feedback-messages error">
+        <ul>
+            <% for (String error : validationErrors) { %>
+            <li><%= error %></li>
+            <% } %>
+        </ul>
+    </div>
+    <% } %>
 
-    <table class="product-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Immagine</th>
-            <th>Prodotto</th>
-            <th>Descrizione</th>
-            <th>Gruppo</th>
-            <th>Taglia</th>
-            <th>Colore</th>
-            <th>Prezzo</th>
-            <th>Disponibilità</th>
-            <th>Azioni</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%
-            ProdottoDAO prodottoDAO = new ProdottoDAO();
-            GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
-            List<ProdottoBean> prodotti = null;
-            try {
-                prodotti = prodottoDAO.doRetrieveAll();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    <div class="form-section">
+        <h2>Aggiungi Prodotto</h2>
+        <form action="<%= request.getContextPath() %>/AdminUploadServlet" method="post" class="registration-form" enctype="multipart/form-data">
+            <input type="hidden" name="formType" value="newProduct">
 
-            if (prodotti == null || prodotti.isEmpty()) {
-        %>
-        <tr>
-            <td colspan="10" class="no-products">Nessun prodotto disponibile nel catalogo</td>
-        </tr>
-        <%
-        } else {
-            for (ProdottoBean prodotto : prodotti) {
-                GruppoProdottiBean gruppo = null;
-                try {
-                    gruppo = gruppoDAO.doRetrieveByKey(prodotto.getGruppo());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                String disponibilitaClass = prodotto.getDisponibilita() > 0 ? "in-stock" : "out-of-stock";
-                String disponibilitaText = prodotto.getDisponibilita() > 0 ?
-                        "Disponibile (" + prodotto.getDisponibilita() + ")" : "Esaurito";
-        %>
-        <tr>
-            <td><%= prodotto.getId() %></td>
-            <td>
-                <img src="img/small_logo.png" alt="<%= prodotto.getNome() %>" class="product-img">
-            </td>
-            <td>
-                <strong><%= prodotto.getNome() %></strong><br>
-                <small class="text-muted"><%= prodotto.getCategoria() %></small>
-            </td>
-            <td>
-                <%= prodotto.getDescrizione().length() > 60 ?
-                        prodotto.getDescrizione().substring(0, 60) + "..." :
-                        prodotto.getDescrizione() %>
-            </td>
-            <td><%= gruppo != null ? gruppo.getNome() : "N/A" %></td>
-            <td><%= prodotto.getTaglia() %></td>
-
-            <td><%= prodotto.getColore() %></td>
-            <td class="price"><%= String.format("€%.2f", prodotto.getPrezzo()) %></td>
-            <td>
-                <span class="availability <%= disponibilitaClass %>">
-                    <%= disponibilitaText %>
-                </span>
-            </td>
-            <td class="action-buttons">
-                <button class="btn btn-details"
-                        onclick="window.location.href='dettaglioProdotto.jsp?id=<%= prodotto.getId() %>'">
-                    Dettagli
-                </button>
-                <% if (prodotto.getDisponibilita() > 0) { %>
-                <button class="btn btn-add">
-                    Aggiungi
-                </button>
-                <% } else { %>
-                <button class="btn btn-add" disabled>
-                    Non disponibile
-                </button>
+            <div class="form-group">
+                <label for="groupName">Nome Gruppo Prodotto:</label>
+                <input type="text" id="groupName" name="groupName" required maxlength="255"
+                       value="<%= groupExists ? currentSelectedGroup.getNome() : (request.getAttribute("oldGroupName") != null ? request.getAttribute("oldGroupName") : "") %>"
+                    <%= groupExists ? "readonly" : "" %>>
+                <% if (groupExists) { %>
+                <input type="hidden" name="groupId" value="<%= currentSelectedGroup.getId() %>">
                 <% } %>
-            </td>
-        </tr>
-        <%
-                }
-            }
-        %>
-        </tbody>
-    </table>
+            </div>
+
+            <div class="form-group">
+                <label for="productName">Nome Prodotto:</label>
+                <input type="text" id="productName" name="productName" required maxlength="255"
+                       value="<%= oldProductName != null ? oldProductName : "" %>">
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Descrizione:</label>
+                <textarea id="productDescription" name="productDescription" rows="5" required maxlength="4096"><%= oldProductDescription != null ? oldProductDescription : "" %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="productTaglia">Taglia:</label>
+                <select id="productTaglia" name="productTaglia" required>
+                    <option value="">-- Seleziona Taglia --</option>
+                    <option value="XXS" <%= "XXS".equals(oldProductTaglia) ? "selected" : "" %>>XXS</option>
+                    <option value="XS" <%= "XS".equals(oldProductTaglia) ? "selected" : "" %>>XS</option>
+                    <option value="S" <%= "S".equals(oldProductTaglia) ? "selected" : "" %>>S</option>
+                    <option value="M" <%= "M".equals(oldProductTaglia) ? "selected" : "" %>>M</option>
+                    <option value="L" <%= "L".equals(oldProductTaglia) ? "selected" : "" %>>L</option>
+                    <option value="XL" <%= "XL".equals(oldProductTaglia) ? "selected" : "" %>>XL</option>
+                    <option value="XXL" <%= "XXL".equals(oldProductTaglia) ? "selected" : "" %>>XXL</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productColore">Colore:</label>
+                <input type="text" id="productColore" name="productColore" required maxlength="50"
+                       value="<%= oldProductColore != null ? oldProductColore : "" %>">
+            </div>
+
+            <div class="form-group">
+                <label for="productCategoria">Categoria:</label>
+                <input type="text" id="productCategoria" name="productCategoria" required maxlength="50"
+                       value="<%= oldProductCategory != null ? oldProductCategory : "" %>">
+            </div>
+
+            <div class="form-group">
+                <label for="productPrezzo">Prezzo:</label>
+                <input type="number" id="productPrezzo" name="productPrezzo" step="0.01" min="0" required
+                       value="<%= oldProductPrice != null ? oldProductPrice : "" %>">
+            </div>
+
+            <div class="form-group">
+                <label for="productIVA">IVA (%):</label>
+                <select id="productIVA" name="productIVA" required>
+                    <option value="">-- Seleziona IVA --</option>
+                    <option value="4" <%= "4".equals(oldProductIva) ? "selected" : "" %>>4%</option>
+                    <option value="10" <%= "10".equals(oldProductIva) ? "selected" : "" %>>10%</option>
+                    <option value="22" <%= "22".equals(oldProductIva) ? "selected" : "" %>>22%</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productDisponibilita">Disponibilità:</label>
+                <input type="number" id="productDisponibilita" name="productDisponibilita" min="0" required
+                       value="<%= oldProductDisponibilita != null ? oldProductDisponibilita : "" %>">
+            </div>
+
+            <div class="radio-group">
+                <label>Personalizzabile:</label>
+                <input type="radio" id="personalizzabileYes" name="personalizzabile" value="true" <%= oldProductPersonalizzabile ? "checked" : "" %>>
+                <label for="personalizzabileYes">Sì</label>
+                <input type="radio" id="personalizzabileNo" name="personalizzabile" value="false" <%= !oldProductPersonalizzabile ? "checked" : "" %>>
+                <label for="personalizzabileNo">No</label>
+            </div>
+
+            <div class="form-group">
+                <label for="productImgFile">Carica Immagine Prodotto:</label>
+                <input type="file" id="productImgFile" name="productImgFile" accept="image/*" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Aggiungi Prodotto e/o Crea Gruppo</button>
+        </form>
+    </div>
 </div>
 
 <jsp:include page="footer.jsp" />
+
+<script src="<%= request.getContextPath() %>/scripts/menu.js"></script>
 </body>
-<script src="scripts/menu.js"></script>
 </html>
