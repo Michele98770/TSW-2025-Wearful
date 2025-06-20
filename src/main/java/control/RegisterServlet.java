@@ -20,8 +20,8 @@ import java.util.Base64;
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-    private static final Pattern TELEFONO_PATTERN = Pattern.compile("^\\+\\d{1,13}$"); ;
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+    private static final Pattern TELEFONO_PATTERN = Pattern.compile("^\\+\\d{1,13}$");
 
     public RegisterServlet() {
         super();
@@ -100,8 +100,9 @@ public class RegisterServlet extends HttpServlet {
 
             utenteDAO.doSave(nuovoUtente);
 
-            request.setAttribute("successMessage", "Registrazione avvenuta con successo! Puoi accedere.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/login.jsp?email=" + email + "&password=" + password + "&registrationSuccess=true");
+
+
         } catch (SQLException e) {
             System.err.println("Errore SQL durante la registrazione utente: " + e.getMessage());
             e.printStackTrace();

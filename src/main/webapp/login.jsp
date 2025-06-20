@@ -19,9 +19,8 @@
 <jsp:include page="header.jsp" />
 
 <div class="form-container">
-  <h2>Accedi</h2> <%-- Titolo cambiato per il login --%>
+  <h2>Accedi</h2>
 
-  <%-- Messaggi di errore o successo --%>
   <%
     String errorMessage = (String) request.getAttribute("errorMessage");
     String successMessage = (String) request.getAttribute("successMessage");
@@ -51,10 +50,10 @@
       <input type="password" id="password" name="password" required>
     </div>
 
-    <button type="submit" class="btn btn-primary">Accedi</button> <%-- Testo del bottone cambiato --%>
+    <button type="submit" class="btn btn-primary">Accedi</button>
   </form>
 
-  <p class="login-link">Non hai un account? <a href="RegisterServlet">Registrati qui</a></p> <%-- Link per la registrazione --%>
+  <p class="login-link">Non hai un account? <a href="RegisterServlet">Registrati qui</a></p>
 </div>
 
 <br><br><br><br><br>

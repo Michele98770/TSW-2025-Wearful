@@ -13,6 +13,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
+<style>
+    .input-error {
+        border-color: #dc3545 !important;
+    }
+    .input-success {
+        border-color: #28a745 !important;
+    }
+    .label-error {
+        color: #dc3545 ;
+    }
+    .label-success {
+        color: #28a745 ;
+    }
+
+    .error-messages {
+        background-color: #f8d7da;
+        color: #721c24 !important;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .success-messages {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .error-text {
+        color: #dc3545;
+        font-size: 0.85em;
+        margin-top: 5px;
+        text-align: left;
+        display: none; /* Inizialmente nascosto */
+    }
+</style>
 </head>
 <body>
 
@@ -21,7 +60,7 @@
 <div class="form-container">
     <h2>Registrati</h2>
 
-    <%-- Messaggi di errore o successo --%>
+    <%-- Messaggi di errore o successo dal Server --%>
     <%
         String errorMessage = (String) request.getAttribute("errorMessage");
         String successMessage = (String) request.getAttribute("successMessage");
@@ -40,30 +79,35 @@
         }
     %>
 
-    <form action="RegisterServlet" method="post" class="registration-form">
+    <form action="RegisterServlet" method="post" class="registration-form" id="registrationForm">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
+            <label for="email" id="emailLabel">Email:</label>
+            <input type="email" id="email" name="email" placeholder="es. email@example.com" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
+            <div id="emailError" class="error-text"></div>
         </div>
 
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username" id="usernameLabel">Username:</label>
             <input type="text" id="username" name="username" required maxlength="50" value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+            <div id="usernameError" class="error-text"></div>
         </div>
 
         <div class="form-group">
-            <label for="telefono">Telefono:</label>
-            <input type="tel" id="telefono" name="telefono" required maxlength="13" value="<%= request.getParameter("telefono") != null ? request.getParameter("telefono") : "" %>">
+            <label for="telefono" id="telefonoLabel">Telefono:</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="es. +397398379481" maxlength="13" value="<%= request.getParameter("telefono") != null ? request.getParameter("telefono") : "" %>">
+            <div id="telefonoError" class="error-text"></div>
         </div>
 
         <div class="form-group">
-            <label for="password">Password:</label>
+            <label for="password" id="passwordLabel">Password:</label>
             <input type="password" id="password" name="password" required minlength="8">
+            <div id="passwordError" class="error-text"></div>
         </div>
 
         <div class="form-group">
-            <label for="confirm_password">Conferma Password:</label>
+            <label for="confirm_password" id="confirmPasswordLabel">Conferma Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+            <div id="confirmPasswordError" class="error-text"></div>
         </div>
 
         <button type="submit" class="btn btn-primary">Registrati</button>
@@ -75,5 +119,6 @@
 <jsp:include page="footer.jsp" />
 
 <script src="./scripts/menu.js"></script>
+<script src="./scripts/register.js"></script>
 </body>
 </html>

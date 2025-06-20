@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <header class="header">
     <div class="logo">
-        <a href="index.jsp">
+        <a href="adminUpload.jsp">
             <img src="img/wide_logo.png" alt="Logo"/>
         </a>
     </div>

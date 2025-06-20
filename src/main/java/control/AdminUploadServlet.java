@@ -27,9 +27,9 @@ import java.util.Optional;
 
 @WebServlet("/AdminUploadServlet")
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10,      // 10MB
-        maxRequestSize = 1024 * 1024 * 50    // 50MB
+        fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50
 )
 public class AdminUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -45,16 +45,14 @@ public class AdminUploadServlet extends HttpServlet {
         UtenteBean currentUser = (UtenteBean) session.getAttribute("currentUser");
 
 
-
         GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
         GruppoProdottiBean currentSelectedGroup = null;
 
         try {
-            // Recupera tutti i gruppi
             List<GruppoProdottiBean> allGroups = gruppoDAO.doRetrieveAll();
             if (allGroups != null && !allGroups.isEmpty()) {
                 allGroups.sort((g1, g2) -> g2.getId().compareTo(g1.getId()));
-                currentSelectedGroup = allGroups.get(0); // Prende il gruppo con l'ID più alto (presumibilmente l'ultimo creato)
+                currentSelectedGroup = allGroups.get(0);
             }
         } catch (SQLException e) {
             System.err.println("Errore SQL nel recupero dei gruppi prodotti per doGet: " + e.getMessage());
@@ -63,7 +61,18 @@ public class AdminUploadServlet extends HttpServlet {
         }
 
         request.setAttribute("currentSelectedGroup", currentSelectedGroup);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.setAttribute("oldProductName", "");
+        request.setAttribute("oldProductDescription", "");
+        request.setAttribute("oldProductTaglia", "");
+        request.setAttribute("oldProductColore", "");
+        request.setAttribute("oldProductCategory", "");
+        request.setAttribute("oldProductPrice", "");
+        request.setAttribute("oldProductIva", "");
+        request.setAttribute("oldProductDisponibilita", "");
+        request.setAttribute("oldProductPersonalizzabile", false);
+        request.setAttribute("oldGroupName", currentSelectedGroup != null ? currentSelectedGroup.getNome() : "");
+
+        request.getRequestDispatcher("/adminUpload.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -78,7 +87,6 @@ public class AdminUploadServlet extends HttpServlet {
         String groupName = request.getParameter("groupName");
         String groupIdStr = request.getParameter("groupId");
 
-        // Reintegro i dati del form per ripopolare in caso di errore
         request.setAttribute("oldProductName", request.getParameter("productName"));
         request.setAttribute("oldProductDescription", request.getParameter("productDescription"));
         request.setAttribute("oldProductTaglia", request.getParameter("productTaglia"));
@@ -88,7 +96,7 @@ public class AdminUploadServlet extends HttpServlet {
         request.setAttribute("oldProductIva", request.getParameter("productIVA"));
         request.setAttribute("oldProductDisponibilita", request.getParameter("productDisponibilita"));
         request.setAttribute("oldProductPersonalizzabile", "true".equals(request.getParameter("personalizzabile")));
-        request.setAttribute("oldGroupName", groupName); // Mantiene il nome del gruppo digitato in caso di errore
+        request.setAttribute("oldGroupName", groupName);
 
         GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
         ProdottoDAO prodottoDAO = new ProdottoDAO();
@@ -118,7 +126,6 @@ public class AdminUploadServlet extends HttpServlet {
                     validationErrors.add("ID gruppo prodotto non valido. Riprovare.");
                 }
             } else {
-
                 if (groupName == null || groupName.trim().isEmpty()) {
                     validationErrors.add("Il nome del gruppo non può essere vuoto.");
                 } else if (groupName.length() > 255) {
@@ -135,9 +142,9 @@ public class AdminUploadServlet extends HttpServlet {
                     } else {
                         GruppoProdottiBean newGroup = new GruppoProdottiBean();
                         newGroup.setNome(groupName.trim());
-                        gruppoDAO.doSave(newGroup); // Questo popolerà l'ID nel bean
-                        currentSelectedGroup = newGroup; // Ora currentSelectedGroup contiene l'ID
-                        successMessage = "Gruppo prodotto '" + groupName + "' creato con successo!";
+                        gruppoDAO.doSave(newGroup);
+                        currentSelectedGroup = newGroup;
+                        successMessage = "Gruppo prodotto '" + groupName + "' creato con successo! ";
                     }
                 }
             }
@@ -148,8 +155,8 @@ public class AdminUploadServlet extends HttpServlet {
 
             if (!validationErrors.isEmpty()) {
                 request.setAttribute("validationErrors", validationErrors);
-                request.setAttribute("currentSelectedGroup", currentSelectedGroup); // Passa il gruppo (anche se nullo o con errori) per mantenere lo stato
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.setAttribute("currentSelectedGroup", currentSelectedGroup);
+                request.getRequestDispatcher("/adminUpload.jsp").forward(request, response);
                 return;
             }
 
@@ -268,26 +275,22 @@ public class AdminUploadServlet extends HttpServlet {
                     newProduct.setDisponibilita(disponibilita);
                     newProduct.setPersonalizzabile(personalizzabile);
                     newProduct.setImgPath(productImgPath);
-                    newProduct.setPublisher("admin@wearful.com");
+                    newProduct.setPublisher(currentUser.getEmail());
                     newProduct.setGruppo(currentSelectedGroup.getId());
 
-
-                    System.out.println("DEBUG: Valore IVA prima del salvataggio: " + newProduct.getIva());
-                    System.out.println("DEBUG: Valore Publisher prima del salvataggio: " + newProduct.getPublisher());
-                    System.out.println("DEBUG: Valore Gruppo ID prima del salvataggio: " + newProduct.getGruppo() + " (Nome: " + currentSelectedGroup.getNome() + ")");
 
                     prodottoDAO.doSave(newProduct);
                     successMessage = (successMessage == null ? "" : successMessage + "<br>") + "Prodotto '" + productName + "' aggiunto con successo al gruppo '" + currentSelectedGroup.getNome() + "'!";
 
-                    request.removeAttribute("oldProductName");
-                    request.removeAttribute("oldProductDescription");
-                    request.removeAttribute("oldProductTaglia");
-                    request.removeAttribute("oldProductColore");
-                    request.removeAttribute("oldProductCategory");
-                    request.removeAttribute("oldProductPrice");
-                    request.removeAttribute("oldProductIva");
-                    request.removeAttribute("oldProductDisponibilita");
-                    request.removeAttribute("oldProductPersonalizzabile");
+                    request.setAttribute("oldProductName", "");
+                    request.setAttribute("oldProductDescription", "");
+                    request.setAttribute("oldProductTaglia", "");
+                    request.setAttribute("oldProductColore", "");
+                    request.setAttribute("oldProductCategory", "");
+                    request.setAttribute("oldProductPrice", "");
+                    request.setAttribute("oldProductIva", "");
+                    request.setAttribute("oldProductDisponibilita", "");
+                    request.setAttribute("oldProductPersonalizzabile", false);
 
                 } catch (SQLException e) {
                     System.err.println("Errore SQL nell'aggiunta del prodotto: " + e.getMessage());
@@ -314,10 +317,9 @@ public class AdminUploadServlet extends HttpServlet {
             if (successMessage != null) {
                 request.setAttribute("successMessage", successMessage);
             }
-
             request.setAttribute("currentSelectedGroup", currentSelectedGroup);
 
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("adminUpload.jsp").forward(request, response);
         }
     }
 

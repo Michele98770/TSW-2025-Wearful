@@ -1,4 +1,3 @@
-/* stylesheets/form.css */
 
 .form-container {
     max-width: 500px;
@@ -61,13 +60,15 @@
     font-size: 1.1em;
     font-weight: 600;
     transition: background-color 0.2s ease;
-    width: 100%; /* Bottone a tutta larghezza */
+    width: 100%;
     box-sizing: border-box;
 }
+
 
 .btn-primary:hover {
     background-color: #0056b3;
 }
+
 
 .error-messages {
     background-color: #f8d7da;
@@ -94,6 +95,7 @@
     margin-bottom: 0;
 }
 
+
 .login-link {
     margin-top: 20px;
     font-size: 0.95em;
@@ -110,6 +112,7 @@
     text-decoration: underline;
 }
 
+
 /* Media Queries for responsiveness */
 @media (max-width: 768px) {
     .form-container {
@@ -117,3 +120,4 @@
         padding: 20px;
     }
 }
+
