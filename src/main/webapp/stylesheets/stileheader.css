@@ -1,101 +1,19 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 40px;
-    background-color: #f8f9fa;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    gap: 20px;
-}
-
+/* Stili generali del logo */
 .logo img {
-    height: 50px;
+    height: 50px; /* Altezza di default per desktop */
     object-fit: contain;
+    max-width: 100%;
+    display: block;
 }
 
-
-.search-bar-mobile {
+/* Nascondi il logo mobile per default (desktop view) */
+.logo .logo-mobile {
     display: none;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    padding: 5px 15px;
-    background-color: #f0f0f0;
 }
 
-.search-bar-mobile input[type="search"] {
-    border: none;
-    outline: none;
-    flex-grow: 1;
-    padding: 5px 0;
-    font-size: 16px;
-    color: #333;
-    background-color: transparent;
-}
-
-.search-bar-mobile input[type="search"]::placeholder {
-    color: #999;
-}
-
-.search-bar-mobile button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 5px;
-    color: #555;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.menu {
-    display: flex;
-    gap: 30px;
-}
-
-.menu a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.menu a:hover {
-    color: #3498db;
-}
-
-.user-actions { /* Azioni utente desktop */
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.user-actions a{
-    color: #555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.user-actions a:hover{
-    color: #3498db;
-}
-
-.language {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.hamburger-menu {
-    display: none;
-    cursor: pointer;
-    z-index: 1001;
-}
-
-.mobile-menu-overlay {
-    display: none;
+/* Mostra il logo desktop per default (desktop view) */
+.logo .logo-desktop {
+    display: block;
 }
 
 
@@ -104,6 +22,8 @@
         padding: 15px 20px;
         justify-content: space-between;
         gap: 10px;
+        min-width: 0;
+        flex-wrap: nowrap;
     }
 
     .menu,
@@ -111,27 +31,51 @@
         display: none;
     }
 
+    .logo {
+        flex-shrink: 0;
+        /* Larghezza massima per il logo mobile, adatta a small_logo.png */
+        max-width: 20vw; /* Potrebbe essere 15vw o anche un valore fisso es: 60px */
+        width: auto;
+    }
+
+    .logo img {
+        /* Reset per assicurare che le nuove regole abbiano effetto se ereditate */
+        height: auto;
+    }
+
+    /* Nascondi il logo desktop in modalità mobile */
+    .logo .logo-desktop {
+        display: none;
+    }
+
+    /* Mostra il logo mobile in modalità mobile */
+    .logo .logo-mobile {
+        display: block;
+        height: 40px; /* Altezza per il logo mobile */
+        max-width: 100%; /* Assicurati che non sfori */
+    }
+
     .hamburger-menu {
         display: block;
-        width: 30px;
-        height: 20px;
+        width: 35px;
+        height: 25px;
         position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        flex-shrink: 0;
     }
 
     .hamburger-menu .bar {
         width: 100%;
-        height: 3px;
+        height: 4px;
         background-color: #333;
         border-radius: 2px;
         transition: all 0.3s ease;
     }
 
-    /* Stili per l'icona "X" */
     .hamburger-menu.open .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(10.5px) rotate(45deg);
     }
 
     .hamburger-menu.open .bar:nth-child(2) {
@@ -139,25 +83,25 @@
     }
 
     .hamburger-menu.open .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-10.5px) rotate(-45deg);
     }
 
     .search-bar-mobile {
         display: flex;
-        flex-grow: 1;
+        flex: 0 1 0%;
         margin-right: 10px;
-        max-width: none;
+        min-width: 40px;
+        max-width: 50vw;
+        padding: 7px 8px;
     }
 
     .search-bar-mobile input[type="search"] {
-        font-size: 16px;
+        font-size: 13px;
     }
 
     .search-bar-mobile button {
-        font-size: 20px;
+        font-size: 18px;
     }
-
-
 
     .mobile-menu-overlay {
         position: fixed;
