@@ -1,5 +1,3 @@
-/* base.css */
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,4 +8,188 @@
 body {
     background-color: #f9f9f9;
     margin: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+main {
+    max-width: 1000px;
+    margin: 3rem auto 10rem;
+    padding: 4rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Modificato per usare una classe per maggiore riusabilità */
+.menu-section {
+    text-align: center; /* Questo centra i titoli e i contenuti inline */
+    margin-bottom: 0;
+}
+
+.menu-section a{
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.menu-section a:hover{
+    color: #3498db;
+}
+
+.menu-section h1 {
+    font-size: 2.8em;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.menu-section p {
+    font-size: 1.1em;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    line-height: 1.8;
+    text-align: center; /* AGGIUNTO: Centra il testo all'interno dei paragrafi */
+}
+
+.menu-section h2 {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.menu-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: center; /* AGGIUNTO: Centra il testo all'interno dell'UL */
+}
+
+/* Aggiunto border-bottom per dimostrare l'effetto di :last-child */
+.menu-section ul li {
+    font-size: 1.1em;
+    color: #444;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee; /* Aggiunto un bordo leggero */
+    text-align: center; /* AGGIUNTO: Centra il testo all'interno degli elementi LI */
+}
+
+.menu-section ul li:last-child {
+    border-bottom: none;
+}
+
+.faq-item {
+    border-bottom: 1px solid #d6b3ff;
+    margin-bottom: 15px;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    background-color: transparent;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #3d0066; /* Dark violet */
+    font-size: 1.1em;
+    font-weight: 600;
+    outline: none;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 5px;
+}
+
+.faq-question:hover {
+    background-color: #d6b3ff;
+}
+
+.faq-answer {
+    padding: 0 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    color: #555;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    padding: 15px;
+}
+
+.faq-item.active .faq-question .expand-icon {
+    transform: rotate(180deg);
+}
+
+.expand-icon {
+    font-size: 1.5em;
+    color: #8e44ad;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-info-container {
+    flex: 1;
+    min-width: 300px;
+    padding: 25px;
+    border-radius: 8px;
+    background-color: #F8F9FA;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.social-info-container h3 {
+    font-size: 1.8em;
+    color: #8E44AD;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.social-info-container h4 {
+    font-size: 1.5em;
+    color: #8E44AD;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.social-info-container p {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1em;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center; /* Center social icons */
+    gap: 20px; /* Space between icons */
+    margin-bottom: 30px;
+}
+
+.social-links a {
+    font-size: 2.5em; /* Icon size */
+    color: #8E44AD; /* Medium violet */
+    transition: color 0.3s ease, transform 0.2s ease;
+    text-decoration: none; /* Remove underline */
+}
+
+.social-links a:hover {
+    color: #3498DB; /* Vibrant blue on hover */
+    transform: translateY(-3px); /* Slight lift on hover */
+}
+
+/* Styles for quick contact details */
+.contact-details p {
+    text-align: center;
+}
+
+.contact-details p i.material-icons {
+    margin-right: 10px;
+    font-size: 1.5em;
+    color: #8E44AD; /* Medium violet for icons */
 }

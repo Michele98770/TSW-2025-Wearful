@@ -100,7 +100,7 @@ public class RegisterServlet extends HttpServlet {
 
             utenteDAO.doSave(nuovoUtente);
 
-            response.sendRedirect(request.getContextPath() + "/login.jsp?email=" + email + "&password=" + password + "&registrationSuccess=true");
+            response.sendRedirect(request.getContextPath() + "/login.jsp?email=" + email );
 
 
         } catch (SQLException e) {

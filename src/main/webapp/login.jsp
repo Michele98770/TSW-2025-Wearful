@@ -43,13 +43,13 @@
 
   <form action="LoginServlet" method="post" class="registration-form"> <%-- Action per il LoginServlet, stessa classe form --%>
     <div class="form-group">
-      <label for="email">Email:</label>
+      <label for="email" id="emailLabel">Email:</label>
       <input type="email" id="email" name="email" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
     </div>
 
     <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+      <label for="password" id="passwordLabel">Password:</label>
+      <input type="password" id="password" name="password" required minlength="8">
     </div>
 
     <button type="submit" class="btn btn-primary">Accedi</button>
@@ -59,6 +59,8 @@
 </div>
 
 <br><br><br><br><br>
+
+<script src="./scripts/register.js"></script>
 
 <jsp:include page="footer.jsp" />
 

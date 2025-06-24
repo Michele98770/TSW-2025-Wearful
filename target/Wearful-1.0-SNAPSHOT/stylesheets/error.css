@@ -1,0 +1,76 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.error-container {
+    flex-grow: 1;
+    display: flex; /* Cambiato a flex per il layout orizzontale */
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Il testo sarà centrato all'interno del suo blocco */
+    padding: 40px;
+    background-color: #f8f8f8;
+    color: #333;
+    gap: 50px; /* Spazio tra l'immagine e il testo */
+    flex-wrap: wrap; /* Per gestire il layout su schermi piccoli */
+}
+.error-image {
+    flex-shrink: 0; /* Impedisce all'immagine di ridursi troppo */
+    max-width: 300px; /* Dimensione massima dell'immagine */
+    height: auto;
+}
+.error-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centra il contenuto del testo */
+    text-align: center;
+}
+.error-container h1 {
+    font-size: 8em;
+    color: #660099;
+    margin-bottom: 10px;
+}
+.error-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.error-container p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    max-width: 600px;
+    line-height: 1.6;
+}
+.error-container a {
+    display: inline-block;
+    background-color: #660099;
+    color: #fff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.error-container a:hover {
+    background-color: #8000b3;
+}
+
+
+@media (max-width: 768px) {
+    .error-container {
+        flex-direction: column; /* Impila immagine e testo verticalmente */
+        gap: 20px;
+    }
+    .error-image {
+        max-width: 200px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 40px;
+        background-color: #f8f9fa;
+        box-shadow: 0 2px 5px #0000001a;
+    }
+}

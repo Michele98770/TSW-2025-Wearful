@@ -11,14 +11,21 @@
         <a href="#">Domande</a>
         <a href="#">Contatti</a>
     </nav>
-    <div class="user-actions" id="desktop-user-actions">
-        <a href="#">
-            <i class="material-icons">search</i>
-        </a>
-        <select class="language">
-            <option value="it">IT</option>
-            <option value="en">EN</option>
-        </select>
+    <div class="user-actions" id="user-actions">
+        <div class="box">
+            <label>
+                <input type="text" placeholder="Cerca...">
+            </label>
+            <a href="#">
+                <i class="material-icons">search</i>
+            </a>
+        </div>
+        <label>
+            <select class="language">
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+            </select>
+        </label>
         <a href="#">
             <i class="material-icons">person</i>
         </a>
@@ -26,5 +33,4 @@
             <i class="material-icons">shopping_cart</i>
         </a>
     </div>
-
 </header>

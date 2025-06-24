@@ -22,6 +22,6 @@
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; <%= Calendar.getInstance().get(Calendar.YEAR) %> Wearful. Tutti i diritti riservati.</p>
+    <p>&copy;  Wearful <%= Calendar.getInstance().get(Calendar.YEAR) %>. Tutti i diritti riservati.</p>
   </div>
 </footer>

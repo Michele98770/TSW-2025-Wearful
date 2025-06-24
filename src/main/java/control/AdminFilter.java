@@ -41,7 +41,7 @@ public class AdminFilter implements Filter {
 
         if (!isLoggedIn || !isAdmin) {
             System.out.println("AdminFilter: Access denied. Redirecting to login.");
-            httpResponse.sendRedirect(loginPage + "?error=accessDenied");
+            httpResponse.sendRedirect("403.jsp");
         } else {
             System.out.println("AdminFilter: Access granted. Continuing chain.");
             chain.doFilter(request, response);

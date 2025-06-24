@@ -39,6 +39,31 @@ body {
     color: #3498db;
 }
 
+.box{
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px 10px;
+    background: #fff;
+    border-radius: 30px;
+    align-items: center;
+    box-shadow: 0 10px 25px #0000001a;
+}
+
+.box:hover input{
+    width: 250px;
+}
+
+.box input{
+    width: 0;
+    outline: none;
+    border: none;
+    transition: 0.8s;
+    background: transparent;
+}
+
+
+
 .user-actions {
     display: flex;
     align-items: center;
