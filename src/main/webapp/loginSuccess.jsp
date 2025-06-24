@@ -29,6 +29,5 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="./scripts/menu.js"></script>
 </body>
 </html>

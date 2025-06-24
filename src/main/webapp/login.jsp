@@ -4,7 +4,6 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-
   <title>Login Utente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="./img/small_logo.png">
@@ -16,6 +15,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 
 <jsp:include page="header.jsp" />
@@ -62,6 +62,5 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="./scripts/menu.js"></script>
 </body>
 </html>

@@ -5,42 +5,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
+import model.utente.UtenteBean;
+import model.utente.UtenteDAO;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
-        super();
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String emailFromCookie = null;
-        String passwordFromCookie = null;
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("rememberGuestEmail".equals(cookie.getName())) {
-                    emailFromCookie = cookie.getValue();
-                }
-                if ("rememberGuestPassword".equals(cookie.getName())) {
-                    passwordFromCookie = cookie.getValue();
-                }
-            }
-        }
-
-        if (emailFromCookie != null) {
-            request.setAttribute("prefilledEmail", emailFromCookie);
-        }
-        if (passwordFromCookie != null) {
-            request.setAttribute("prefilledPassword", passwordFromCookie);
-        }
-
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
@@ -53,28 +27,32 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        if ("on".equals(rememberMe)) {
-            Cookie emailCookie = new Cookie("rememberGuestEmail", email);
-            emailCookie.setMaxAge(60 * 60 * 24 * 7);
-            emailCookie.setPath("/");
-            response.addCookie(emailCookie);
+        UtenteDAO utenteDAO = new UtenteDAO(); // Istanzia il tuo DAO
+        UtenteBean utenteLoggato = null;
 
-            Cookie passwordCookie = new Cookie("rememberGuestPassword", password);
-            passwordCookie.setMaxAge(60 * 60 * 24 * 7);
-            passwordCookie.setPath("/");
-            response.addCookie(passwordCookie);
-        } else {
-            Cookie emailCookie = new Cookie("rememberGuestEmail", "");
-            emailCookie.setMaxAge(0);
-            emailCookie.setPath("/");
-            response.addCookie(emailCookie);
-
-            Cookie passwordCookie = new Cookie("rememberGuestPassword", "");
-            passwordCookie.setMaxAge(0);
-            passwordCookie.setPath("/");
-            response.addCookie(passwordCookie);
+        try {
+            // Utilizza il metodo doLogin del tuo DAO per recuperare l'utente
+            utenteLoggato = utenteDAO.doLogin(email, Security.hashPassword(password));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Stampa l'errore per debug
+            request.setAttribute("errorMessage", "Errore del server durante il login. Riprova più tardi.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
 
-        response.sendRedirect(request.getContextPath() + "/loginSuccess.jsp");
+        if (utenteLoggato != null) {
+
+            HttpSession session = request.getSession(); // Ottieni o crea la sessione
+            session.setAttribute("user", utenteLoggato);
+            if(utenteLoggato.isAdmin())
+                session.setAttribute("isAdmin", true);
+            session.setMaxInactiveInterval(30 * 60); // Imposta la scadenza della sessione a 30 minuti
+
+
+            response.sendRedirect(request.getContextPath() + "/loginSuccess.jsp");
+        } else {
+            request.setAttribute("errorMessage", "Email o password non validi.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
 }

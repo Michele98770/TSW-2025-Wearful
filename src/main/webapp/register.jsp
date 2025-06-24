@@ -61,7 +61,7 @@
 <div class="form-container">
     <h2>Registrati</h2>
 
-    <%-- Messaggi di errore o successo dal Server --%>
+
     <%
         String errorMessage = (String) request.getAttribute("errorMessage");
         String successMessage = (String) request.getAttribute("successMessage");
@@ -119,7 +119,6 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="./scripts/menu.js"></script>
 <script src="./scripts/register.js"></script>
 </body>
 </html>
