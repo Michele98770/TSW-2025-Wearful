@@ -1,5 +1,7 @@
 package control;
 
+import model.utente.UtenteBean;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -29,9 +31,15 @@ public class AdminFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
+       UtenteBean currentUser = (UtenteBean)session.getAttribute("user");
 
-        boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
-        boolean isAdmin = (session != null && Boolean.TRUE.equals(session.getAttribute("isAdmin")));
+        boolean isLoggedIn=false;
+        boolean isAdmin=false;
+
+         if(currentUser != null) {
+              isLoggedIn = true;
+              isAdmin = currentUser.isAdmin();
+         }
 
         String loginPage = httpRequest.getContextPath() + "/login.jsp";
 
@@ -42,7 +50,8 @@ public class AdminFilter implements Filter {
         if (!isLoggedIn || !isAdmin) {
             System.out.println("AdminFilter: Access denied. Redirecting to login.");
             httpResponse.sendRedirect("403.jsp");
-        } else {
+        }
+        else {
             System.out.println("AdminFilter: Access granted. Continuing chain.");
             chain.doFilter(request, response);
         }

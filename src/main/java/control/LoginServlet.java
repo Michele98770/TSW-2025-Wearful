@@ -44,10 +44,8 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession(); // Ottieni o crea la sessione
             session.setAttribute("user", utenteLoggato);
-            session.setAttribute("currentUser",utenteLoggato.getEmail());
             session.setMaxInactiveInterval(30 * 60);
             if(utenteLoggato.isAdmin()) {
-                session.setAttribute("isAdmin", true);
                 response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
             }
             else

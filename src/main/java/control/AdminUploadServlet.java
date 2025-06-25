@@ -44,7 +44,6 @@ public class AdminUploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
        String currentUser = (String) session.getAttribute("currentUser");
 
-
         GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
         GruppoProdottiBean currentSelectedGroup = null;
 
@@ -78,13 +77,8 @@ public class AdminUploadServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String currentUser = (String) session.getAttribute("currentUser");
+        UtenteBean currentUser = (UtenteBean) session.getAttribute("user");
 
-        // Qui dovresti aggiungere un controllo sui permessi dell'utente, ad esempio:
-        // if (currentUser == null || !currentUser.isAdmin()) {
-        //     response.sendRedirect(request.getContextPath() + "/login.jsp"); // O una pagina di errore
-        //     return;
-        // }
 
         List<String> validationErrors = new ArrayList<>();
         String successMessage = null;
@@ -302,7 +296,7 @@ public class AdminUploadServlet extends HttpServlet {
                     newProduct.setDisponibilita(disponibilita);
                     newProduct.setPersonalizzabile(personalizzabile);
                     newProduct.setImgPath(productImgPath);
-                    newProduct.setPublisher(currentUser); // Assicurati che currentUser non sia null
+                    newProduct.setPublisher(currentUser.getEmail()); // Assicurati che currentUser non sia null
                     newProduct.setGruppo(currentSelectedGroup.getId());
 
 
