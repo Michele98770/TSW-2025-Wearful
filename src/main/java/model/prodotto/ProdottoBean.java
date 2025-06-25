@@ -1,4 +1,4 @@
-package  model.prodotto;
+package model.prodotto;
 
 import java.io.Serializable;
 //import java.math.BigDecimal;
@@ -6,12 +6,12 @@ import java.io.Serializable;
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     private Long id;
     private String nome;
     private String descrizione;
     private String taglia;
     private String colore;
+    private String codiceColore; // NUOVO CAMPO AGGIUNTO
     private String categoria;
     private float prezzo;
     private int iva;
@@ -21,15 +21,16 @@ public class ProdottoBean implements Serializable {
     private String publisher;
     private Long gruppo;
 
-
+    // Costruttore completo aggiornato
     public ProdottoBean(Long id, String nome, String descrizione, String taglia,
-                    String colore, String categoria, float prezzo, int iva,int disponibilita,
-                    boolean personalizzabile, String imgPath, String publisher, Long gruppo) {
+                        String colore, String codiceColore, String categoria, float prezzo, int iva, int disponibilita,
+                        boolean personalizzabile, String imgPath, String publisher, Long gruppo) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.taglia = taglia;
         this.colore = colore;
+        this.codiceColore = codiceColore; // Assegna il nuovo campo
         this.categoria = categoria;
         this.prezzo = prezzo;
         this.iva = iva;
@@ -41,9 +42,20 @@ public class ProdottoBean implements Serializable {
     }
 
     public ProdottoBean() {
-
+        // Costruttore vuoto, inizializza codiceColore a null o valore predefinito
+        this.codiceColore = null;
     }
 
+    // Getter e Setter per codiceColore
+    public String getCodiceColore() {
+        return codiceColore;
+    }
+
+    public void setCodiceColore(String codiceColore) {
+        this.codiceColore = codiceColore;
+    }
+
+    // --- Metodi esistenti (getters e setters) ---
     public Long getId() {
         return id;
     }
@@ -100,6 +112,22 @@ public class ProdottoBean implements Serializable {
         this.prezzo = prezzo;
     }
 
+    public int getIva() {
+        return iva;
+    }
+
+    public void setIva(int iva) {
+        this.iva = iva;
+    }
+
+    public int getDisponibilita() {
+        return disponibilita;
+    }
+
+    public void setDisponibilita(int disponibilita) {
+        this.disponibilita = disponibilita;
+    }
+
     public boolean isPersonalizzabile() {
         return personalizzabile;
     }
@@ -130,30 +158,5 @@ public class ProdottoBean implements Serializable {
 
     public void setGruppo(Long gruppo) {
         this.gruppo = gruppo;
-    }
-
-    public int getIva() {
-        return iva;
-    }
-
-    public void setIva(int iva) {
-        this.iva = iva;
-    }
-
-    public int getDisponibilita() {
-        return disponibilita;
-    }
-
-    public void setDisponibilita(int disponibilita) {
-        this.disponibilita = disponibilita;
-    }
-
-    public float getPrezzoConIva() {
-        return prezzo+(((float)(iva)/100) * prezzo);
-    }
-
-    @Override
-    public String toString() {
-        return "Prodotto{" + "id=" + id + ", nome=" + nome + ", prezzo=" + prezzo + '}';
     }
 }

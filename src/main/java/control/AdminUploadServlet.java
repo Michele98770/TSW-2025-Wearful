@@ -42,7 +42,7 @@ public class AdminUploadServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        UtenteBean currentUser = (UtenteBean) session.getAttribute("currentUser");
+       String currentUser = (String) session.getAttribute("currentUser");
 
 
         GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
@@ -52,7 +52,7 @@ public class AdminUploadServlet extends HttpServlet {
             List<GruppoProdottiBean> allGroups = gruppoDAO.doRetrieveAll();
             if (allGroups != null && !allGroups.isEmpty()) {
                 allGroups.sort((g1, g2) -> g2.getId().compareTo(g1.getId()));
-                currentSelectedGroup = allGroups.get(0);
+                currentSelectedGroup = allGroups.get(0); // Seleziona il gruppo più recente o uno di default
             }
         } catch (SQLException e) {
             System.err.println("Errore SQL nel recupero dei gruppi prodotti per doGet: " + e.getMessage());
@@ -65,6 +65,7 @@ public class AdminUploadServlet extends HttpServlet {
         request.setAttribute("oldProductDescription", "");
         request.setAttribute("oldProductTaglia", "");
         request.setAttribute("oldProductColore", "");
+        request.setAttribute("oldProductCodiceColore", ""); // Nuovo campo
         request.setAttribute("oldProductCategory", "");
         request.setAttribute("oldProductPrice", "");
         request.setAttribute("oldProductIva", "");
@@ -77,8 +78,13 @@ public class AdminUploadServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        UtenteBean currentUser = (UtenteBean) session.getAttribute("currentUser");
+        String currentUser = (String) session.getAttribute("currentUser");
 
+        // Qui dovresti aggiungere un controllo sui permessi dell'utente, ad esempio:
+        // if (currentUser == null || !currentUser.isAdmin()) {
+        //     response.sendRedirect(request.getContextPath() + "/login.jsp"); // O una pagina di errore
+        //     return;
+        // }
 
         List<String> validationErrors = new ArrayList<>();
         String successMessage = null;
@@ -87,10 +93,12 @@ public class AdminUploadServlet extends HttpServlet {
         String groupName = request.getParameter("groupName");
         String groupIdStr = request.getParameter("groupId");
 
+        // Imposta gli attributi per ripopolare il form in caso di errore
         request.setAttribute("oldProductName", request.getParameter("productName"));
         request.setAttribute("oldProductDescription", request.getParameter("productDescription"));
         request.setAttribute("oldProductTaglia", request.getParameter("productTaglia"));
         request.setAttribute("oldProductColore", request.getParameter("productColore"));
+        request.setAttribute("oldProductCodiceColore", request.getParameter("productCodiceColore")); // Nuovo campo
         request.setAttribute("oldProductCategory", request.getParameter("productCategoria"));
         request.setAttribute("oldProductPrice", request.getParameter("productPrezzo"));
         request.setAttribute("oldProductIva", request.getParameter("productIVA"));
@@ -125,7 +133,7 @@ public class AdminUploadServlet extends HttpServlet {
                 } catch (NumberFormatException e) {
                     validationErrors.add("ID gruppo prodotto non valido. Riprovare.");
                 }
-            } else {
+            } else { // Se non è stato selezionato un gruppo esistente, tenta di crearne uno nuovo
                 if (groupName == null || groupName.trim().isEmpty()) {
                     validationErrors.add("Il nome del gruppo non può essere vuoto.");
                 } else if (groupName.length() > 255) {
@@ -142,28 +150,35 @@ public class AdminUploadServlet extends HttpServlet {
                     } else {
                         GruppoProdottiBean newGroup = new GruppoProdottiBean();
                         newGroup.setNome(groupName.trim());
-                        gruppoDAO.doSave(newGroup);
+                        gruppoDAO.doSave(newGroup); // Salva il nuovo gruppo
                         currentSelectedGroup = newGroup;
                         successMessage = "Gruppo prodotto '" + groupName + "' creato con successo! ";
                     }
                 }
             }
 
-            if (currentSelectedGroup == null && validationErrors.isEmpty()) {
-                validationErrors.add("Impossibile determinare o creare il gruppo prodotto.");
-            }
-
+            // Se ci sono errori nella gestione del gruppo, reindirizza
             if (!validationErrors.isEmpty()) {
                 request.setAttribute("validationErrors", validationErrors);
-                request.setAttribute("currentSelectedGroup", currentSelectedGroup);
+                request.setAttribute("currentSelectedGroup", currentSelectedGroup); // Mantiene il gruppo selezionato/tentato
                 request.getRequestDispatcher("/adminUpload.jsp").forward(request, response);
                 return;
             }
+
+            // Assicurati che currentSelectedGroup sia non nullo prima di procedere
+            if (currentSelectedGroup == null) {
+                validationErrors.add("Errore critico nella gestione del gruppo prodotto.");
+                request.setAttribute("validationErrors", validationErrors);
+                request.getRequestDispatcher("/adminUpload.jsp").forward(request, response);
+                return;
+            }
+
 
             String productName = request.getParameter("productName");
             String productDescription = request.getParameter("productDescription");
             String productTaglia = request.getParameter("productTaglia");
             String productColore = request.getParameter("productColore");
+            String productCodiceColore = request.getParameter("productCodiceColore"); // Nuovo parametro
             String productCategoria = request.getParameter("productCategoria");
             String productPrezzoStr = request.getParameter("productPrezzo");
             String productIvaStr = request.getParameter("productIVA");
@@ -212,6 +227,7 @@ public class AdminUploadServlet extends HttpServlet {
                 validationErrors.add("Errore nel caricamento dell'immagine: " + e.getMessage());
             }
 
+            // Validazioni campi prodotto
             if (productName == null || productName.trim().isEmpty()) {
                 validationErrors.add("Il nome del prodotto è obbligatorio.");
             } else if (productName.length() > 255) {
@@ -230,6 +246,14 @@ public class AdminUploadServlet extends HttpServlet {
             } else if (productColore.length() > 50) {
                 validationErrors.add("Il colore è troppo lungo (max 50 caratteri).");
             }
+
+            // Validazione per codiceColore
+            if (productCodiceColore == null || productCodiceColore.trim().isEmpty()) {
+                validationErrors.add("Il codice colore è obbligatorio.");
+            } else if (!productCodiceColore.matches("^#([A-Fa-f0-9]{6})$")) { // Regex per #RRGGBB
+                validationErrors.add("Il codice colore non è valido. Deve essere nel formato #RRGGBB (es. #FF0000).");
+            }
+
             if (productCategoria == null || productCategoria.trim().isEmpty()) {
                 validationErrors.add("La categoria è obbligatoria.");
             } else if (productCategoria.length() > 50) {
@@ -247,8 +271,9 @@ public class AdminUploadServlet extends HttpServlet {
             int iva = 0;
             try {
                 iva = Integer.parseInt(productIvaStr);
+                if (iva < 0 || iva > 100) validationErrors.add("IVA non valida. Selezionare una percentuale tra 0 e 100.");
             } catch (NumberFormatException e) {
-                validationErrors.add("IVA non valida. Selezionare una percentuale valida.");
+                validationErrors.add("IVA non valida. Inserire un numero intero valido.");
             }
 
             int disponibilita = 0;
@@ -261,6 +286,7 @@ public class AdminUploadServlet extends HttpServlet {
 
             boolean personalizzabile = "true".equals(personalizzabileStr);
 
+            // Se non ci sono errori di validazione, procedi con il salvataggio del prodotto
             if (validationErrors.isEmpty()) {
                 try {
                     ProdottoBean newProduct = new ProdottoBean();
@@ -269,23 +295,26 @@ public class AdminUploadServlet extends HttpServlet {
                     newProduct.setDescrizione(productDescription.trim());
                     newProduct.setTaglia(productTaglia);
                     newProduct.setColore(productColore.trim());
+                    newProduct.setCodiceColore(productCodiceColore.trim()); // Imposta il nuovo campo
                     newProduct.setCategoria(productCategoria.trim());
                     newProduct.setPrezzo(prezzo);
                     newProduct.setIva(iva);
                     newProduct.setDisponibilita(disponibilita);
                     newProduct.setPersonalizzabile(personalizzabile);
                     newProduct.setImgPath(productImgPath);
-                    newProduct.setPublisher(currentUser.getEmail());
+                    newProduct.setPublisher(currentUser); // Assicurati che currentUser non sia null
                     newProduct.setGruppo(currentSelectedGroup.getId());
 
 
                     prodottoDAO.doSave(newProduct);
                     successMessage = (successMessage == null ? "" : successMessage + "<br>") + "Prodotto '" + productName + "' aggiunto con successo al gruppo '" + currentSelectedGroup.getNome() + "'!";
 
+                    // Resetta i campi del form dopo un salvataggio riuscito
                     request.setAttribute("oldProductName", "");
                     request.setAttribute("oldProductDescription", "");
                     request.setAttribute("oldProductTaglia", "");
                     request.setAttribute("oldProductColore", "");
+                    request.setAttribute("oldProductCodiceColore", ""); // Resetta il nuovo campo
                     request.setAttribute("oldProductCategory", "");
                     request.setAttribute("oldProductPrice", "");
                     request.setAttribute("oldProductIva", "");
@@ -296,6 +325,7 @@ public class AdminUploadServlet extends HttpServlet {
                     System.err.println("Errore SQL nell'aggiunta del prodotto: " + e.getMessage());
                     e.printStackTrace();
                     validationErrors.add("Errore database nell'aggiunta del prodotto. Riprova.");
+                    // Cerca di eliminare l'immagine caricata se c'è un errore DB
                     if (productImgPath != null) {
                         try {
                             String relativeUploadPath = productImgPath.substring(request.getContextPath().length() + 1);
@@ -309,7 +339,7 @@ public class AdminUploadServlet extends HttpServlet {
             }
 
         } catch (SQLException e) {
-            System.err.println("Errore SQL generale nella servlet: " + e.getMessage());
+            System.err.println("Errore SQL generale nella servlet (gruppo o altro): " + e.getMessage());
             e.printStackTrace();
             validationErrors.add("Errore interno del server. Riprova.");
         } finally {
@@ -317,7 +347,7 @@ public class AdminUploadServlet extends HttpServlet {
             if (successMessage != null) {
                 request.setAttribute("successMessage", successMessage);
             }
-            request.setAttribute("currentSelectedGroup", currentSelectedGroup);
+            request.setAttribute("currentSelectedGroup", currentSelectedGroup); // Assicura che il gruppo sia sempre settato per la JSP
 
             request.getRequestDispatcher("adminUpload.jsp").forward(request, response);
         }

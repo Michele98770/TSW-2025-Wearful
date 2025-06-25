@@ -33,6 +33,7 @@ CREATE TABLE Prodotto (
     descrizione VARCHAR(4096) NOT NULL,
     taglia ENUM('XXS','XS','S', 'M', 'L', 'XL', 'XXL') NOT NULL,
     colore VARCHAR(50) NOT NULL,
+    codiceColore CHAR(7) NOT NULL,
     categoria VARCHAR(50) NOT NULL,
     prezzo DECIMAL(7,2) NOT NULL,
     IVA TINYINT UNSIGNED NOT NULL,
@@ -85,4 +86,4 @@ CREATE TABLE OrderItem (
 
 
 INSERT INTO Utente (email, username, telefono, password, isAdmin)
-VALUES ('admin@wearful.com', 'adminUser', '1234567890', 'CcV0rNKcBuduhNc5BLywbuFP+TGvMLEPmqCp2jrpxok=', TRUE);
+VALUES ('admin@wearful.com', 'adminUser', '+390123456789', 'CcV0rNKcBuduhNc5BLywbuFP+TGvMLEPmqCp2jrpxok=', TRUE);

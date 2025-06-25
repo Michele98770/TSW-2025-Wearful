@@ -4,24 +4,22 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi siamo - Wearful</title>
     <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stileheader.css?v=1.0">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stilefooter.css?v=1.0">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/common.css?v=1.0.1"> <%-- Changed base.css to common.css --%>
+    <link rel="stylesheet" href="./stylesheets/stilefooter.css">
+    <link rel="stylesheet" href="./stylesheets/stileheader.css">
+    <link rel="stylesheet" href="./stylesheets/common.css?v=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
-<%-- INIZIO HEADER --%>
-<jsp:include page="header.jsp" />
-<%-- FINE HEADER --%>
+<jsp:include page="header.jsp"/>
 
 <main>
-    <section id="menu">
+    <section id="menu" class="menu-section">
         <h1>Chi siamo?</h1>
         <p>
             Siamo un team di appassionati di <b>videogiochi</b>, <b>film</b>, <b>fumetti</b> e <b>comics</b>, che ha fondato Wearful per condividere la nostra passione!
@@ -47,8 +45,7 @@
     </section>
 </main>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="footer.jsp"/>
 
 </body>
 </html>
-

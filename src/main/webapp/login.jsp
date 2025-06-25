@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./stylesheets/stilefooter.css">
   <link rel="stylesheet" href="./stylesheets/stileheader.css">
   <link rel="stylesheet" href="./stylesheets/common.css">
-  <link rel="stylesheet" href="./stylesheets/register.css">
+  <link rel="stylesheet" href="./stylesheets/register.css?v=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
@@ -41,15 +41,17 @@
     }
   %>
 
-  <form action="LoginServlet" method="post" class="registration-form"> <%-- Action per il LoginServlet, stessa classe form --%>
+  <form action="LoginServlet" method="post" class="registration-form" id="loginForm"> <%-- Changed id to loginForm --%>
     <div class="form-group">
       <label for="email" id="emailLabel">Email:</label>
       <input type="email" id="email" name="email" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
+      <div id="emailError" class="error-message"></div> <%-- Added error div for email --%>
     </div>
 
     <div class="form-group">
       <label for="password" id="passwordLabel">Password:</label>
       <input type="password" id="password" name="password" required minlength="8">
+      <div id="passwordError" class="error-message"></div> <%-- Added error div for password --%>
     </div>
 
     <button type="submit" class="btn btn-primary">Accedi</button>
@@ -60,7 +62,7 @@
 
 <br><br><br><br><br>
 
-<script src="./scripts/register.js"></script>
+<script src="./scripts/login.js"></script> <%-- Changed script reference to login.js --%>
 
 <jsp:include page="footer.jsp" />
 

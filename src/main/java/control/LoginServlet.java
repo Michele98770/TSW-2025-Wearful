@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        UtenteDAO utenteDAO = new UtenteDAO(); // Istanzia il tuo DAO
+        UtenteDAO utenteDAO = new UtenteDAO();
         UtenteBean utenteLoggato = null;
 
         try {
@@ -44,12 +44,15 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession(); // Ottieni o crea la sessione
             session.setAttribute("user", utenteLoggato);
-            if(utenteLoggato.isAdmin())
+            session.setAttribute("currentUser",utenteLoggato.getEmail());
+            session.setMaxInactiveInterval(30 * 60);
+            if(utenteLoggato.isAdmin()) {
                 session.setAttribute("isAdmin", true);
-            session.setMaxInactiveInterval(30 * 60); // Imposta la scadenza della sessione a 30 minuti
+                response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
+            }
+            else
+                response.sendRedirect(request.getContextPath()+"/loginSuccess.jsp");
 
-
-            response.sendRedirect(request.getContextPath() + "/loginSuccess.jsp");
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

@@ -1,61 +1,69 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const colorTextInput = document.getElementById('productColore');
-    const colorPicker = document.getElementById('colorPicker');
+    const productNameInput = document.getElementById('productName');
+    const productDescriptionInput = document.getElementById('productDescription');
+    const productTagliaSelect = document.getElementById('productTaglia');
+    const productColoreInput = document.getElementById('productColore');
+    const productCodiceColoreInput = document.getElementById('productCodiceColore');
+    const productCategoriaInput = document.getElementById('productCategoria');
+    const productPrezzoInput = document.getElementById('productPrezzo');
+    const productIvaSelect = document.getElementById('productIVA');
+    const productDisponibilitaInput = document.getElementById('productDisponibilita');
+    const personalizzabileYesRadio = document.getElementById('personalizzabileYes');
+    const personalizzabileNoRadio = document.getElementById('personalizzabileNo');
     const productImgFile = document.getElementById('productImgFile');
+    const colorPicker = document.getElementById('colorPicker');
 
-    // Nuovi elementi per l'anteprima e il contagocce
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const colorDropperCanvas = document.getElementById('colorDropperCanvas');
     const ctx = colorDropperCanvas.getContext('2d');
     const currentColorHexSpan = document.getElementById('currentColorHex');
     const currentColorSwatch = document.getElementById('currentColorSwatch');
 
-    let currentImage = null; // Memorizzerà l'oggetto Image caricato per il canvas
+    let currentImage = null;
 
-    // --- Sincronizzazione esistente tra input testo colore e color picker ---
-    colorTextInput.addEventListener('input', function() {
-        let hexValue = colorTextInput.value;
-        if (hexValue.startsWith('#') && hexValue.length === 7) {
-            colorPicker.value = hexValue;
-            updateColorDisplay(hexValue);
-        } else if (hexValue.length === 6 && !hexValue.startsWith('#')) {
-            // Se l'utente digita 6 cifre senza #, aggiungiamo noi il #
+    const productForm = document.querySelector('.admin-registration-form');
+    const submitButton = productForm.querySelector('.admin-submit-button');
+
+    productCodiceColoreInput.addEventListener('input', function() {
+        let hexValue = productCodiceColoreInput.value.trim();
+
+        if (!hexValue.startsWith('#') && hexValue.length <= 6) {
             hexValue = '#' + hexValue;
-            colorTextInput.value = hexValue; // Aggiorna l'input testuale
+        }
+
+        if (hexValue.match(/^#([0-9A-Fa-f]{6})$/)) {
             colorPicker.value = hexValue;
             updateColorDisplay(hexValue);
         } else {
-            // Potresti voler gestire altri formati o feedback per l'utente
-            // Per ora, aggiorniamo solo il swatch se possibile, altrimenti lo resettiamo
-            try {
-                // Prova a settare il colore, se non valido il browser lo ignorerà
-                colorPicker.value = "#000000"; // Resetta a un valore base se non valido
-                updateColorDisplay("#------"); // Mostra un placeholder
-            } catch (e) {
-                // Ignore errors
-            }
+            colorPicker.value = "#000000";
+            updateColorDisplay("#------");
         }
+        toggleSubmitButton();
     });
 
     colorPicker.addEventListener('input', function() {
         const hexColor = colorPicker.value;
-        colorTextInput.value = hexColor;
+        productCodiceColoreInput.value = hexColor;
         updateColorDisplay(hexColor);
+        toggleSubmitButton();
     });
 
-    // Inizializza il color picker e l'anteprima al caricamento della pagina
-    const initialColor = colorTextInput.value && colorTextInput.value.startsWith('#') && colorTextInput.value.length === 7
-        ? colorTextInput.value : "#ffffff";
-    colorPicker.value = initialColor;
-    updateColorDisplay(initialColor);
+    const initialCodiceColore = productCodiceColoreInput.value.trim();
+    if (initialCodiceColore.match(/^#([0-9A-Fa-f]{6})$/)) {
+        colorPicker.value = initialCodiceColore;
+        updateColorDisplay(initialCodiceColore);
+    } else {
+        productCodiceColoreInput.value = "#000000";
+        colorPicker.value = "#000000";
+        updateColorDisplay("#000000");
+    }
 
-
-    // --- Gestione del caricamento dell'immagine e disegno sul canvas ---
     productImgFile.addEventListener('change', function() {
         const file = this.files[0];
         if (!file) {
-            imagePreviewContainer.style.display = 'none'; // Nascondi se nessun file
+            imagePreviewContainer.style.display = 'none';
             currentImage = null;
+            toggleSubmitButton();
             return;
         }
 
@@ -64,19 +72,15 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
-                currentImage = img; // Salva l'immagine caricata per il contagocce
-
-                // Mostra il contenitore dell'anteprima
+                currentImage = img;
                 imagePreviewContainer.style.display = 'block';
 
-                // Imposta le dimensioni del canvas, ridimensionando l'immagine per l'anteprima
-                const maxWidth = 320; // Larghezza massima per l'anteprima nel layout
-                const maxHeight = 320; // Altezza massima per l'anteprima nel layout
+                const maxWidth = 320;
+                const maxHeight = 320;
 
                 let width = img.width;
                 let height = img.height;
 
-                // Calcola le nuove dimensioni mantenendo l'aspect ratio
                 if (width > maxWidth) {
                     height = height * (maxWidth / width);
                     width = maxWidth;
@@ -88,15 +92,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 colorDropperCanvas.width = width;
                 colorDropperCanvas.height = height;
-
-                // Disegna l'immagine sul canvas ridimensionata
                 ctx.drawImage(img, 0, 0, width, height);
+                toggleSubmitButton();
             };
             img.onerror = function() {
                 console.error("Errore nel caricamento dell'immagine.");
                 alert("Errore nel caricamento dell'immagine. Assicurati che sia un file immagine valido.");
                 imagePreviewContainer.style.display = 'none';
                 currentImage = null;
+                toggleSubmitButton();
             };
             img.src = e.target.result;
         };
@@ -106,63 +110,156 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Errore nella lettura del file immagine.");
             imagePreviewContainer.style.display = 'none';
             currentImage = null;
+            toggleSubmitButton();
         };
 
-        reader.readAsDataURL(file); // Legge il file come URL di dati (Base64)
+        reader.readAsDataURL(file);
     });
 
-    // --- Funzionalità Contagocce sul Canvas ---
     colorDropperCanvas.addEventListener('click', function(event) {
         if (!currentImage) {
-            return; // Nessuna immagine caricata sul canvas
+            return;
         }
 
-        // Ottieni le coordinate del click relative al canvas
         const rect = colorDropperCanvas.getBoundingClientRect();
-        // Calcola lo scaling se il canvas è ridimensionato via CSS
         const scaleX = colorDropperCanvas.width / rect.width;
         const scaleY = colorDropperCanvas.height / rect.height;
 
         const x = Math.floor((event.clientX - rect.left) * scaleX);
         const y = Math.floor((event.clientY - rect.top) * scaleY);
 
-        // Ottieni i dati del pixel al punto cliccato
         try {
-            // ImageData richiede che l'immagine sia "pulita" o dello stesso dominio
-            const imageData = ctx.getImageData(x, y, 1, 1); // Ottieni solo 1 pixel
-            const pixel = imageData.data; // Array [R, G, B, A]
+            const imageData = ctx.getImageData(x, y, 1, 1);
+            const pixel = imageData.data;
 
             const r = pixel[0];
             const g = pixel[1];
             const b = pixel[2];
 
-            // Converti RGB in formato esadecimale (HEX)
             const hexColor = '#' +
                 ('0' + r.toString(16)).slice(-2) +
                 ('0' + g.toString(16)).slice(-2) +
                 ('0' + b.toString(16)).slice(-2);
 
-            // Imposta il color picker e l'input di testo
+            productCodiceColoreInput.value = hexColor;
             colorPicker.value = hexColor;
-            colorTextInput.value = hexColor;
-
-            // Aggiorna anche la visualizzazione del colore corrente
             updateColorDisplay(hexColor);
-
+            toggleSubmitButton();
         } catch (e) {
             console.error("Impossibile leggere il pixel:", e);
             alert("Impossibile leggere il colore da questa posizione dell'immagine. Potrebbe essere un problema di sicurezza (CORS) se l'immagine proviene da un'altra fonte.");
         }
     });
 
-    // Funzione per aggiornare la visualizzazione del colore corrente
     function updateColorDisplay(hexColor) {
-        if (hexColor.startsWith('#') && hexColor.length === 7) {
+        if (hexColor.match(/^#([0-9A-Fa-f]{6})$/)) {
             currentColorHexSpan.textContent = hexColor.toUpperCase();
             currentColorSwatch.style.backgroundColor = hexColor;
         } else {
             currentColorHexSpan.textContent = "#------";
-            currentColorSwatch.style.backgroundColor = "transparent"; // O un colore neutro
+            currentColorSwatch.style.backgroundColor = "transparent";
         }
     }
+
+    function validateForm() {
+        let isValid = true;
+        const errors = [];
+
+        const groupNameInput = document.getElementById('groupName');
+        if (!groupNameInput.readOnly && groupNameInput.value.trim() === '') {
+            errors.push("Il campo 'Nome Linea di prodotti' è obbligatorio.");
+            isValid = false;
+        }
+
+        if (productNameInput.value.trim() === '') {
+            errors.push("Il campo 'Nome Prodotto' è obbligatorio.");
+            isValid = false;
+        }
+
+        if (productDescriptionInput.value.trim() === '') {
+            errors.push("Il campo 'Descrizione' è obbligatorio.");
+            isValid = false;
+        }
+
+        if (productTagliaSelect.value === '') {
+            errors.push("Selezionare una 'Taglia'.");
+            isValid = false;
+        }
+
+        if (productColoreInput.value.trim() === '') {
+            errors.push("Il campo 'Nome Colore' è obbligatorio.");
+            isValid = false;
+        }
+
+        if (!productCodiceColoreInput.value.trim().match(/^#([0-9A-Fa-f]{6})$/)) {
+            errors.push("Il campo 'Colore' deve essere un codice esadecimale valido (es. #RRGGBB).");
+            isValid = false;
+        }
+
+        if (productCategoriaInput.value === '') {
+            errors.push("Selezionare una 'Categoria'.");
+            isValid = false;
+        }
+
+        const prezzo = parseFloat(productPrezzoInput.value);
+        if (isNaN(prezzo) || prezzo <= 0) {
+            errors.push("Il campo 'Prezzo' deve essere un numero positivo.");
+            isValid = false;
+        }
+
+        if (productIvaSelect.value === '') {
+            errors.push("Selezionare un'aliquota 'IVA'.");
+            isValid = false;
+        }
+
+        const disponibilita = parseInt(productDisponibilitaInput.value, 10);
+        if (isNaN(disponibilita) || disponibilita < 0) {
+            errors.push("Il campo 'Disponibilità' deve essere un numero intero non negativo.");
+            isValid = false;
+        }
+
+        if (!personalizzabileYesRadio.checked && !personalizzabileNoRadio.checked) {
+            errors.push("Selezionare se il prodotto è 'Personalizzabile'.");
+            isValid = false;
+        }
+
+        if (productImgFile.files.length === 0) {
+            errors.push("Caricare un'immagine per il prodotto.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function displayValidationErrors(errors) {
+    }
+
+    function toggleSubmitButton() {
+        if (validateForm()) {
+            submitButton.disabled = false;
+            submitButton.style.opacity = '1';
+            submitButton.style.cursor = 'pointer';
+        } else {
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.5';
+            submitButton.style.cursor = 'not-allowed';
+        }
+    }
+
+    const formElements = productForm.querySelectorAll('input, select, textarea');
+    formElements.forEach(element => {
+        if (element.type === 'text' || element.type === 'number' || element.type === 'color' || element.tagName === 'TEXTAREA') {
+            element.addEventListener('input', toggleSubmitButton);
+        } else if (element.tagName === 'SELECT' || element.type === 'file' || element.type === 'radio') {
+            element.addEventListener('change', toggleSubmitButton);
+        }
+    });
+
+    productForm.addEventListener('submit', function(event) {
+        if (!validateForm()) {
+            event.preventDefault();
+        }
+    });
+
+    toggleSubmitButton();
 });
