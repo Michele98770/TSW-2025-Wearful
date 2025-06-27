@@ -69,6 +69,12 @@
     background-color: #0056b3;
 }
 
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 
 .error-messages {
     background-color: #f8d7da;

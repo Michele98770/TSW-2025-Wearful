@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Errore 404 - Pagina Non Trovata</title>
 
+    <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
     <link rel="stylesheet" href="./stylesheets/stilefooter.css">
     <link rel="stylesheet" href="./stylesheets/stileheader.css">
     <link rel="stylesheet" href="./stylesheets/common.css">
-    <link rel="stylesheet" href="./stylesheets/register.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
@@ -27,7 +27,7 @@
         <h1>404</h1>
         <h2>Oops! Pagina Non Trovata.</h2>
         <p>Sembra che tu abbia raggiunto un vicolo cieco. La pagina che stai cercando non esiste o è stata spostata.</p>
-        <a href="<%= request.getContextPath() %>/login.jsp">Torna alla Home</a>
+        <a href="CatalogoServlet">Torna alla Home</a>
     </div>
 </div>
 

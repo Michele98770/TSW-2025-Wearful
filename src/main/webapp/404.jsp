@@ -27,7 +27,7 @@
         <h1>404</h1>
         <h2>Oops! Pagina Non Trovata.</h2>
         <p>Sembra che tu abbia raggiunto un vicolo cieco. La pagina che stai cercando non esiste o è stata spostata.</p>
-        <a href="<%= request.getContextPath() %>/login.jsp">Torna alla Home</a>
+        <a href="CatalogoServlet">Torna alla Home</a>
     </div>
 </div>
 

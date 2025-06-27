@@ -34,7 +34,7 @@ import java.util.Optional;
 public class AdminUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String UPLOAD_DIRECTORY = "uploads";
+    private static final String UPLOAD_DIRECTORY = "src/main/webapp/img/uploads";
 
     public AdminUploadServlet() {
         super();

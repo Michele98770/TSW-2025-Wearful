@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Errore 404 - Pagina Non Trovata</title>
+  <title>Errore 403 - Accesso non autorizzato</title>
 
+  <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
   <link rel="stylesheet" href="./stylesheets/stilefooter.css">
   <link rel="stylesheet" href="./stylesheets/stileheader.css">
-  <link rel="stylesheet" href="./stylesheets/common.css">
-  <link rel="stylesheet" href="./stylesheets/register.css">
+  <link rel="stylesheet" href="./stylesheets/common.css?v=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
@@ -27,7 +27,7 @@
     <h1>403</h1>
     <h2>Attenzione! Non sei autorizzato ad accedere a questa pagina.</h2>
     <p>Sembra che tu non abbia i permessi per accedere a questa risorsa. Torna indietro.</p>
-    <a href="<%= request.getContextPath() %>/login.jsp">Torna alla Home</a>
+    <a href="CatalogoServlet">Torna alla Home</a>
   </div>
 </div>
 

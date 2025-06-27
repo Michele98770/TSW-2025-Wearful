@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Errore 404 - Pagina Non Trovata</title>
+    <title>Errore 500 - Errore Server</title>
 
     <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
     <link rel="stylesheet" href="./stylesheets/stilefooter.css">
@@ -28,7 +28,7 @@
         <h2>Qualcosa è adato storto...</h2>
         <p>Siamo spiacenti. riprova più tardi.
         </p>
-        <a href="<%= request.getContextPath() %>/login.jsp">Torna alla Home</a>
+        <a href="CatalogoServlet">Torna alla Home</a>
     </div>
 </div>
 

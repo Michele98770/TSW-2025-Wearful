@@ -6,7 +6,7 @@
     </div>
 
     <nav class="menu" id="desktop-menu">
-        <a href="#">Catalogo</a>
+        <a href="CatalogoServlet">Catalogo</a>
         <a href="./chiSiamo.jsp">Chi siamo</a>
         <a href="./domande.jsp">Domande</a>
         <a href="./contatti.jsp">Contatti</a>

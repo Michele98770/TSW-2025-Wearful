@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
             }
             else
-                response.sendRedirect(request.getContextPath()+"/loginSuccess.jsp");
+                response.sendRedirect("CatalogoServlet");
 
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");

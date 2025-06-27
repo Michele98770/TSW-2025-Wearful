@@ -1,0 +1,268 @@
+/* Stili per il layout del catalogo */
+.catalog-page-layout {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    gap: 30px;
+    align-items: flex-start; /* Allinea gli elementi in alto */
+}
+
+/* Stili per la sidebar dei filtri */
+.filter-sidebar {
+    flex: 0 0 250px; /* Non cresce, non si restringe, larghezza base 250px */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: sticky; /* Rende la sidebar "appiccicosa" durante lo scroll */
+    top: 20px; /* Distanza dal top della finestra */
+}
+
+.filter-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.3em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.filter-group {
+    margin-bottom: 25px;
+}
+
+.filter-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Stili per le categorie (bottoni/link) */
+.category-filters button {
+    display: block; /* Ogni bottone su una nuova riga */
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 1em;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.category-filters button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.category-filters button.active {
+    background-color: #660099; /* Colore tema per il selezionato */
+    color: #fff;
+    border-color: #660099;
+}
+
+/* Stili per i filtri numerici (prezzo) */
+.price-filter input[type="number"] {
+    width: calc(50% - 10px); /* Due input affiancati */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+.price-filter input[type="number"]:last-child {
+    margin-right: 0;
+}
+
+/* Stili per il filtro colore */
+.color-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #ccc; /* Bordo predefinito */
+    border-radius: 50%; /* Cerchio */
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.color-option.selected {
+    border-color: #660099; /* Bordo più spesso per il selezionato */
+    transform: scale(1.1);
+}
+.color-option.selected::after {
+    content: '✓'; /* Segno di spunta */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* O un colore leggibile sul cerchio */
+    font-size: 1.2em;
+    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+
+
+/* Stili per il filtro taglia */
+.size-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.size-option input[type="checkbox"] {
+    display: none; /* Nasconde la checkbox di default */
+}
+
+.size-option label {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.size-option input[type="checkbox"]:checked + label {
+    background-color: #660099;
+    color: #fff;
+    border-color: #660099;
+}
+
+/* Stili per la griglia dei prodotti */
+.product-grid {
+    flex: 1; /* Prende lo spazio rimanente */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 250px minimo, si adatta */
+    gap: 25px;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none; /* Rimuove sottolineatura dai link */
+    color: inherit; /* Mantiene il colore del testo */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.product-card-image {
+    width: 100%;
+    height: 250px; /* Altezza fissa per le immagini del prodotto */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5; /* Sfondo per immagini piccole */
+}
+
+.product-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* L'immagine si adatta mantenendo le proporzioni */
+    display: block;
+}
+
+.product-card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Permette al contenuto di espandersi */
+}
+
+.product-card-content h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    color: #333;
+    white-space: nowrap; /* Previene il ritorno a capo */
+    overflow: hidden; /* Nasconde il testo in eccesso */
+    text-overflow: ellipsis; /* Aggiunge i puntini di sospensione */
+}
+
+.product-card-content .price {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #660099; /* Colore tema per il prezzo */
+    margin-bottom: 15px;
+}
+
+.add-to-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #660099;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Spinge il bottone in fondo alla card */
+}
+
+.add-to-cart-btn:hover {
+    background-color: #550077;
+}
+
+/* Paginazione */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    gap: 10px;
+}
+
+.pagination a, .pagination span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #660099;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .current-page {
+    background-color: #660099;
+    color: #fff;
+    border-color: #660099;
+    cursor: default;
+}
+
+/* Messaggi di nessun prodotto */
+.no-products-message {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2em;
+    color: #777;
+    flex: 1; /* Prende spazio nella griglia se vuoto */
+}

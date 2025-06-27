@@ -9,16 +9,21 @@
 </welcome-file-list>
 
     <filter>
-        <filter-name>AdminFilter</filter-name>
-        <filter-class>control.AdminFilter</filter-class> </filter>
-    <filter-mapping>
-        <filter-name>AdminFilter</filter-name>
-        <url-pattern>/adminUpload.jsp</url-pattern>
-    </filter-mapping>
+         <filter-name>AdminFilter</filter-name>
+         <filter-class>control.AdminFilter</filter-class> </filter>
+      <filter-mapping>
+         <filter-name>AdminFilter</filter-name>
+         <url-pattern>/adminUpload.jsp</url-pattern>
+     </filter-mapping>
 
     <error-page>
         <error-code>404</error-code>
         <location>/404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500.jsp</location>
     </error-page>
 
     <session-config>

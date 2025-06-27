@@ -1,108 +1,294 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
+#adminFormWrapper .admin-form-container {
+    max-width: 900px; /* Increased from 700px */
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
+
+#adminFormWrapper h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+#adminFormWrapper .admin-form-group {
+    margin-bottom: 20px;
+}
+
+#adminFormWrapper label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+#adminFormWrapper input[type="text"],
+#adminFormWrapper input[type="number"],
+#adminFormWrapper input[type="email"],
+#adminFormWrapper input[type="password"],
+#adminFormWrapper select,
+#adminFormWrapper textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #495057;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-sizing: border-box;
+}
+
+#adminFormWrapper input[type="text"]:focus,
+#adminFormWrapper input[type="number"]:focus,
+#adminFormWrapper select:focus,
+#adminFormWrapper textarea:focus {
+    border-color: #66b5ff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+#adminFormWrapper textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#adminFormWrapper .admin-color-input-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#adminFormWrapper .admin-color-input-group input[type="text"] {
+    flex-grow: 1;
+}
+
+#adminFormWrapper input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 50px;
+    height: 50px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#adminFormWrapper input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#adminFormWrapper input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#adminFormWrapper input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#adminFormWrapper .admin-radio-group {
+    margin-bottom: 20px;
+}
+
+#adminFormWrapper .admin-radio-group label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 25px;
+    font-weight: normal;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+#adminFormWrapper .admin-radio-group input[type="radio"] {
+    margin-right: 8px;
+    width: auto;
+    height: auto;
+    min-width: unset;
+}
+
+#adminFormWrapper input[type="file"] {
+    padding: 10px;
+    border: 1px dashed #ced4da;
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+
+
+
+#imagePreviewContainer input[type="file"] {
+    width: 100%; /* Assicura che si adatti al 100% dello spazio disponibile */
+    box-sizing: border-box; /* Include padding e bordo nel calcolo della larghezza */
+    max-width: 90%; /* Limita la larghezza massima al 90% del contenitore */
+    padding: 10px;
+    border: 1px dashed #ced4da;
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+
+#adminFormWrapper .admin-submit-button {
+    display: block;
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+#adminFormWrapper .admin-submit-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#adminFormWrapper .admin-submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#adminFormWrapper .admin-feedback-messages {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+#adminFormWrapper .admin-feedback-messages.admin-error-message {
+    background-color: #fdeded;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+#adminFormWrapper .admin-feedback-messages.admin-success-message {
+    background-color: #e8f9ed;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+#adminFormWrapper .admin-feedback-messages ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+#adminFormWrapper .admin-feedback-messages li {
+    margin-bottom: 5px;
+}
+
+.main-admin-content {
     padding: 20px;
 }
-h1 {
-    color: #343a40;
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 600;
-}
-.product-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.product-table thead {
-    background-color: #343a40;
-    color: white;
-}
-.product-table th, .product-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
-.product-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-}
-.product-table tbody tr:hover {
-    background-color: #f8f9fa;
-    transition: background-color 0.2s ease;
-}
-.product-table tbody tr:last-child td {
-    border-bottom: none;
-}
-.product-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.action-buttons {
+
+.admin-page-layout {
     display: flex;
-    gap: 8px;
+    gap: 30px;
+    max-width: 1500px; /* Increased from 1200px */
+    margin: 0 auto;
+    flex-wrap: wrap;
+    align-items: flex-start;
 }
-.btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
+
+.admin-form-section {
+    flex: 2;
+    min-width: 300px;
 }
-.btn-details {
-    background-color: #17a2b8;
-    color: white;
-}
-.btn-details:hover {
-    background-color: #138496;
-}
-.btn-add {
-    background-color: #28a745;
-    color: white;
-}
-.btn-add:hover {
-    background-color: #218838;
-}
-.availability {
-    display: inline-block;
-    padding: 4px 8px;
+
+#imagePreviewContainer {
+    margin-top: 87%;
+    flex: 1;
+    min-width: 250px;
+    background-color: #fff;
+    padding: 20px;
     border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-.in-stock {
-    background-color: #d4edda;
-    color: #155724;
-}
-.out-of-stock {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-.price {
-    font-weight: 600;
-    color: #28a745;
-}
-.no-products {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     text-align: center;
-    padding: 40px;
-    color: #6c757d;
-    font-size: 1.1rem;
+}
+
+#imagePreviewContainer canvas {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 15px auto;
+    cursor: crosshair;
+}
+
+.admin-submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#selectedColorDisplay {
+    margin-top: 20px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#currentColorSwatch {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background-color: #000;
+}
+
+@media (max-width: 992px) {
+    .admin-page-layout {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .admin-form-section, #imagePreviewContainer {
+        flex: auto;
+        width: 100%;
+    }
+    #adminFormWrapper .admin-form-container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    #adminFormWrapper .admin-form-container {
+        padding: 20px;
+    }
+    #adminFormWrapper h2 {
+        font-size: 1.8em;
+    }
+
+}
+
+@media (max-width: 480px) {
+    #adminFormWrapper .admin-form-container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    #adminFormWrapper .admin-submit-button {
+        padding: 12px 15px;
+        font-size: 1em;
+    }
+    .main-admin-content {
+        padding: 10px;
+    }
 }
