@@ -4,14 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./img/small_logo.png">
     <title>Contatti - Wearful</title>
-    <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/common.css?v=1.0">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stileheader.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stilefooter.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
 </head>
 <body>
 

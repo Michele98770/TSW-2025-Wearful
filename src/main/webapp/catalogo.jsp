@@ -42,16 +42,10 @@
 <html lang="it">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
-    <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stileheader.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/stilefooter.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/common.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css"> <%-- Include il nuovo CSS --%>
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css">
 </head>
 <body>
 

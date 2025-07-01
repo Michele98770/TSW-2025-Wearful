@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Calendar" %>
 <footer class="footer">
+  <link rel="stylesheet" href="./stylesheets/stilefooter.css">
+  <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
   <div class="footer-container">
     <div class="footer-logo">
       <h2>Wearful</h2>
