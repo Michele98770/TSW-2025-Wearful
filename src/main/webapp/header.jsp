@@ -1,3 +1,4 @@
+<%@ page import="model.utente.UtenteBean" %>
 <header class="header">
     <link rel="stylesheet" type="text/css" href="./stylesheets/stileheader.css?v=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
@@ -24,9 +25,15 @@
                 <i class="material-icons">search</i>
             </a>
         </div>
-        <a href="#">
+            <%
+            UtenteBean user= (UtenteBean)session.getAttribute("user");
+            if(user==null){ %>
+            <a href="login.jsp">Accedi</a>
+           <% } else {%>
+            <a href="#">
             <i class="material-icons">person</i>
-        </a>
+            <% }%>
+            </a>
         <a href="#">
             <i class="material-icons">shopping_cart</i>
         </a>

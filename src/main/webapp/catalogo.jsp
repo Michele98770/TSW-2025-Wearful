@@ -6,24 +6,20 @@
 <%@ page import="java.nio.charset.StandardCharsets" %>
 
 <%
-    // Recupera la lista di prodotti dalla request (sarà popolata dalla Servlet)
     List<ProdottoBean> products = (List<ProdottoBean>) request.getAttribute("products");
     if (products == null) {
-        products = new ArrayList<>(); // Inizializza una lista vuota se non ci sono prodotti
+        products = new ArrayList<>();
     }
 
-    // Recupera i filtri applicati dalla request per mantenere lo stato del form
+
     String currentCategory = (String) request.getAttribute("filterCategory");
-    // Gestione dei valori numerici per il prezzo
+
     String minPriceStr = (String) request.getAttribute("filterMinPrice");
     String maxPriceStr = (String) request.getAttribute("filterMaxPrice");
-    // List<String> selectedColors = (List<String>) request.getAttribute("filterColors"); // Rimosso
-    // if (selectedColors == null) selectedColors = new ArrayList<>(); // Rimosso
+
     List<String> selectedSizes = (List<String>) request.getAttribute("filterSizes");
     if (selectedSizes == null) selectedSizes = new ArrayList<>();
 
-    // Definisci le opzioni per i filtri (potresti prenderli dal DB in un'applicazione reale)
-    // Rimosse le opzioni per i colori
     List<String> availableSizes = new ArrayList<>();
     availableSizes.add("XXS");
     availableSizes.add("XS");

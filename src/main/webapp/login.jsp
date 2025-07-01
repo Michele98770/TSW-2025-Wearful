@@ -40,13 +40,13 @@
     <div class="form-group">
       <label for="email" id="emailLabel">Email:</label>
       <input type="email" id="email" name="email" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
-      <div id="emailError" class="error-message"></div> <%-- Added error div for email --%>
+      <div id="emailError" class="error-message"></div>
     </div>
 
     <div class="form-group">
       <label for="password" id="passwordLabel">Password:</label>
       <input type="password" id="password" name="password" required minlength="8">
-      <div id="passwordError" class="error-message"></div> <%-- Added error div for password --%>
+      <div id="passwordError" class="error-message"></div>
     </div>
 
     <button type="submit" class="btn btn-primary">Accedi</button>
@@ -57,7 +57,7 @@
 
 <br><br><br><br><br>
 
-<script src="./scripts/login.js"></script> <%-- Changed script reference to login.js --%>
+<script src="./scripts/login.js"></script>
 
 <jsp:include page="footer.jsp" />
 

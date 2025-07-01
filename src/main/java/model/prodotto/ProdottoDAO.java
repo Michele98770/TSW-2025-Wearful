@@ -447,4 +447,51 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         }
         return totalProducts;
     }
+
+
+    public List<ProdottoBean> doRetrieveByGruppo(Long gruppoId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<ProdottoBean> prodottiDelGruppo = new ArrayList<>();
+
+        String sql = "SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE gruppo = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, gruppoId);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                prodottiDelGruppo.add(new ProdottoBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("descrizione"),
+                        resultSet.getString("taglia"),
+                        resultSet.getString("colore"),
+                        resultSet.getString("codiceColore"),
+                        resultSet.getString("categoria"),
+                        resultSet.getFloat("prezzo"),
+                        resultSet.getInt("IVA"),
+                        resultSet.getInt("disponibilita"),
+                        resultSet.getBoolean("personalizzabile"),
+                        resultSet.getString("imgPath"),
+                        resultSet.getString("publisher"),
+                        resultSet.getLong("gruppo")
+                ));
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return prodottiDelGruppo;
+    }
 }

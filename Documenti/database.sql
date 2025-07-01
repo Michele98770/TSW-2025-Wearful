@@ -95,5 +95,5 @@ VALUES (1,'I am a Ducktor'),
 INSERT INTO Prodotto( nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo)
 VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '#cedace','Maglia',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
         ('I am a Ducktor', 'Maglia unisex con papera divertente', 'L', 'Verde', '#cedace','Maglia',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
-       ('I am a Ducktor', 'Maglia unisex con papera divertente', 'XL', 'Verde', '#cedace','Maglia',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
+       ('I am a Ducktor', 'Maglia unisex con papera divertente', 'XL', 'Verde', '#cedace','Maglia',20.00, 22,2,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
        ('Obi-Juan', 'Maglia unisex tema star wars divertente', 'M', 'Nera', '#1e1e1e','Felpa',25.00, 22,1,false,'./img/uploads/obiJuan.jpg','admin@wearful.com',2)
