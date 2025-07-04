@@ -12,7 +12,7 @@
 
 .product-image-gallery {
     flex: 1;
-    min-width: 300px;
+    min-width: 50%;
     max-width: 500px;
     display: flex;
     justify-content: center;
@@ -86,8 +86,7 @@
 }
 
 .color-option.selected {
-    border-color: #660099; /* Colore di selezione */
-    box-shadow: 0 0 0 3px #660099; /* Anello di selezione */
+    border-color: #660099;
 }
 
 .size-option {
@@ -109,9 +108,7 @@
 }
 
 .size-option.selected {
-    border-color: #660099;
-    background-color: #660099;
-    color: #fff;
+    background-color: #d6b3ff;
     font-weight: bold;
 }
 
@@ -177,7 +174,7 @@
     border-color: #bbb;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
     .product-detail-layout {
         flex-direction: column;

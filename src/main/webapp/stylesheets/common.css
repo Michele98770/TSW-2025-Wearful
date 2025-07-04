@@ -21,9 +21,9 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Modificato per usare una classe per maggiore riusabilità */
+
 .menu-section {
-    text-align: center; /* Questo centra i titoli e i contenuti inline */
+    text-align: center;
     margin-bottom: 0;
 }
 
@@ -49,7 +49,7 @@ main {
     max-width: 800px;
     margin: 0 auto 1.5rem auto;
     line-height: 1.8;
-    text-align: center; /* AGGIUNTO: Centra il testo all'interno dei paragrafi */
+    text-align: center;
 }
 
 .menu-section h2 {
@@ -65,16 +65,15 @@ main {
     padding: 0;
     margin: 0 auto;
     max-width: 600px;
-    text-align: center; /* AGGIUNTO: Centra il testo all'interno dell'UL */
+    text-align: center;
 }
 
-/* Aggiunto border-bottom per dimostrare l'effetto di :last-child */
 .menu-section ul li {
     font-size: 1.1em;
     color: #444;
     padding: 0.8rem 0;
-    border-bottom: 1px solid #eee; /* Aggiunto un bordo leggero */
-    text-align: center; /* AGGIUNTO: Centra il testo all'interno degli elementi LI */
+    border-bottom: 1px solid #eee;
+    text-align: center;
 }
 
 .menu-section ul li:last-child {
@@ -166,8 +165,8 @@ main {
 
 .social-links {
     display: flex;
-    justify-content: center; /* Center social icons */
-    gap: 20px; /* Space between icons */
+    justify-content: center;
+    gap: 20px;
     margin-bottom: 30px;
 }
 
@@ -183,7 +182,6 @@ main {
     transform: translateY(-3px); /* Slight lift on hover */
 }
 
-/* Styles for quick contact details */
 .contact-details p {
     text-align: center;
 }
@@ -191,5 +189,5 @@ main {
 .contact-details p i.material-icons {
     margin-right: 10px;
     font-size: 1.5em;
-    color: #8E44AD; /* Medium violet for icons */
+    color: #8E44AD;
 }

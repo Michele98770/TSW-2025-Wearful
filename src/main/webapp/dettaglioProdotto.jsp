@@ -28,9 +28,9 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title><%= productGroupName %> - Dettaglio Prodotto</title> <%-- Ora usa il nome del gruppo --%>
+  <title><%= productGroupName %> - Dettaglio Prodotto</title>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.0">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.1">
 
 </head>
 <body>
@@ -99,7 +99,7 @@
 <script>
   const productsData = <%= jsonProducts %>;
 </script>
-<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.0"></script>
+<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.1"></script>
 
 </body>
 </html>

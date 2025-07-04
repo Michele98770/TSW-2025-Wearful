@@ -41,7 +41,6 @@ function updateProductDetails() {
         productImage.src = '';
         productPrice.textContent = '';
         selectedColorDisplay.textContent = currentSelectedColor || 'N/D';
-        selectedSizeDisplay.textContent = currentSelectedSize || 'N/D';
         return;
     }
 
@@ -85,7 +84,6 @@ function updateProductDetails() {
         productPrice.textContent = '';
     }
     selectedColorDisplay.textContent = currentSelectedColor;
-    selectedSizeDisplay.textContent = currentSelectedSize || 'N/D';
 }
 
 function updateSizeOptions() {
