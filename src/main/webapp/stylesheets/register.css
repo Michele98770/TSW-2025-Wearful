@@ -1,5 +1,5 @@
-
 .form-container {
+    width: 90%;
     max-width: 500px;
     margin: 50px auto;
     padding: 30px;
@@ -32,7 +32,7 @@
 .registration-form input[type="text"],
 .registration-form input[type="tel"],
 .registration-form input[type="password"] {
-    width: calc(100% - 20px);
+    width: calc(100% - 20px); /* Mantiene il calcolo per padding */
     padding: 12px 10px;
     border: 1px solid #ced4da;
     border-radius: 5px;
@@ -64,7 +64,6 @@
     box-sizing: border-box;
 }
 
-
 .btn-primary:hover {
     background-color: #0056b3;
 }
@@ -74,7 +73,6 @@
     cursor: not-allowed;
     pointer-events: none;
 }
-
 
 .error-messages {
     background-color: #f8d7da;
@@ -101,7 +99,6 @@
     margin-bottom: 0;
 }
 
-
 .login-link {
     margin-top: 20px;
     font-size: 0.95em;
@@ -118,12 +115,10 @@
     text-decoration: underline;
 }
 
-
-/* Media Queries for responsiveness */
 @media (max-width: 768px) {
     .form-container {
         margin: 20px 10px;
         padding: 20px;
+        width: calc(100% - 20px);
     }
 }
-

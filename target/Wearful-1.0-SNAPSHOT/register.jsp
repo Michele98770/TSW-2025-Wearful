@@ -15,6 +15,7 @@
     .input-success {
         border-color: #28a745 !important;
     }
+
     .label-error {
         color: #dc3545 ;
     }

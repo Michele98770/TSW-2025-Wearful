@@ -62,8 +62,6 @@ body {
     background: transparent;
 }
 
-
-
 .user-actions {
     display: flex;
     align-items: center;
@@ -85,4 +83,8 @@ body {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.material-icons{
+    padding-top: 5px;
 }

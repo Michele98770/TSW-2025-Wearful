@@ -86,3 +86,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.material-icons{
+    padding-top: 5px;
+}

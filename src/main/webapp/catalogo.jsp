@@ -29,7 +29,6 @@
     availableSizes.add("XL");
     availableSizes.add("XXL");
 
-    // Parametri per la paginazione (esempio, la logica completa andrebbe nella Servlet)
     int currentPage = (Integer) (request.getAttribute("currentPage") != null ? request.getAttribute("currentPage") : 1);
     int totalPages = (Integer) (request.getAttribute("totalPages") != null ? request.getAttribute("totalPages") : 1);
 %>
@@ -51,8 +50,8 @@
     <aside class="filter-sidebar">
         <h3>Filtra Prodotti</h3>
         <form action="<%= request.getContextPath() %>/CatalogoServlet" method="get">
-            <input type="hidden" name="page" value="<%= currentPage %>"> <%-- Mantiene la pagina corrente --%>
-            <input type="hidden" name="action" value="filter"> <%-- Azione per la servlet --%>
+            <input type="hidden" name="page" value="<%= currentPage %>">
+            <input type="hidden" name="action" value="filter">
 
             <div class="filter-group category-filters">
                 <label>Categorie:</label>
@@ -113,7 +112,6 @@
 
 <div class="pagination">
     <% for (int i = 1; i <= totalPages; i++) {
-        // Ricostruisci i parametri di query per la paginazione, mantenendo i filtri attivi
         String queryString = "?page=" + i;
         if (currentCategory != null && !currentCategory.isEmpty()) queryString += "&category=" + URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString());
         if (minPriceStr != null && !minPriceStr.isEmpty()) queryString += "&minPrice=" + URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString());

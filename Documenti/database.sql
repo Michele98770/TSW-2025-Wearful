@@ -90,10 +90,15 @@ VALUES ('admin@wearful.com', 'adminUser', '+390123456789', 'CcV0rNKcBuduhNc5BLyw
 
 INSERT INTO GruppoProdotti(id, nome)
 VALUES (1,'I am a Ducktor'),
-        (2, 'Obi-Juan');
+        (2, 'Obi-Juan'),
+        (3,'Maglia Tramonto');
 
 INSERT INTO Prodotto( nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo)
-VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '#cedace','Maglia',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
-        ('I am a Ducktor', 'Maglia unisex con papera divertente', 'L', 'Verde', '#cedace','Maglia',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
-       ('I am a Ducktor', 'Maglia unisex con papera divertente', 'XL', 'Verde', '#cedace','Maglia',20.00, 22,2,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
-       ('Obi-Juan', 'Maglia unisex tema star wars divertente', 'M', 'Nera', '#1e1e1e','Felpa',25.00, 22,1,false,'./img/uploads/obiJuan.jpg','admin@wearful.com',2)
+VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '#cedace','Felpa',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
+        ('I am a Ducktor', 'Maglia unisex con papera divertente', 'L', 'Verde', '#cedace','Felpa',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
+       ('I am a Ducktor', 'Maglia unisex con papera divertente', 'XL', 'Verde', '#cedace','Felpa',20.00, 22,2,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
+       ('Obi-Juan', 'Maglia unisex tema star wars divertente', 'M', 'Nera', '#1e1e1e','Felpa',25.00, 22,1,false,'./img/uploads/obiJuan.jpg','admin@wearful.com',2),
+       ('Tramonto Nero', 'Maglia con logo del tramonto unisex', 'M', 'Nera','#000000', 'Maglia',15.00,22,2,false,'./img/uploads/tramonto_nero.jpg','admin@wearful.com',3),
+       ('Tramonto Blu', 'Maglia con logo del tramonto unisex', 'M', 'Blu','#16192c', 'Maglia',15.00,22,1,false,'./img/uploads/tramonto_blu.jpg','admin@wearful.com',3),
+       ('Tramonto Nero', 'Maglia con logo del tramonto unisex', 'L', 'Nera','#000000', 'Maglia',15.00,22,6,false,'./img/uploads/tramonto_nero.jpg','admin@wearful.com',3),
+       ('Tramonto Blu', 'Maglia con logo del tramonto unisex', 'L', 'Blu','#16192c', 'Maglia',15.00,22,3,false,'./img/uploads/tramonto_blu.jpg','admin@wearful.com',3);

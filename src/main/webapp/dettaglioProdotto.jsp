@@ -3,8 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.HashMap" %>
+<%@ page import="control.JsonUtil" %>
 
 <%
   ProdottoBean mainProduct = (ProdottoBean) request.getAttribute("mainProduct");
@@ -14,35 +13,14 @@
   Map<String, Map<String, ProdottoBean>> productsByColorAndSize = (Map<String, Map<String, ProdottoBean>>) request.getAttribute("productsByColorAndSize");
   String selectedColor = (String) request.getAttribute("selectedColor");
   String selectedSize = (String) request.getAttribute("selectedSize");
+  String productGroupName = (String) request.getAttribute("productGroupName"); // Recupera il nome del gruppo dalla Servlet
+  String jsonProducts = (String) request.getAttribute("jsonProducts");       // Recupera la stringa JSON dalla Servlet
 
   if (mainProduct == null) {
     response.sendRedirect(request.getContextPath() + "/CatalogoServlet");
     return;
   }
 
-  StringBuilder jsonProducts = new StringBuilder("{");
-  boolean firstColor = true;
-  for (Map.Entry<String, Map<String, ProdottoBean>> colorEntry : productsByColorAndSize.entrySet()) {
-    if (!firstColor) jsonProducts.append(",");
-    jsonProducts.append("\"").append(colorEntry.getKey()).append("\":{");
-    boolean firstSize = true;
-    for (Map.Entry<String, ProdottoBean> sizeEntry : colorEntry.getValue().entrySet()) {
-      if (!firstSize) jsonProducts.append(",");
-      ProdottoBean pb = sizeEntry.getValue();
-      jsonProducts.append("\"").append(sizeEntry.getKey()).append("\":{");
-      jsonProducts.append("\"id\":").append(pb.getId()).append(",");
-      jsonProducts.append("\"nome\":\"").append(pb.getNome().replace("\"", "\\\"")).append("\",");
-      jsonProducts.append("\"descrizione\":\"").append(pb.getDescrizione().replace("\"", "\\\"")).append("\",");
-      jsonProducts.append("\"prezzo\":").append(pb.getPrezzo()).append(",");
-      jsonProducts.append("\"disponibilita\":").append(pb.getDisponibilita()).append(",");
-      jsonProducts.append("\"imgPath\":\"").append(pb.getImgPath().replace("\"", "\\\"")).append("\"");
-      jsonProducts.append("}");
-      firstSize = false;
-    }
-    jsonProducts.append("}");
-    firstColor = false;
-  }
-  jsonProducts.append("}");
 %>
 
 <!DOCTYPE html>
@@ -50,7 +28,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title><%= mainProduct.getNome() %> - Dettaglio Prodotto</title>
+  <title><%= productGroupName %> - Dettaglio Prodotto</title> <%-- Ora usa il nome del gruppo --%>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
   <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.0">
 
@@ -65,7 +43,7 @@
   </div>
 
   <div class="product-details-container">
-    <h1 id="productName"><%= mainProduct.getNome() %></h1>
+    <h1 id="productName"><%= productGroupName %></h1> <%-- Ora usa il nome del gruppo --%>
     <p class="product-description" id="productDescription"><%= mainProduct.getDescrizione() %></p>
     <p class="product-price" id="productPrice">€ <%= String.format("%.2f", mainProduct.getPrezzo()) %></p>
 
@@ -119,7 +97,7 @@
 <jsp:include page="footer.jsp" />
 
 <script>
-  const productsData = <%= jsonProducts.toString() %>;
+  const productsData = <%= jsonProducts %>;
 </script>
 <script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.0"></script>
 

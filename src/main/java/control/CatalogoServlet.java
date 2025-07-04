@@ -88,20 +88,20 @@ public class CatalogoServlet extends HttpServlet {
         int totalPages = 1;
 
         try {
-            // Recupera tutti i prodotti filtrati, prima di applicare la logica di "distinct per gruppo"
-            List<ProdottoBean> allFilteredProducts = prodottoDAO.doRetrieveAllFiltered(category, minPrice, maxPrice, sizes, 0, Integer.MAX_VALUE, sortBy); // Recupera potenzialmente tutti i prodotti per calcolare il distinct
+            // Recupera tutti i prodotti filtrati, prima di applicare la logica di "distinct per nome"
+            List<ProdottoBean> allFilteredProducts = prodottoDAO.doRetrieveAllFiltered(category, minPrice, maxPrice, sizes, 0, Integer.MAX_VALUE, sortBy);
 
-            // Filtra i prodotti per mostrare solo un'istanza per 'gruppo'
-            List<ProdottoBean> distinctProductsByGroup = new ArrayList<>();
-            Set<Long> seenGroups = new HashSet<>();
+            // MODIFICA QUI: Filtra i prodotti per mostrare solo un'istanza per 'nome' (come richiesto)
+            List<ProdottoBean> distinctProductsByName = new ArrayList<>();
+            Set<String> seenNames = new HashSet<>(); // Usiamo un Set di Stringhe per i nomi
             for (ProdottoBean product : allFilteredProducts) {
-                if (!seenGroups.contains(product.getGruppo())) {
-                    distinctProductsByGroup.add(product);
-                    seenGroups.add(product.getGruppo());
+                if (!seenNames.contains(product.getNome())) { // Controlla se il nome è già stato visto
+                    distinctProductsByName.add(product);
+                    seenNames.add(product.getNome()); // Aggiungi il nome al set
                 }
             }
 
-            totalProducts = distinctProductsByGroup.size();
+            totalProducts = distinctProductsByName.size(); // Ora il conteggio si basa sui nomi distinti
 
             totalPages = (int) Math.ceil((double) totalProducts / ITEMS_PER_PAGE);
             if (totalPages == 0) totalPages = 1;
@@ -112,9 +112,9 @@ public class CatalogoServlet extends HttpServlet {
             int offset = (currentPage - 1) * ITEMS_PER_PAGE;
             int endIndex = Math.min(offset + ITEMS_PER_PAGE, totalProducts);
 
-            // Estrai la sotto-lista per la paginazione dopo aver applicato il distinct
+            // Estrai la sotto-lista per la paginazione dopo aver applicato il distinct per nome
             if (offset < totalProducts) {
-                products = distinctProductsByGroup.subList(offset, endIndex);
+                products = distinctProductsByName.subList(offset, endIndex);
             } else {
                 products = new ArrayList<>(); // Nessun prodotto per questa pagina
             }

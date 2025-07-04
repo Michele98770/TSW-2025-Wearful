@@ -1,22 +1,17 @@
+<%@ page import="model.utente.UtenteBean" %>
 <header class="header">
     <link rel="stylesheet" type="text/css" href="./stylesheets/stileheader.css?v=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./stylesheets/common.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-        function cambia(){
-            $("#catalogo").css("text-color","blue");
-        }
-    </script>
-
     <div class="logo">
         <a href="adminUpload.jsp">
             <img src="img/wide_logo.png" alt="Logo Desktop" class="logo-desktop"/>
         </a>
     </div>
     <nav class="menu" id="desktop-menu">
-        <a id="catalogo" href="CatalogoServlet" onclick="cambia()">Catalogo</a>
+        <a id="catalogo" href="CatalogoServlet">Catalogo</a>
         <a href="./chiSiamo.jsp">Chi siamo</a>
         <a href="./domande.jsp">Domande</a>
         <a href="./contatti.jsp">Contatti</a>
@@ -30,9 +25,15 @@
                 <i class="material-icons">search</i>
             </a>
         </div>
-        <a href="#">
+            <%
+            UtenteBean user= (UtenteBean)session.getAttribute("user");
+            if(user==null){ %>
+            <a href="login.jsp">Accedi</a>
+           <% } else {%>
+            <a href="#">
             <i class="material-icons">person</i>
-        </a>
+            <% }%>
+            </a>
         <a href="#">
             <i class="material-icons">shopping_cart</i>
         </a>

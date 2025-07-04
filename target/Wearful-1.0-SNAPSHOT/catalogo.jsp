@@ -6,24 +6,20 @@
 <%@ page import="java.nio.charset.StandardCharsets" %>
 
 <%
-    // Recupera la lista di prodotti dalla request (sarà popolata dalla Servlet)
     List<ProdottoBean> products = (List<ProdottoBean>) request.getAttribute("products");
     if (products == null) {
-        products = new ArrayList<>(); // Inizializza una lista vuota se non ci sono prodotti
+        products = new ArrayList<>();
     }
 
-    // Recupera i filtri applicati dalla request per mantenere lo stato del form
+
     String currentCategory = (String) request.getAttribute("filterCategory");
-    // Gestione dei valori numerici per il prezzo
+
     String minPriceStr = (String) request.getAttribute("filterMinPrice");
     String maxPriceStr = (String) request.getAttribute("filterMaxPrice");
-    // List<String> selectedColors = (List<String>) request.getAttribute("filterColors"); // Rimosso
-    // if (selectedColors == null) selectedColors = new ArrayList<>(); // Rimosso
+
     List<String> selectedSizes = (List<String>) request.getAttribute("filterSizes");
     if (selectedSizes == null) selectedSizes = new ArrayList<>();
 
-    // Definisci le opzioni per i filtri (potresti prenderli dal DB in un'applicazione reale)
-    // Rimosse le opzioni per i colori
     List<String> availableSizes = new ArrayList<>();
     availableSizes.add("XXS");
     availableSizes.add("XS");
@@ -33,7 +29,6 @@
     availableSizes.add("XL");
     availableSizes.add("XXL");
 
-    // Parametri per la paginazione (esempio, la logica completa andrebbe nella Servlet)
     int currentPage = (Integer) (request.getAttribute("currentPage") != null ? request.getAttribute("currentPage") : 1);
     int totalPages = (Integer) (request.getAttribute("totalPages") != null ? request.getAttribute("totalPages") : 1);
 %>
@@ -55,8 +50,8 @@
     <aside class="filter-sidebar">
         <h3>Filtra Prodotti</h3>
         <form action="<%= request.getContextPath() %>/CatalogoServlet" method="get">
-            <input type="hidden" name="page" value="<%= currentPage %>"> <%-- Mantiene la pagina corrente --%>
-            <input type="hidden" name="action" value="filter"> <%-- Azione per la servlet --%>
+            <input type="hidden" name="page" value="<%= currentPage %>">
+            <input type="hidden" name="action" value="filter">
 
             <div class="filter-group category-filters">
                 <label>Categorie:</label>
@@ -117,7 +112,6 @@
 
 <div class="pagination">
     <% for (int i = 1; i <= totalPages; i++) {
-        // Ricostruisci i parametri di query per la paginazione, mantenendo i filtri attivi
         String queryString = "?page=" + i;
         if (currentCategory != null && !currentCategory.isEmpty()) queryString += "&category=" + URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString());
         if (minPriceStr != null && !minPriceStr.isEmpty()) queryString += "&minPrice=" + URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString());

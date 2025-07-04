@@ -1,7 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Page Title</title>
+  <link rel="stylesheet" href="./stylesheets/stilefooter.css">
+</head>
+<body>
+
+<header>
+</header>
+
+<div class="main-content-wrapper">
+  <br>
+</div>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Calendar" %>
 <footer class="footer">
-  <link rel="stylesheet" href="./stylesheets/stilefooter.css">
   <script src="https://kit.fontawesome.com/4c2f47ebbf.js" crossorigin="anonymous"></script>
   <div class="footer-container">
     <div class="footer-logo">
@@ -27,3 +43,6 @@
     <p>&copy;  Wearful <%= Calendar.getInstance().get(Calendar.YEAR) %>. Tutti i diritti riservati.</p>
   </div>
 </footer>
+
+</body>
+</html>
