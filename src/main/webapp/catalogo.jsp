@@ -40,7 +40,7 @@
     <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.0">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.1">
 </head>
 <body>
 

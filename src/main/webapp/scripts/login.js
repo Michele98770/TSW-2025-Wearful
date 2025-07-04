@@ -10,35 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailLabel = document.getElementById('emailLabel');
     const passwordLabel = document.getElementById('passwordLabel');
 
-    function showError(element, errorDiv, labelElement) {
-        element.classList.remove('input-success');
-        element.classList.add('input-error');
-        if (labelElement) {
-            labelElement.classList.remove('label-success');
-            labelElement.classList.add('label-error');
-        }
-        errorDiv.textContent = '';
-        errorDiv.style.display = 'none';
-    }
-
-    function showSuccess(element, labelElement) {
-        element.classList.remove('input-error');
-        element.classList.add('input-success');
-        if (labelElement) {
-            labelElement.classList.remove('label-error');
-            labelElement.classList.add('label-success');
-        }
-    }
-
-    function hideError(element, errorDiv, labelElement) {
-        element.classList.remove('input-error');
-        if (labelElement) {
-            labelElement.classList.remove('label-error');
-            labelElement.classList.remove('label-success');
-        }
-        errorDiv.textContent = '';
-        errorDiv.style.display = 'none';
-    }
 
     function validateEmail() {
         const email = emailInput.value.trim();
