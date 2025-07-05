@@ -7,46 +7,8 @@
     <title>Registrazione Utente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="./img/small_logo.png">
-    <link rel="stylesheet" href="./stylesheets/register.css?v=1.0">
+    <link rel="stylesheet" href="./stylesheets/register.css?v=1.1">
 <style>
-    .input-error {
-        border-color: #dc3545 !important;
-    }
-    .input-success {
-        border-color: #28a745 !important;
-    }
-
-    .label-error {
-        color: #dc3545 ;
-    }
-    .label-success {
-        color: #28a745 ;
-    }
-
-    .error-messages {
-        background-color: #f8d7da;
-        color: #721c24 !important;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-    .success-messages {
-        background-color: #d4edda;
-        color: #155724;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .error-text {
-        color: #dc3545;
-        font-size: 0.85em;
-        margin-top: 5px;
-        text-align: left;
-        display: none; /* Inizialmente nascosto */
-    }
 </style>
 </head>
 <body>

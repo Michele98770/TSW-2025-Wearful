@@ -16,11 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const emailPattern = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
 
         if (email === '' || !emailPattern.test(email)) {
-            showError(emailInput, emailError, emailLabel);
             return false;
         } else {
-            showSuccess(emailInput, emailLabel);
-            hideError(emailInput, emailError, emailLabel);
             return true;
         }
     }
@@ -30,11 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const minLength = 8;
 
         if (password === '' || password.length < minLength) {
-            showError(passwordInput, passwordError, passwordLabel);
             return false;
         } else {
-            showSuccess(passwordInput, passwordLabel);
-            hideError(passwordInput, passwordError, passwordLabel);
             return true;
         }
     }

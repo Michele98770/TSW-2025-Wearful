@@ -25,11 +25,10 @@
     </div>
 
     <div class="footer-links">
-      <a href="#">Home</a>
-      <a href="#">Catalogo</a>
-      <a href="#">Chi Siamo</a>
-      <a href="#">Contatti</a>
-      <a href="#">Domande</a>
+      <a href="CatalogoServlet">Catalogo</a>
+      <a href="chiSiamo.jsp">Chi Siamo</a>
+      <a href="contatti.jsp">Contatti</a>
+      <a href="domande.jsp">Domande</a>
     </div>
 
     <div class="footer-social">

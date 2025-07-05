@@ -1,22 +1,22 @@
-/* Stili per il layout del catalogo */
+
 .catalog-page-layout {
     display: flex;
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 20px;
     gap: 30px;
-    align-items: flex-start; /* Allinea gli elementi in alto */
+    align-items: flex-start;
 }
 
-/* Stili per la sidebar dei filtri */
+
 .filter-sidebar {
-    flex: 0 0 250px; /* Non cresce, non si restringe, larghezza base 250px */
+    flex: 0 0 250px;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    position: sticky; /* Rende la sidebar "appiccicosa" durante lo scroll */
-    top: 20px; /* Distanza dal top della finestra */
+    position: sticky;
+    top: 20px;
 }
 
 .filter-sidebar h3 {
@@ -39,9 +39,9 @@
     color: #555;
 }
 
-/* Stili per le categorie (bottoni/link) */
+
 .category-filters button {
-    display: block; /* Ogni bottone su una nuova riga */
+    display: block;
     width: 100%;
     padding: 10px 15px;
     margin-bottom: 8px;
@@ -66,7 +66,7 @@
     border-color: #660099;
 }
 
-/* Stili per i filtri numerici (prezzo) */
+
 .price-filter input[type="number"] {
     width: calc(50% - 10px); /* Due input affiancati */
     padding: 8px;
@@ -78,7 +78,6 @@
     margin-right: 0;
 }
 
-/* Stili per il filtro colore */
 .color-filter-options {
     display: flex;
     flex-wrap: wrap;
@@ -88,8 +87,8 @@
 .color-option {
     width: 30px;
     height: 30px;
-    border: 2px solid #ccc; /* Bordo predefinito */
-    border-radius: 50%; /* Cerchio */
+    border: 2px solid #ccc;
+    border-radius: 50%;
     cursor: pointer;
     display: inline-block;
     transition: transform 0.2s ease, border-color 0.2s ease;
@@ -111,7 +110,6 @@
 }
 
 
-/* Stili per il filtro taglia */
 .size-filter-options {
     display: flex;
     flex-wrap: wrap;
@@ -138,11 +136,11 @@
     border-color: #660099;
 }
 
-/* Stili per la griglia dei prodotti */
+
 .product-grid {
-    flex: 1; /* Prende lo spazio rimanente */
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 250px minimo, si adatta */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 25px;
 }
 
@@ -153,8 +151,8 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    text-decoration: none; /* Rimuove sottolineatura dai link */
-    color: inherit; /* Mantiene il colore del testo */
+    text-decoration: none;
+    color: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -165,18 +163,18 @@
 
 .product-card-image {
     width: 100%;
-    height: 250px; /* Altezza fissa per le immagini del prodotto */
+    height: 250px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f5f5f5; /* Sfondo per immagini piccole */
+    background-color: #f5f5f5;
 }
 
 .product-card-image img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* L'immagine si adatta mantenendo le proporzioni */
+    object-fit: contain;
     display: block;
 }
 
@@ -184,7 +182,7 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Permette al contenuto di espandersi */
+    flex-grow: 1;
 }
 
 .product-card-content h4 {
@@ -192,15 +190,15 @@
     margin-bottom: 8px;
     font-size: 1.1em;
     color: #333;
-    white-space: nowrap; /* Previene il ritorno a capo */
-    overflow: hidden; /* Nasconde il testo in eccesso */
-    text-overflow: ellipsis; /* Aggiunge i puntini di sospensione */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .product-card-content .price {
     font-size: 1.25em;
     font-weight: bold;
-    color: #660099; /* Colore tema per il prezzo */
+    color: #660099;
     margin-bottom: 15px;
 }
 
@@ -216,18 +214,18 @@
     font-size: 1em;
     text-align: center;
     transition: background-color 0.3s ease;
-    margin-top: auto; /* Spinge il bottone in fondo alla card */
+    margin-top: auto;
 }
 
 .add-to-cart-btn:hover {
     background-color: #550077;
 }
 
-/* Paginazione */
+
 .pagination {
+    margin-left: 20%;
     display: flex;
     justify-content: center;
-    margin-top: 40px;
     margin-bottom: 40px;
     gap: 10px;
 }
@@ -258,11 +256,10 @@
     cursor: default;
 }
 
-/* Messaggi di nessun prodotto */
 .no-products-message {
     text-align: center;
     padding: 50px;
     font-size: 1.2em;
     color: #777;
-    flex: 1; /* Prende spazio nella griglia se vuoto */
+    flex: 1;
 }
