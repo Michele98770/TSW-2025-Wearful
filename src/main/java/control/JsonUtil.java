@@ -19,7 +19,7 @@ public class JsonUtil {
                 jsonProducts.append("\"id\":").append(pb.getId()).append(",");
                 jsonProducts.append("\"nome\":\"").append(escapeJsonString(pb.getNome())).append("\",");
                 jsonProducts.append("\"descrizione\":\"").append(escapeJsonString(pb.getDescrizione())).append("\",");
-                jsonProducts.append("\"prezzo\":").append(pb.getPrezzo()).append(",");
+                jsonProducts.append("\"prezzo\":").append(pb.getPrezzoFinale()).append(",");
                 jsonProducts.append("\"disponibilita\":").append(pb.getDisponibilita()).append(",");
                 jsonProducts.append("\"imgPath\":\"").append(escapeJsonString(pb.getImgPath())).append("\"");
                 jsonProducts.append("}");

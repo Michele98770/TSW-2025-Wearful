@@ -30,7 +30,7 @@ public class DettaglioProdottoServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         prodottoDAO = new ProdottoDAO();
-        gruppoProdottiDAO = new GruppoProdottiDAO(); // NUOVO: Inizializzazione
+        gruppoProdottiDAO = new GruppoProdottiDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -109,7 +109,7 @@ public class DettaglioProdottoServlet extends HttpServlet {
         }
     }
 
-    // Metodo helper per l'ordinamento delle taglie
+
     private int getSizeOrder(String size) {
         switch (size.toUpperCase()) {
             case "XXS": return 1;

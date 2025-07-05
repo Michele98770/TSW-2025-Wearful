@@ -99,7 +99,7 @@ main {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    color: #3d0066; /* Dark violet */
+    color: #3d0066;
     font-size: 1.1em;
     font-weight: 600;
     outline: none;
@@ -190,4 +190,19 @@ main {
     margin-right: 10px;
     font-size: 1.5em;
     color: #8E44AD;
+}
+
+
+.welcome-message {
+    color: #3d0066;
+    font-weight: 600;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }

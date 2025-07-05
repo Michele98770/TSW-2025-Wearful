@@ -108,6 +108,10 @@ public class ProdottoBean implements Serializable {
         return prezzo;
     }
 
+    public float getPrezzoFinale(){
+        return prezzo+((prezzo/100)*this.getIva());
+    }
+
     public void setPrezzo(float prezzo) {
         this.prezzo = prezzo;
     }

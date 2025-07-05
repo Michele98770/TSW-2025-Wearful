@@ -1,15 +1,20 @@
 package control;
-import com.google.gson.Gson;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.ServletException; // CAMBIATO
+import jakarta.servlet.annotation.WebServlet; // CAMBIATO
+import jakarta.servlet.http.HttpServlet; // CAMBIATO
+import jakarta.servlet.http.HttpServletRequest; // CAMBIATO
+import jakarta.servlet.http.HttpServletResponse; // CAMBIATO
 import model.utente.UtenteDAO;
 import model.utente.UtenteBean;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonWriter;
+import jakarta.json.JsonValue;
 
 @WebServlet("/CheckEmailServlet")
 public class CheckEmailServlet extends HttpServlet {
@@ -24,39 +29,37 @@ public class CheckEmailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         boolean isAvailable = true;
+        String errorMessage = null;
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        Gson gson = new Gson();
 
         if (email != null && !email.trim().isEmpty()) {
             try {
-
                 UtenteBean existingUser = utenteDAO.doRetrieveByEmail(email);
                 if (existingUser != null) {
                     isAvailable = false;
                 }
             } catch (SQLException e) {
-
                 System.err.println("Errore SQL durante il controllo email: " + e.getMessage());
-
+                e.printStackTrace();
                 isAvailable = false;
+                errorMessage = "Errore del server durante la verifica dell'email. Riprova più tardi.";
             }
         } else {
-
-            isAvailable = true;
+            isAvailable = false;
+            errorMessage = "L'email non può essere vuota.";
         }
 
+        JsonObject jsonResponse = Json.createObjectBuilder()
+                .add("available", isAvailable)
+                .add("error", (errorMessage != null) ? Json.createValue(errorMessage) : JsonValue.NULL)
+                .build();
 
-        class EmailCheckResponse {
-            boolean available;
-            public EmailCheckResponse(boolean available) {
-                this.available = available;
-            }
-        }
-        EmailCheckResponse res = new EmailCheckResponse(isAvailable);
-        out.print(gson.toJson(res));
+        JsonWriter jsonWriter = Json.createWriter(out);
+        jsonWriter.writeObject(jsonResponse);
+        jsonWriter.close();
         out.flush();
     }
 

@@ -72,7 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetch(`./CheckEmailServlet?email=${encodeURIComponent(email)}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (!data.available) {
+                        if (data.error) {
+                            showError(emailInput, data.error, emailError, emailLabel);
+                            if (callback) callback(false);
+                        } else if (!data.available) {
                             showError(emailInput, 'Questa email è già registrata.', emailError, emailLabel);
                             if (callback) callback(false);
                         } else {
@@ -84,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.error('Errore durante la verifica email:', error);
-                        showError(emailInput, 'Questa email è già registrata.', emailError, emailLabel);
+                        showError(emailInput, 'Errore di connessione o del server. Riprova.', emailError, emailLabel);
                         if (callback) callback(false);
                         updateSubmitButtonState();
                     });
@@ -173,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let isEmailAvailable = false;
 
     function updateSubmitButtonState() {
-
         const isFormValidExcludingEmail =
             validateUsername() &&
             validateTelefono() &&
@@ -185,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     submitButton.disabled = true;
 
-    // Event listeners
     emailInput.addEventListener('input', () => {
         validateEmail((isValid) => {
             isEmailAvailable = isValid;
@@ -217,14 +218,11 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
-
         const isSyncValid = validateUsername() && validateTelefono() && validatePassword() && validateConfirmPassword();
 
         if (isSyncValid) {
-
             validateEmail((emailIsValid) => {
                 if (emailIsValid) {
-
                     form.submit();
                 } else {
                     console.log('Email non valida o non disponibile. Submit bloccato.');
@@ -232,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         } else {
-
             console.log('Validazione sincrona fallita. Submit bloccato.');
             updateSubmitButtonState();
         }

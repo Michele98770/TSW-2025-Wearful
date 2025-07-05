@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import model.utente.UtenteBean;
 import model.utente.UtenteDAO;
+import control.Security;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
@@ -31,7 +31,6 @@ public class LoginServlet extends HttpServlet {
         UtenteBean utenteLoggato = null;
 
         try {
-
             utenteLoggato = utenteDAO.doLogin(email, Security.hashPassword(password));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,16 +40,17 @@ public class LoginServlet extends HttpServlet {
         }
 
         if (utenteLoggato != null) {
-
             HttpSession session = request.getSession();
             session.setAttribute("user", utenteLoggato);
             session.setMaxInactiveInterval(30 * 60);
+
+            session.setAttribute("welcomeMessageUsername", utenteLoggato.getUsername());
+
             if(utenteLoggato.isAdmin()) {
                 response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
-            }
-            else
+            } else {
                 response.sendRedirect("CatalogoServlet");
-
+            }
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

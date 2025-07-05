@@ -20,8 +20,7 @@
     if (selectedSizes == null) selectedSizes = new ArrayList<>();
 
     String currentSearchQuery = (String) request.getAttribute("searchQuery");
-    if (currentSearchQuery == null) currentSearchQuery = ""; // Assicurati che non sia null per evitare problemi
-
+    if (currentSearchQuery == null) currentSearchQuery = "";
     List<String> availableSizes = new ArrayList<>();
     availableSizes.add("XXS");
     availableSizes.add("XS");
@@ -42,7 +41,7 @@
     <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.1">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css">
 </head>
 <body>
 
@@ -94,7 +93,8 @@
 
     <main class="product-grid">
         <% if (products.isEmpty()) { %>
-        <p class="no-products-message">Nessun prodotto trovato con i filtri selezionati.</p>
+        <img src="./img/search.png" alt="not found" style="width: 100%;">
+        <p class="no-products-message">Nessun prodotto trovato...</p>
         <% } else { %>
         <% for (ProdottoBean product : products) { %>
         <a href="<%= request.getContextPath() %>/DettaglioProdottoServlet?id=<%= product.getId() %>" class="product-card">
@@ -106,7 +106,7 @@
             </div>
             <div class="product-card-content">
                 <h4><%= product.getNome() %></h4>
-                <div class="price">€ <%= String.format("%.2f", product.getPrezzo()) %></div>
+                <div class="price">€ <%= String.format("%.2f", product.getPrezzoFinale()) %></div>
             </div>
         </a>
         <% } %>
@@ -117,7 +117,7 @@
 <div class="pagination">
     <% for (int i = 1; i <= totalPages; i++) {
         StringBuilder queryStringBuilder = new StringBuilder("?page=" + i);
-        queryStringBuilder.append("&action=filter"); // Assicurati che l'azione sia sempre 'filter' per i link di paginazione
+        queryStringBuilder.append("&action=filter");
 
         if (currentCategory != null && !currentCategory.isEmpty()) queryStringBuilder.append("&category=").append(URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString()));
         if (minPriceStr != null && !minPriceStr.isEmpty()) queryStringBuilder.append("&minPrice=").append(URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString()));

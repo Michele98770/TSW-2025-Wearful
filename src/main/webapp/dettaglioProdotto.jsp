@@ -43,9 +43,9 @@
   </div>
 
   <div class="product-details-container">
-    <h1 id="productName"><%= productGroupName %></h1> <%-- Ora usa il nome del gruppo --%>
+    <h1 id="productName"><%= productGroupName %></h1>
     <p class="product-description" id="productDescription"><%= mainProduct.getDescrizione() %></p>
-    <p class="product-price" id="productPrice">€ <%= String.format("%.2f", mainProduct.getPrezzo()) %></p>
+    <p class="product-price" id="productPrice">€ <%= String.format("%.2f", mainProduct.getPrezzoFinale()) %></p>
 
     <div class="variant-selector color-selector">
       <h3>Colore: <span id="selectedColorDisplay"><%= selectedColor %></span></h3>
