@@ -2,7 +2,7 @@
 .catalog-page-layout {
     display: flex;
     max-width: 1200px;
-    margin: 30px auto;
+    margin: 30px auto 30px 10%;
     padding: 0 20px;
     gap: 30px;
     align-items: flex-start;
@@ -10,6 +10,7 @@
 
 
 .filter-sidebar {
+    margin: 3rem auto 10rem;
     flex: 0 0 250px;
     background-color: #fff;
     padding: 20px;
@@ -223,7 +224,6 @@
 
 
 .pagination {
-    margin-left: 20%;
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
@@ -258,7 +258,7 @@
 
 .no-products-message {
     text-align: center;
-    padding: 50px;
+    padding-top: 80%;
     font-size: 1.2em;
     color: #777;
     flex: 1;

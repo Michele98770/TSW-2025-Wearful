@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordLabel = document.getElementById('passwordLabel');
     const confirmPasswordLabel = document.getElementById('confirmPasswordLabel');
 
+    let emailCheckTimeout = null;
+
     function showError(element, message, errorDiv, labelElement) {
         element.classList.remove('input-success');
         element.classList.add('input-error');
@@ -49,19 +51,45 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.style.display = 'none';
     }
 
-    function validateEmail() {
+    function validateEmail(callback) {
         const email = emailInput.value.trim();
         const emailPattern = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
 
         if (email === '') {
-            showError(emailInput, '', emailError, emailLabel);
+            showError(emailInput, 'L\'email non può essere vuota.', emailError, emailLabel);
+            if (callback) callback(false);
             return false;
         } else if (!emailPattern.test(email)) {
-            showError(emailInput, '', emailError, emailLabel);
+            showError(emailInput, 'Formato email non valido.', emailError, emailLabel);
+            if (callback) callback(false);
             return false;
         } else {
             showSuccess(emailInput, emailLabel);
             hideError(emailInput, emailError, emailLabel);
+
+            clearTimeout(emailCheckTimeout);
+            emailCheckTimeout = setTimeout(() => {
+                fetch(`./CheckEmailServlet?email=${encodeURIComponent(email)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.available) {
+                            showError(emailInput, 'Questa email è già registrata.', emailError, emailLabel);
+                            if (callback) callback(false);
+                        } else {
+                            showSuccess(emailInput, emailLabel);
+                            hideError(emailInput, emailError, emailLabel);
+                            if (callback) callback(true);
+                        }
+                        updateSubmitButtonState();
+                    })
+                    .catch(error => {
+                        console.error('Errore durante la verifica email:', error);
+                        showError(emailInput, 'Questa email è già registrata.', emailError, emailLabel);
+                        if (callback) callback(false);
+                        updateSubmitButtonState();
+                    });
+            }, 500);
+
             return true;
         }
     }
@@ -69,13 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function validateUsername() {
         const username = usernameInput.value.trim();
         if (username === '') {
-            showError(usernameInput, '', usernameError, usernameLabel);
+            showError(usernameInput, 'Il nome utente non può essere vuoto.', usernameError, usernameLabel);
             return false;
         } else if (username.length < 3) {
-            showError(usernameInput, '', usernameError, usernameLabel);
+            showError(usernameInput, 'Il nome utente deve essere di almeno 3 caratteri.', usernameError, usernameLabel);
             return false;
         } else if (username.length > 50) {
-            showError(usernameInput, '', usernameError, usernameLabel);
+            showError(usernameInput, 'Il nome utente non può superare i 50 caratteri.', usernameError, usernameLabel);
             return false;
         } else {
             showSuccess(usernameInput, usernameLabel);
@@ -86,13 +114,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateTelefono() {
         const telefono = telefonoInput.value.trim();
-        const telefonoPattern = /^(\+\d{1,4})?\d{10}$/;
+        const telefonoPattern = /^(?:(?:\+|00)39)?(?:\d{2,3}(?: |\-)?\d{6,7}|\d{3}(?: |\-)?\d{7}|3\d{2}(?: |\-)?\d{6,7})$/;
+
 
         if (telefono === '') {
-            showError(telefonoInput, '', telefonoError, telefonoLabel);
+            showError(telefonoInput, 'Il numero di telefono non può essere vuoto.', telefonoError, telefonoLabel);
             return false;
         } else if (!telefonoPattern.test(telefono)) {
-            showError(telefonoInput, '', telefonoError, telefonoLabel);
+            showError(telefonoInput, 'Formato telefono non valido.', telefonoError, telefonoLabel);
             return false;
         } else {
             showSuccess(telefonoInput, telefonoLabel);
@@ -105,11 +134,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = passwordInput.value;
         const minLength = 8;
 
+        const passwordStrongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+
         if (password === '') {
-            showError(passwordInput, '', passwordError, passwordLabel);
+            showError(passwordInput, 'La password non può essere vuota.', passwordError, passwordLabel);
             return false;
         } else if (password.length < minLength) {
             showError(passwordInput, `La password deve essere di almeno ${minLength} caratteri.`, passwordError, passwordLabel);
+            return false;
+        } else if (!passwordStrongPattern.test(password)) {
+            showError(passwordInput, 'La password deve contenere almeno una maiuscola, una minuscola, un numero e un carattere speciale.', passwordError, passwordLabel);
             return false;
         } else {
             showSuccess(passwordInput, passwordLabel);
@@ -123,10 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmPassword = confirmPasswordInput.value;
 
         if (confirmPassword === '') {
-            showError(confirmPasswordInput, '', confirmPasswordError, confirmPasswordLabel);
+            showError(confirmPasswordInput, 'Conferma password non può essere vuota.', confirmPasswordError, confirmPasswordLabel);
             return false;
         } else if (password !== confirmPassword) {
-            showError(confirmPasswordInput, 'Le password devono coincidere', confirmPasswordError, confirmPasswordLabel);
+            showError(confirmPasswordInput, 'Le password devono coincidere.', confirmPasswordError, confirmPasswordLabel);
             return false;
         } else {
             showSuccess(confirmPasswordInput, confirmPasswordLabel);
@@ -135,24 +170,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    let isEmailAvailable = false;
+
     function updateSubmitButtonState() {
-        const isFormValid =
-            validateEmail() &&
+
+        const isFormValidExcludingEmail =
             validateUsername() &&
             validateTelefono() &&
             validatePassword() &&
             validateConfirmPassword();
 
-        submitButton.disabled = !isFormValid;
+        submitButton.disabled = !(isFormValidExcludingEmail && isEmailAvailable);
     }
 
-    // Disabilita inizialmente
     submitButton.disabled = true;
 
     // Event listeners
     emailInput.addEventListener('input', () => {
-        validateEmail();
-        updateSubmitButtonState();
+        validateEmail((isValid) => {
+            isEmailAvailable = isValid;
+            updateSubmitButtonState();
+        });
     });
 
     usernameInput.addEventListener('input', () => {
@@ -177,14 +215,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     form.addEventListener('submit', function(event) {
-        if (!(
-            validateEmail() &&
-            validateUsername() &&
-            validateTelefono() &&
-            validatePassword() &&
-            validateConfirmPassword()
-        )) {
-            event.preventDefault();
+        event.preventDefault();
+
+
+        const isSyncValid = validateUsername() && validateTelefono() && validatePassword() && validateConfirmPassword();
+
+        if (isSyncValid) {
+
+            validateEmail((emailIsValid) => {
+                if (emailIsValid) {
+
+                    form.submit();
+                } else {
+                    console.log('Email non valida o non disponibile. Submit bloccato.');
+                    updateSubmitButtonState();
+                }
+            });
+        } else {
+
+            console.log('Validazione sincrona fallita. Submit bloccato.');
+            updateSubmitButtonState();
         }
     });
 });

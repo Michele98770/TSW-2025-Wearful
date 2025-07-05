@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Wearful">
+    <output-path>$PROJECT_DIR$/out/artifacts/Wearful</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Wearful" />
+          <element id="library" level="application" name="4c2f47ebbf" />
+          <element id="library" level="application" name="jquery" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.mysql:mysql-connector-j:9.2.0" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Wearful/web/Web" />
+    </root>
+  </artifact>
+</component>

@@ -279,7 +279,7 @@
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     #adminFormWrapper .admin-form-container {
         padding: 15px;
         border-radius: 8px;
@@ -290,5 +290,9 @@
     }
     .main-admin-content {
         padding: 10px;
+    }
+
+    #imagePreviewContainer{
+        margin-top:0%;
     }
 }

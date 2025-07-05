@@ -23,21 +23,19 @@
             <label>
                 <input id="search" type="text" placeholder="Cerca..." value="<%= request.getAttribute("searchQuery") != null ? (String)request.getAttribute("searchQuery") : "" %>">
             </label>
-            <a href="#">
                 <i class="material-icons">search</i>
-            </a>
         </div>
         <%
             UtenteBean user= (UtenteBean)session.getAttribute("user");
             if(user==null){ %>
-        <a href="login.jsp">Accedi</a>
+        <a href="login.jsp" id="accedi">Accedi</a>
         <% } else {%>
         <a href="#">
             <i class="material-icons">person</i>
             <% }%>
         </a>
         <a href="#">
-            <i class="material-icons">shopping_cart</i>
+            <i class="material-icons" >shopping_cart</i>
         </a>
     </div>
 </header>

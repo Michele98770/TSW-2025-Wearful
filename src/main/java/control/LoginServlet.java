@@ -31,10 +31,10 @@ public class LoginServlet extends HttpServlet {
         UtenteBean utenteLoggato = null;
 
         try {
-            // Utilizza il metodo doLogin del tuo DAO per recuperare l'utente
+
             utenteLoggato = utenteDAO.doLogin(email, Security.hashPassword(password));
         } catch (SQLException e) {
-            e.printStackTrace(); // Stampa l'errore per debug
+            e.printStackTrace();
             request.setAttribute("errorMessage", "Errore del server durante il login. Riprova più tardi.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 
         if (utenteLoggato != null) {
 
-            HttpSession session = request.getSession(); // Ottieni o crea la sessione
+            HttpSession session = request.getSession();
             session.setAttribute("user", utenteLoggato);
             session.setMaxInactiveInterval(30 * 60);
             if(utenteLoggato.isAdmin()) {

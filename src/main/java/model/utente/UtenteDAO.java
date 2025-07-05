@@ -18,14 +18,14 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
 
     @Override
     public UtenteBean doRetrieveByKey(String email) throws SQLException {
-        Connection connection = null; // Dichiarazione qui per il finally
+        Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         UtenteBean utente = null;
 
-        String sql = "SELECT * FROM Utente WHERE email = ?";
+        String sql = "SELECT email, username, telefono, password, isAdmin FROM Utente WHERE email = ?";
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setString(1, email);
@@ -41,14 +41,13 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
                 );
             }
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (resultSet != null) resultSet.close();
             } finally {
                 try {
                     if (statement != null) statement.close();
                 } finally {
-                    ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -62,7 +61,7 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String sql = "SELECT * FROM Utente";
+        String sql = "SELECT email, username, telefono, password, isAdmin FROM Utente";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -168,22 +167,58 @@ public class UtenteDAO implements DAOInterface<UtenteBean, String> {
         }
     }
 
-    // Metodo aggiuntivo per il login
     public UtenteBean doLogin(String email, String password) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         UtenteBean utente = null;
 
-        String sql = "SELECT * FROM Utente WHERE email = ? AND password = ?";
+        String sql = "SELECT email, username, telefono, password, isAdmin FROM Utente WHERE email = ? AND password = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setString(1, email);
-            statement.setString(2, password); // Qui la password deve essere già hashata per il confronto
+            statement.setString(2, password);
 
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                utente = new UtenteBean(
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("telefono"),
+                        resultSet.getString("password"),
+                        resultSet.getBoolean("isAdmin")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return utente;
+    }
+
+    public UtenteBean doRetrieveByEmail(String email) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        UtenteBean utente = null;
+
+        String sql = "SELECT email, username, telefono, password, isAdmin FROM Utente WHERE email = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
             resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
