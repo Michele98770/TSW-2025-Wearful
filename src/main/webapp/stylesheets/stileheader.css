@@ -50,9 +50,6 @@ body {
     box-shadow: 0 10px 25px #0000001a;
 }
 
-.box:hover input{
-    width: 250px;
-}
 
 .box input{
     width: 0;

@@ -4,8 +4,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./stylesheets/common.css">
-    <script>
-    </script>
+
+    <script src="./scripts/search.js"></script>
+
     <div class="logo">
         <a href="adminUpload.jsp">
             <img src="img/wide_logo.png" alt="Logo Desktop" class="logo-desktop"/>
@@ -20,21 +21,21 @@
     <div class="user-actions" id="user-actions">
         <div class="box">
             <label>
-                <input id="search" type="text" placeholder="Cerca..." onload="fixBar()">
+                <input id="search" type="text" placeholder="Cerca..." value="<%= request.getAttribute("searchQuery") != null ? (String)request.getAttribute("searchQuery") : "" %>">
             </label>
             <a href="#">
                 <i class="material-icons">search</i>
             </a>
         </div>
-            <%
+        <%
             UtenteBean user= (UtenteBean)session.getAttribute("user");
             if(user==null){ %>
-            <a href="login.jsp">Accedi</a>
-           <% } else {%>
-            <a href="#">
+        <a href="login.jsp">Accedi</a>
+        <% } else {%>
+        <a href="#">
             <i class="material-icons">person</i>
             <% }%>
-            </a>
+        </a>
         <a href="#">
             <i class="material-icons">shopping_cart</i>
         </a>

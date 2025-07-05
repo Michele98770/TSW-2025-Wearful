@@ -5,26 +5,26 @@ body {
 }
 .error-container {
     flex-grow: 1;
-    display: flex; /* Cambiato a flex per il layout orizzontale */
+    display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; /* Il testo sarà centrato all'interno del suo blocco */
+    text-align: center;
     padding: 40px;
     background-color: #f8f8f8;
     color: #333;
-    gap: 50px; /* Spazio tra l'immagine e il testo */
-    flex-wrap: wrap; /* Per gestire il layout su schermi piccoli */
+    gap: 50px;
+    flex-wrap: wrap;
 }
 .error-image {
-    flex-shrink: 0; /* Impedisce all'immagine di ridursi troppo */
-    max-width: 300px; /* Dimensione massima dell'immagine */
+    flex-shrink: 0;
+    max-width: 300px;
     height: auto;
 }
 .error-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Centra il contenuto del testo */
+    align-items: center;
     text-align: center;
 }
 .error-container h1 {
@@ -58,7 +58,7 @@ body {
 
 @media (max-width: 768px) {
     .error-container {
-        flex-direction: column; /* Impila immagine e testo verticalmente */
+        flex-direction: column;
         gap: 20px;
     }
     .error-image {

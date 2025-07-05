@@ -13,9 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+
 
 @WebServlet("/CatalogoServlet")
 public class CatalogoServlet extends HttpServlet {
@@ -30,14 +29,21 @@ public class CatalogoServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
         String action = request.getParameter("action");
         if (action == null || action.isEmpty()) {
             action = "filter";
         }
 
+        String searchQuery = request.getParameter("searchQuery");
+
+        if (searchQuery != null && searchQuery.isEmpty()) searchQuery = null;
+
         String category = null;
         Float minPrice = null;
         Float maxPrice = null;
+
         List<String> sizes = null;
         String sortBy = null;
         int currentPage = 1;
@@ -88,20 +94,8 @@ public class CatalogoServlet extends HttpServlet {
         int totalPages = 1;
 
         try {
-            // Recupera tutti i prodotti filtrati, prima di applicare la logica di "distinct per nome"
-            List<ProdottoBean> allFilteredProducts = prodottoDAO.doRetrieveAllFiltered(category, minPrice, maxPrice, sizes, 0, Integer.MAX_VALUE, sortBy);
 
-            // MODIFICA QUI: Filtra i prodotti per mostrare solo un'istanza per 'nome' (come richiesto)
-            List<ProdottoBean> distinctProductsByName = new ArrayList<>();
-            Set<String> seenNames = new HashSet<>(); // Usiamo un Set di Stringhe per i nomi
-            for (ProdottoBean product : allFilteredProducts) {
-                if (!seenNames.contains(product.getNome())) { // Controlla se il nome è già stato visto
-                    distinctProductsByName.add(product);
-                    seenNames.add(product.getNome()); // Aggiungi il nome al set
-                }
-            }
-
-            totalProducts = distinctProductsByName.size(); // Ora il conteggio si basa sui nomi distinti
+            totalProducts = prodottoDAO.countAllFiltered(category, minPrice, maxPrice, sizes, searchQuery);
 
             totalPages = (int) Math.ceil((double) totalProducts / ITEMS_PER_PAGE);
             if (totalPages == 0) totalPages = 1;
@@ -110,14 +104,9 @@ public class CatalogoServlet extends HttpServlet {
             if (currentPage > totalPages) currentPage = totalPages;
 
             int offset = (currentPage - 1) * ITEMS_PER_PAGE;
-            int endIndex = Math.min(offset + ITEMS_PER_PAGE, totalProducts);
 
-            // Estrai la sotto-lista per la paginazione dopo aver applicato il distinct per nome
-            if (offset < totalProducts) {
-                products = distinctProductsByName.subList(offset, endIndex);
-            } else {
-                products = new ArrayList<>(); // Nessun prodotto per questa pagina
-            }
+            products = prodottoDAO.doRetrieveAllFiltered(category, minPrice, maxPrice, sizes, offset, ITEMS_PER_PAGE, sortBy, searchQuery);
+
 
         } catch (SQLException e) {
             System.err.println("Errore SQL nella CatalogoServlet: " + e.getMessage());
@@ -125,14 +114,17 @@ public class CatalogoServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Errore nel caricamento dei prodotti dal database.");
         }
 
+        // Imposta gli attributi per la JSP
         request.setAttribute("products", products);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("filterCategory", category);
         request.setAttribute("filterMinPrice", minPrice != null ? String.valueOf(minPrice) : "");
         request.setAttribute("filterMaxPrice", maxPrice != null ? String.valueOf(maxPrice) : "");
+        // Rimuovi request.setAttribute("filterColors", colors); se non lo usi
         request.setAttribute("filterSizes", sizes);
         request.setAttribute("filterSortBy", sortBy);
+        request.setAttribute("searchQuery", searchQuery); // Per mantenere la query nella barra di ricerca del catalogo
 
         request.getRequestDispatcher("/catalogo.jsp").forward(request, response);
     }

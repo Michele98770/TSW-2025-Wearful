@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
 
@@ -200,7 +201,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
     public void doDelete(Long id) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-        int rowsAffected = 0;
 
         String sql = "DELETE FROM Prodotto WHERE id = ?";
 
@@ -209,7 +209,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
 
-            rowsAffected = statement.executeUpdate();
+            statement.executeUpdate();
         } finally {
             try {
                 if (statement != null) statement.close();
@@ -243,6 +243,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         }
     }
 
+    // NUOVO APPROCCIO PER DO_RETRIEVE_ALL_FILTERED
     public List<ProdottoBean> doRetrieveAllFiltered(
             String category,
             Float minPrice,
@@ -250,16 +251,27 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             List<String> sizes,
             int offset,
             int limit,
-            String sortBy
+            String sortBy,
+            String searchQuery
     ) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<ProdottoBean> prodotti = new ArrayList<>();
 
-        StringBuilder sqlBuilder = new StringBuilder("SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE id IN (SELECT MIN(id) FROM Prodotto WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
+        // Aggiungi condizioni di ricerca testuale alla subquery
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            sqlBuilder.append(" AND (LOWER(nome) LIKE ? OR LOWER(descrizione) LIKE ? OR LOWER(categoria) LIKE ?)");
+            String searchPattern = "%" + searchQuery.toLowerCase() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        // Aggiungi filtri alla subquery
         if (category != null && !category.isEmpty()) {
             sqlBuilder.append(" AND categoria = ?");
             params.add(category);
@@ -287,6 +299,9 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             sqlBuilder.append(")");
         }
 
+        sqlBuilder.append(" GROUP BY nome)"); // Chiude la subquery e raggruppa per nome al suo interno
+
+        // Aggiungi l'ordinamento e la paginazione alla query esterna
         if (sortBy != null && !sortBy.isEmpty()) {
             switch (sortBy.toLowerCase()) {
                 case "nome_asc":
@@ -302,11 +317,11 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
                     sqlBuilder.append(" ORDER BY prezzo DESC");
                     break;
                 default:
-                    sqlBuilder.append(" ORDER BY id ASC");
+                    sqlBuilder.append(" ORDER BY id ASC"); // Ordine di default
                     break;
             }
         } else {
-            sqlBuilder.append(" ORDER BY id ASC");
+            sqlBuilder.append(" ORDER BY id ASC"); // Ordine di default
         }
 
         sqlBuilder.append(" LIMIT ? OFFSET ?");
@@ -368,19 +383,29 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         return prodotti;
     }
 
+    // COUNT_ALL_FILTERED: Questo metodo rimane come prima, il COUNT(DISTINCT nome) è corretto
     public int countAllFiltered(
             String category,
             Float minPrice,
             Float maxPrice,
-            List<String> sizes
+            List<String> sizes,
+            String searchQuery
     ) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         int totalProducts = 0;
 
-        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(id) FROM Prodotto WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(DISTINCT nome) FROM Prodotto WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
+
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            sqlBuilder.append(" AND (LOWER(nome) LIKE ? OR LOWER(descrizione) LIKE ? OR LOWER(categoria) LIKE ?)");
+            String searchPattern = "%" + searchQuery.toLowerCase() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
 
         if (category != null && !category.isEmpty()) {
             sqlBuilder.append(" AND categoria = ?");

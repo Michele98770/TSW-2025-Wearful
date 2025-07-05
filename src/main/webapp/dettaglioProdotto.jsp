@@ -30,7 +30,7 @@
   <meta charset="UTF-8">
   <title><%= productGroupName %> - Dettaglio Prodotto</title>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.1">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.2">
 
 </head>
 <body>

@@ -11,7 +11,6 @@
         products = new ArrayList<>();
     }
 
-
     String currentCategory = (String) request.getAttribute("filterCategory");
 
     String minPriceStr = (String) request.getAttribute("filterMinPrice");
@@ -19,6 +18,9 @@
 
     List<String> selectedSizes = (List<String>) request.getAttribute("filterSizes");
     if (selectedSizes == null) selectedSizes = new ArrayList<>();
+
+    String currentSearchQuery = (String) request.getAttribute("searchQuery");
+    if (currentSearchQuery == null) currentSearchQuery = ""; // Assicurati che non sia null per evitare problemi
 
     List<String> availableSizes = new ArrayList<>();
     availableSizes.add("XXS");
@@ -50,8 +52,10 @@
     <aside class="filter-sidebar">
         <h3>Filtra Prodotti</h3>
         <form action="<%= request.getContextPath() %>/CatalogoServlet" method="get">
-            <input type="hidden" name="page" value="<%= currentPage %>">
+            <input type="hidden" name="page" value="1">
             <input type="hidden" name="action" value="filter">
+
+            <input type="hidden" name="searchQuery" value="<%= currentSearchQuery %>">
 
             <div class="filter-group category-filters">
                 <label>Categorie:</label>
@@ -112,13 +116,20 @@
 
 <div class="pagination">
     <% for (int i = 1; i <= totalPages; i++) {
-        String queryString = "?page=" + i;
-        if (currentCategory != null && !currentCategory.isEmpty()) queryString += "&category=" + URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString());
-        if (minPriceStr != null && !minPriceStr.isEmpty()) queryString += "&minPrice=" + URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString());
-        if (maxPriceStr != null && !maxPriceStr.isEmpty()) queryString += "&maxPrice=" + URLEncoder.encode(maxPriceStr, StandardCharsets.UTF_8.toString());
+        StringBuilder queryStringBuilder = new StringBuilder("?page=" + i);
+        queryStringBuilder.append("&action=filter"); // Assicurati che l'azione sia sempre 'filter' per i link di paginazione
+
+        if (currentCategory != null && !currentCategory.isEmpty()) queryStringBuilder.append("&category=").append(URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString()));
+        if (minPriceStr != null && !minPriceStr.isEmpty()) queryStringBuilder.append("&minPrice=").append(URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString()));
+        if (maxPriceStr != null && !maxPriceStr.isEmpty()) queryStringBuilder.append("&maxPrice=").append(URLEncoder.encode(maxPriceStr, StandardCharsets.UTF_8.toString()));
         for (String size : selectedSizes) {
-            queryString += "&size=" + URLEncoder.encode(size, StandardCharsets.UTF_8.toString());
+            queryStringBuilder.append("&size=").append(URLEncoder.encode(size, StandardCharsets.UTF_8.toString()));
         }
+
+        if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
+            queryStringBuilder.append("&searchQuery=").append(URLEncoder.encode(currentSearchQuery, StandardCharsets.UTF_8.toString()));
+        }
+        String queryString = queryStringBuilder.toString();
     %>
     <% if (i == currentPage) { %>
     <span class="current-page"><%= i %></span>

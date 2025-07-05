@@ -97,7 +97,12 @@ VALUES (1,'I am a Ducktor'),
         (6,'Felpa Not Today'),
         (7,'Live Fast Eat Trash'),
         (8,'Garpez'),
-        (9,'Jaque Mate');
+        (9,'Jaque Mate'),
+        (10,'I am too old'),
+        (11,'Riot'),
+        (12,'Cappello North Face'),
+        (13,'Cappello Sportswear'),
+        (14,'Cappello What');
 
 INSERT INTO Prodotto( nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo)
 VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '#cedace','Felpa',20.00, 22,3,false,'./img/uploads/ducktor.jpg','admin@wearful.com',1 ),
@@ -140,9 +145,16 @@ VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '
        ('Jaque Mate', 'Maglia unisex scacchi e basket','S', 'Rosso', '#742125','Maglia',20.00,22,4,false,'./img/uploads/jaque_mate.jpg','admin@wearful.com',9),
        ('Jaque Mate', 'Maglia unisex scacchi e basket','XS', 'Rosso', '#742125','Maglia',20.00,22,2,false,'./img/uploads/jaque_mate.jpg','admin@wearful.com',9),
        ('Jaque Mate', 'Maglia unisex scacchi e basket','XL', 'Rosso', '#742125','Maglia',20.00,22,2,false,'./img/uploads/jaque_mate.jpg','admin@wearful.com',9),
-
-
-
+       ('Im too old', 'Maglia unisex mago seduto','M','Nero','#19182c','Maglia', 15.00,22,4,false,'./img/uploads/too_old.jpg','admin@wearful.com',10 ),
+       ('Im too old', 'Maglia unisex mago seduto','L','Nero','#19182c','Maglia', 15.00,22,8,false,'./img/uploads/too_old.jpg','admin@wearful.com',10 ),
+       ('Im too old', 'Maglia unisex mago seduto','XL','Nero','#19182c','Maglia', 15.00,22,9,false,'./img/uploads/too_old.jpg','admin@wearful.com',10 ),
+       ('Im too old', 'Maglia unisex mago seduto','S','Nero','#19182c','Maglia', 15.00,22,4,false,'./img/uploads/too_old.jpg','admin@wearful.com',10 ),
+       ('Im too old', 'Maglia unisex mago seduto','XS','Nero','#19182c','Maglia', 15.00,22,3,false,'./img/uploads/too_old.jpg','admin@wearful.com',10 ),
+       ('Riot', 'Maglia unisex con papera assassina', 'M', 'Marrone sabbia','#817350','Maglia',20.00,22,4,false,'./img/uploads/riot.jpg','admin@wearful.com',11),
+       ('Riot', 'Maglia unisex con papera assassina', 'L', 'Marrone sabbia','#817350','Maglia',20.00,22,2,false,'./img/uploads/riot.jpg','admin@wearful.com',11),
+       ('Riot', 'Maglia unisex con papera assassina', 'XL', 'Marrone sabbia','#817350','Maglia',20.00,22,6,false,'./img/uploads/riot.jpg','admin@wearful.com',11),
+       ('Riot', 'Maglia unisex con papera assassina', 'S', 'Marrone sabbia','#817350','Maglia',20.00,22,2,false,'./img/uploads/riot.jpg','admin@wearful.com',11),
+       ('Riot', 'Maglia unisex con papera assassina', 'XS', 'Marrone sabbia','#817350','Maglia',20.00,22,1,false,'./img/uploads/riot.jpg','admin@wearful.com',11),
        ('Tramonto Nero', 'Maglia con logo del tramonto unisex', 'M', 'Nera','#000000', 'Maglia',15.00,22,2,false,'./img/uploads/tramonto_nero.jpg','admin@wearful.com',3),
        ('Tramonto Blu', 'Maglia con logo del tramonto unisex', 'M', 'Blu','#16192c', 'Maglia',15.00,22,1,false,'./img/uploads/tramonto_blu.jpg','admin@wearful.com',3),
        ('Tramonto Nero', 'Maglia con logo del tramonto unisex', 'L', 'Nera','#000000', 'Maglia',15.00,22,6,false,'./img/uploads/tramonto_nero.jpg','admin@wearful.com',3),
@@ -150,4 +162,13 @@ VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '
        ('Tramonto Rosso', 'Maglia con logo del tramonto unisex', 'L', 'Rosso','#751e23', 'Maglia',15.00,22,4,false,'./img/uploads/tramonto_rosso.jpg','admin@wearful.com',3),
        ('Tramonto Ciano', 'Maglia con logo del tramonto unisex', 'L', 'Ciano','#456b74', 'Maglia',15.00,22,3,false,'./img/uploads/tramonto_ciano.jpg','admin@wearful.com',3),
        ('Tramonto Rosso', 'Maglia con logo del tramonto unisex', 'M', 'Rosso','#751e23', 'Maglia',15.00,22,2,false,'./img/uploads/tramonto_rosso.jpg','admin@wearful.com',3),
-       ('Tramonto Ciano', 'Maglia con logo del tramonto unisex', 'M', 'Ciano','#456b74', 'Maglia',15.00,22,5,false,'./img/uploads/tramonto_ciano.jpg','admin@wearful.com',3);
+       ('Tramonto Ciano', 'Maglia con logo del tramonto unisex', 'M', 'Ciano','#456b74', 'Maglia',15.00,22,5,false,'./img/uploads/tramonto_ciano.jpg','admin@wearful.com',3),
+       ('Cappello North Face','Cappello della North Face nero','M','Nero','#0a0a0a','Cappello',20.00,22,3,false,'./img/uploads/cappello1.jpg','admin@wearful.com',12),
+       ('Cappello North Face','Cappello della North Face nero','L','Nero','#0a0a0a','Cappello',20.00,22,4,false,'./img/uploads/cappello1.jpg','admin@wearful.com',12),
+       ('Cappello North Face','Cappello della North Face nero','XL','Nero','#0a0a0a','Cappello',20.00,22,5,false,'./img/uploads/cappello1.jpg','admin@wearful.com',12),
+       ('Cappello Sportswear', 'Cappello Sportswear sportivo','M', 'Blu', '#1f283a','Cappello', 20.00,22,5,false,'./img/uploads/cappello2.jpg','admin@wearful.com',13),
+       ('Cappello Sportswear', 'Cappello Sportswear sportivo','L', 'Blu', '#1f283a','Cappello', 20.00,22,3,false,'./img/uploads/cappello2.jpg','admin@wearful.com',13),
+       ('Cappello Sportswear', 'Cappello Sportswear sportivo','M', 'Blu', '#1f283a','Cappello', 20.00,22,2,false,'./img/uploads/cappello2.jpg','admin@wearful.com',13),
+       ('Cappello What', 'Cappello What fantasia vernice ','M', 'Bianco', '#cacccb','Cappello', 20.00,22,5,false,'./img/uploads/cappello3.jpg','admin@wearful.com',14),
+       ('Cappello What', 'Cappello What fantasia vernice ','L', 'Bianco', '#cacccb','Cappello', 20.00,22,2,false,'./img/uploads/cappello3.jpg','admin@wearful.com',14),
+       ('Cappello What', 'Cappello What fantasia vernice ','XL', 'Bianco', '#cacccb','Cappello', 20.00,22,4,false,'./img/uploads/cappello3.jpg','admin@wearful.com',14);
