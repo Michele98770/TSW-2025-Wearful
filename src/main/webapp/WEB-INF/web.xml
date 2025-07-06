@@ -5,7 +5,7 @@
          version="4.0">
 
     <display-name>Wearful</display-name> <welcome-file-list>
-    <welcome-file>login.jsp</welcome-file>
+    <welcome-file>CatalogoServlet</welcome-file>
 </welcome-file-list>
 
     <filter>
@@ -15,6 +15,27 @@
          <filter-name>AdminFilter</filter-name>
          <url-pattern>/adminUpload.jsp</url-pattern>
      </filter-mapping>
+
+    <filter>
+        <filter-name>UserFilter</filter-name>
+        <filter-class>control.UserFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>UserFilter</filter-name>
+        <url-pattern>/mioAccount.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoggedFilter</filter-name>
+        <filter-class>control.LoggedFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoggedFilter</filter-name>
+        <url-pattern>/login.jsp</url-pattern>
+        <url-pattern>/register.jsp</url-pattern>
+    </filter-mapping>
 
     <error-page>
         <error-code>404</error-code>
