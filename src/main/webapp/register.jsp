@@ -76,6 +76,6 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="./scripts/register.js"></script>
+<script src="./scripts/register.js?v=1.0"></script>
 </body>
 </html>

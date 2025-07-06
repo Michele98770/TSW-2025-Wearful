@@ -15,7 +15,7 @@
 <main>
     <section id="menu" class="menu-section">
         <h1>Chi siamo?</h1>
-        <p>
+        <p class="split-text">
             Siamo un team di appassionati di <b>videogiochi</b>, <b>film</b>, <b>fumetti</b> e <b>comics</b>, che ha fondato Wearful per condividere la nostra passione!
             <br><br>
             La nostra missione è offrire un punto di riferimento per chi, come noi, desidera esprimere la propria identità nerd con stile e originalità.
@@ -38,7 +38,6 @@
 
     </section>
 </main>
-
 <jsp:include page="footer.jsp"/>
 
 </body>

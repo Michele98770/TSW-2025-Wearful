@@ -1,0 +1,306 @@
+
+.container-user-area {
+    min-width: 50%;
+    margin: 3rem auto 5rem;
+    padding: 3rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.8s ease-out;
+}
+
+
+.add-button {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 25px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.add-button:hover {
+    background-color: #004c99;
+    transform: translateY(-2px);
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-heading {
+    font-size: 3em;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.section-heading {
+    font-size: 2.2em;
+    color: #8E44AD; /* Dalla palette di common.css */
+    margin-top: 3rem;
+    margin-bottom: 1.8rem;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: center;
+}
+
+.info-display {
+    background-color: #fcfcfc;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 2.5rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.info-display p {
+    margin: 12px 0;
+    font-size: 1.1em;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.info-display strong {
+    display: inline-block;
+    width: 150px; /* Larghezza fissa per le etichette */
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.address-card {
+    background-color: #fefefe;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.address-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.address-card p {
+    margin: 8px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.address-card strong {
+    color: #34495e;
+}
+
+.form-section {
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group-user {
+    margin-bottom: 20px;
+}
+
+.form-group-user label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.05em;
+}
+
+.form-group-user input[type="text"],
+.form-group-user input[type="number"] {
+    width: calc(100% - 24px);
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group-user input[type="text"]:focus,
+.form-group-user input[type="number"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.submit-button {
+    background-color: #3498db; /* Colore primario dalla palette */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: block;
+    width: auto;
+    margin: 30px auto 0;
+    text-align: center;
+}
+
+.submit-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.1em;
+}
+
+.back-link a {
+    color: #3d0066; /* Colore link dalla palette */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link a:hover {
+    color: #8E44AD; /* Colore più chiaro all'hover */
+    text-decoration: underline;
+}
+
+
+.message {
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.success-message {
+    background-color: #e6ffe6;
+    color: #28a745;
+    border: 1px solid #a8e8b9;
+}
+
+.error-message {
+    background-color: #ffe6e6;
+    color: #dc3545;
+    border: 1px solid #f5b0b7;
+}
+
+
+.no-addresses-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    margin-top: 20px;
+    font-size: 1.05em;
+}
+
+.add-button, .modify-button, .edit-button, .remove-button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-button, .modify-button, .edit-button {
+    background-color: #0066cc;
+    color: white;
+}
+
+.add-button:hover, .modify-button:hover, .edit-button:hover {
+    background-color: #004c99;
+    transform: translateY(-2px);
+}
+
+.add-button a{
+    text-decoration: none;
+}
+
+.remove-button {
+    background-color: #cc3300;
+    color: white;
+}
+
+.remove-button:hover {
+    background-color: #b32d00;
+    transform: translateY(-2px);
+}
+
+.form-error-message {
+    color: red;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+
+.address-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.admin-buttons a {
+    text-decoration: none;
+}
+
+
+@media (max-width: 600px) {
+    .address-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.address-card {
+    position: relative;
+}
+
+
+@media (max-width: 600px) {
+    .address-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-buttons {
+        flex-direction: column;
+    }
+}

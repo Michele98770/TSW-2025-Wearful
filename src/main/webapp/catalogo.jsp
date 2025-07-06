@@ -41,11 +41,24 @@
     <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.0">
 </head>
 <body>
 
 <jsp:include page="header.jsp" />
+
+<%
+    String username = (String) session.getAttribute("welcomeMessageUsername");
+    if (username != null) {
+%>
+<div class="welcome-message">
+    Benvenuto, <%= username %>!
+</div>
+<%
+        session.removeAttribute("welcomeMessageUsername");
+    }
+%>
+
 
 <div class="main-content catalog-page-layout">
     <aside class="filter-sidebar">

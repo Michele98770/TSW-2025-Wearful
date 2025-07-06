@@ -30,6 +30,7 @@ main {
 .menu-section a{
     color: inherit;
     transition: color 0.3s ease;
+    text-decoration: none;
 }
 
 .menu-section a:hover{
@@ -171,15 +172,15 @@ main {
 }
 
 .social-links a {
-    font-size: 2.5em; /* Icon size */
-    color: #8E44AD; /* Medium violet */
+    font-size: 2.5em;
+    color: #8E44AD;
     transition: color 0.3s ease, transform 0.2s ease;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none; /* Rimosso la sottolineatura qui */
 }
 
 .social-links a:hover {
-    color: #3498DB; /* Vibrant blue on hover */
-    transform: translateY(-3px); /* Slight lift on hover */
+    color: #3498DB;
+    transform: translateY(-3px);
 }
 
 .contact-details p {
@@ -194,10 +195,13 @@ main {
 
 
 .welcome-message {
+    padding: 10px;
     color: #3d0066;
-    font-weight: 600;
-    margin-right: 15px;
-    white-space: nowrap;
+    font-weight: bold;
+    font-size: 35px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 
@@ -205,4 +209,15 @@ main {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+
+::selection {
+    background-color: #8E44AD;
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background-color: #8E44AD;
+    color: #ffffff;
 }

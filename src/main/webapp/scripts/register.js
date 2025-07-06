@@ -70,7 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(emailCheckTimeout);
             emailCheckTimeout = setTimeout(() => {
                 fetch(`./CheckEmailServlet?email=${encodeURIComponent(email)}`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Errore HTTP! Stato: ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.error) {
                             showError(emailInput, data.error, emailError, emailLabel);
@@ -117,14 +122,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateTelefono() {
         const telefono = telefonoInput.value.trim();
-        const telefonoPattern = /^(?:(?:\+|00)39)?(?:\d{2,3}(?: |\-)?\d{6,7}|\d{3}(?: |\-)?\d{7}|3\d{2}(?: |\-)?\d{6,7})$/;
-
+        // Regex per telefono: deve iniziare con '+' e avere esattamente 12 cifre
+        const telefonoPattern = /^\+\d{12}$/;
 
         if (telefono === '') {
             showError(telefonoInput, 'Il numero di telefono non può essere vuoto.', telefonoError, telefonoLabel);
             return false;
         } else if (!telefonoPattern.test(telefono)) {
-            showError(telefonoInput, 'Formato telefono non valido.', telefonoError, telefonoLabel);
+            showError(telefonoInput, 'Formato telefono non valido. Deve iniziare con "+" e avere 12 cifre.', telefonoError, telefonoLabel);
             return false;
         } else {
             showSuccess(telefonoInput, telefonoLabel);
@@ -136,9 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePassword() {
         const password = passwordInput.value;
         const minLength = 8;
-
-        const passwordStrongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-
+        // Regex per password: minimo 8 caratteri, nient'altro richiesto
+        const passwordPattern = /^.{8,}$/;
 
         if (password === '') {
             showError(passwordInput, 'La password non può essere vuota.', passwordError, passwordLabel);
@@ -146,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (password.length < minLength) {
             showError(passwordInput, `La password deve essere di almeno ${minLength} caratteri.`, passwordError, passwordLabel);
             return false;
-        } else if (!passwordStrongPattern.test(password)) {
-            showError(passwordInput, 'La password deve contenere almeno una maiuscola, una minuscola, un numero e un carattere speciale.', passwordError, passwordLabel);
+        } else if (!passwordPattern.test(password)) {
+            showError(passwordInput, `La password deve essere di almeno ${minLength} caratteri.`, passwordError, passwordLabel);
             return false;
         } else {
             showSuccess(passwordInput, passwordLabel);

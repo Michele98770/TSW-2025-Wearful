@@ -3,15 +3,13 @@
     <link rel="stylesheet" type="text/css" href="./stylesheets/stileheader.css?v=1.3">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./stylesheets/common.css">
+    <link rel="stylesheet" href="./stylesheets/common.css?v=1.0">
 
     <script>
         const CONTEXT_PATH = "<%= request.getContextPath() %>";
     </script>
     <script src="./scripts/search.js"></script> <div class="logo">
-    <a href="adminUpload.jsp">
-        <img src="img/wide_logo.png" alt="Logo Desktop" class="logo-desktop"/>
-    </a>
+    <img src="img/wide_logo.png" alt="Logo Desktop" class="logo-desktop"/>
 </div>
     <nav class="menu" id="desktop-menu">
         <a id="catalogo" href="CatalogoServlet">Catalogo</a>
@@ -37,7 +35,7 @@
                 <i class="material-icons">person</i>
             </a>
             <div class="dropdown-menu">
-                <label><a href="<%= request.getContextPath() %>/IlMioAccountServlet">Il mio account</a></label>
+                <label><a href="<%= request.getContextPath() %>/AreaRiservataServlet">Il mio account</a></label>
                 <label><a href="<%= request.getContextPath() %>/I miei ordiniServlet">I miei ordini</a></label>
                 <form action="<%= request.getContextPath() %>/LogoutServlet" method="post" class="logout-form">
                     <button type="submit" class="logout-button">Logout</button>

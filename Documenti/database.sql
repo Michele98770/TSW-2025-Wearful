@@ -86,7 +86,7 @@ CREATE TABLE OrderItem (
 
 
 INSERT INTO Utente (email, username, telefono, password, isAdmin)
-VALUES ('admin@wearful.com', 'adminUser', '+390123456789', 'CcV0rNKcBuduhNc5BLywbuFP+TGvMLEPmqCp2jrpxok=', TRUE);
+VALUES ('admin@wearful.com', 'Admin', '+390123456789', 'CcV0rNKcBuduhNc5BLywbuFP+TGvMLEPmqCp2jrpxok=', TRUE);
 
 INSERT INTO GruppoProdotti(id, nome)
 VALUES (1,'I am a Ducktor'),

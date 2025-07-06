@@ -1,0 +1,17 @@
+{
+  "name": "tsw-2025-wearful",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Michele98770/TSW-2025-Wearful.git"
+  },
+  "private": true,
+  "dependencies": {
+    "gsap": "^3.13.0"
+  }
+}
