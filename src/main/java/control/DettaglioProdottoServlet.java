@@ -1,9 +1,9 @@
 package control;
 
+import com.google.gson.Gson;
 import model.prodotto.ProdottoBean;
 import model.prodotto.ProdottoDAO;
 import model.gruppoprodotti.GruppoProdottiDAO;
-import control.JsonUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +24,10 @@ import java.util.Comparator;
 public class DettaglioProdottoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    private static final Gson gson = new Gson();
+
     private ProdottoDAO prodottoDAO;
-    private GruppoProdottiDAO gruppoProdottiDAO; // NUOVO: Istanza per GruppoProdottiDAO
+    private GruppoProdottiDAO gruppoProdottiDAO;
 
     public void init() throws ServletException {
         super.init();
@@ -72,7 +74,7 @@ public class DettaglioProdottoServlet extends HttpServlet {
             String selectedColor = mainProduct.getColore();
             String selectedSize = mainProduct.getTaglia();
 
-            String productGroupName = "Nome Gruppo Sconosciuto"; // Valore di default
+            String productGroupName = "Nome Gruppo Sconosciuto";
             try {
                 String retrievedGroupName = gruppoProdottiDAO.doRetrieveByKey(mainProduct.getGruppo()).getNome();
                 if (retrievedGroupName != null && !retrievedGroupName.isEmpty()) {
@@ -84,8 +86,7 @@ public class DettaglioProdottoServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Errore nel caricamento del nome del gruppo.");
             }
 
-
-            String jsonProductsString = JsonUtil.convertProductsToJson(productsByColorAndSize);
+            String jsonProductsString = gson.toJson(productsByColorAndSize);
 
             request.setAttribute("mainProduct", mainProduct);
             request.setAttribute("allVariants", allVariants);
@@ -94,8 +95,8 @@ public class DettaglioProdottoServlet extends HttpServlet {
             request.setAttribute("productsByColorAndSize", productsByColorAndSize);
             request.setAttribute("selectedColor", selectedColor);
             request.setAttribute("selectedSize", selectedSize);
-            request.setAttribute("productGroupName", productGroupName); // NUOVO: Attributo per il nome del gruppo
-            request.setAttribute("jsonProducts", jsonProductsString); // NUOVO: Attributo per la stringa JSON
+            request.setAttribute("productGroupName", productGroupName);
+            request.setAttribute("jsonProducts", jsonProductsString);
 
             request.getRequestDispatcher("/dettaglioProdotto.jsp").forward(request, response);
 
@@ -105,10 +106,9 @@ public class DettaglioProdottoServlet extends HttpServlet {
             System.err.println("Errore SQL nella DettaglioProdottoServlet: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("errorMessage", "Errore nel caricamento dei dettagli del prodotto.");
-            request.getRequestDispatcher("/error.jsp").forward(request, response); // Potresti avere una pagina di errore generica
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
-
 
     private int getSizeOrder(String size) {
         switch (size.toUpperCase()) {

@@ -109,7 +109,9 @@
         <img src="./img/search.png" alt="not found" style="width: 100%;">
         <p class="no-products-message">Nessun prodotto trovato...</p>
         <% } else { %>
-        <% for (ProdottoBean product : products) { %>
+        <% for (ProdottoBean product : products) {
+            if(!product.isPersonalizzabile()){
+        %>
         <a href="<%= request.getContextPath() %>/DettaglioProdottoServlet?id=<%= product.getId() %>" class="product-card">
             <div class="product-card-image">
                 <%
@@ -123,7 +125,7 @@
             </div>
         </a>
         <% } %>
-        <% } %>
+        <% } }%>
     </main>
 </div>
 

@@ -3,24 +3,21 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
-<%@ page import="control.JsonUtil" %>
 
 <%
   ProdottoBean mainProduct = (ProdottoBean) request.getAttribute("mainProduct");
-  List<ProdottoBean> allVariants = (List<ProdottoBean>) request.getAttribute("allVariants");
   Set<String> availableColors = (Set<String>) request.getAttribute("availableColors");
   Map<String, List<String>> sizesByColor = (Map<String, List<String>>) request.getAttribute("sizesByColor");
   Map<String, Map<String, ProdottoBean>> productsByColorAndSize = (Map<String, Map<String, ProdottoBean>>) request.getAttribute("productsByColorAndSize");
   String selectedColor = (String) request.getAttribute("selectedColor");
   String selectedSize = (String) request.getAttribute("selectedSize");
-  String productGroupName = (String) request.getAttribute("productGroupName"); // Recupera il nome del gruppo dalla Servlet
-  String jsonProducts = (String) request.getAttribute("jsonProducts");       // Recupera la stringa JSON dalla Servlet
+  String productGroupName = (String) request.getAttribute("productGroupName");
+  String jsonProducts = (String) request.getAttribute("jsonProducts");
 
   if (mainProduct == null) {
     response.sendRedirect(request.getContextPath() + "/CatalogoServlet");
     return;
   }
-
 %>
 
 <!DOCTYPE html>
@@ -30,8 +27,7 @@
   <meta charset="UTF-8">
   <title><%= productGroupName %> - Dettaglio Prodotto</title>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.3">
-
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.4">
 </head>
 <body>
 
@@ -61,17 +57,20 @@
     </div>
 
     <div class="variant-selector size-selector">
-      <h3>Taglia: <span id="selectedSizeDisplay"></span></h3>
+      <h3>Taglia:</h3>
       <div class="size-options">
-        <% List<String> currentSizesForSelectedColor = sizesByColor.get(selectedColor);
+        <%
+          List<String> currentSizesForSelectedColor = sizesByColor.get(selectedColor);
           if (currentSizesForSelectedColor != null) {
-            for (String size : currentSizesForSelectedColor) { %>
+            for (String size : currentSizesForSelectedColor) {
+        %>
         <div class="size-option <% if(size.equals(selectedSize)) out.print("selected"); %> <% if(productsByColorAndSize.get(selectedColor).get(size).getDisponibilita() <= 0) out.print("unavailable"); %>"
              data-size="<%= size %>">
           <%= size %>
         </div>
-        <% }
-        }
+        <%
+            }
+          }
         %>
       </div>
       <p id="availabilityStatus" class="availability-status <% if(mainProduct.getDisponibilita() <= 0) out.print("out-of-stock"); %>">
@@ -99,7 +98,7 @@
 <script>
   const productsData = <%= jsonProducts %>;
 </script>
-<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.1"></script>
+<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.3"></script>
 
 </body>
 </html>

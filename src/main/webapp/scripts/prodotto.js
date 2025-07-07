@@ -39,7 +39,6 @@ function updateProductDetails() {
         selectedProductIdInput.value = '';
         quantityInput.value = 0;
         productImage.src = '';
-        productPrice.textContent = '';
         selectedColorDisplay.textContent = currentSelectedColor || 'N/D';
         return;
     }
@@ -49,8 +48,6 @@ function updateProductDetails() {
     if (selectedProduct) {
         productImage.src = selectedProduct.imgPath;
         productImage.alt = selectedProduct.nome;
-
-        productPrice.textContent = `€ ${new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(selectedProduct.prezzo)}`;
 
         selectedProductIdInput.value = selectedProduct.id;
 
@@ -81,7 +78,6 @@ function updateProductDetails() {
         selectedProductIdInput.value = '';
         quantityInput.value = 0;
         productImage.src = '';
-        productPrice.textContent = '';
     }
     selectedColorDisplay.textContent = currentSelectedColor;
 }
@@ -159,7 +155,6 @@ colorOptions.forEach(option => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Determina il colore inizialmente selezionato cercando l'elemento con la classe 'selected'
     const initialSelectedColorDiv = document.querySelector('.color-option.selected');
     if (initialSelectedColorDiv) {
         currentSelectedColor = initialSelectedColorDiv.dataset.color;

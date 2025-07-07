@@ -11,6 +11,7 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.mysql:mysql-connector-j:9.2.0" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:4.29.0" />
+          <element id="library" level="project" name="google.gson" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Wearful/web/Web2" />
