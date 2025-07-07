@@ -1,5 +1,5 @@
 #adminFormWrapper .admin-form-container {
-    max-width: 900px; /* Increased from 700px */
+    max-width: 900px;
     margin: 40px auto;
     background-color: #ffffff;
     padding: 30px 40px;
@@ -122,19 +122,15 @@
     cursor: pointer;
 }
 
-
-
-
 #imagePreviewContainer input[type="file"] {
-    width: 100%; /* Assicura che si adatti al 100% dello spazio disponibile */
-    box-sizing: border-box; /* Include padding e bordo nel calcolo della larghezza */
-    max-width: 90%; /* Limita la larghezza massima al 90% del contenitore */
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 90%;
     padding: 10px;
     border: 1px dashed #ced4da;
     background-color: #e9ecef;
     cursor: pointer;
 }
-
 
 #adminFormWrapper .admin-submit-button {
     display: block;
@@ -208,6 +204,10 @@
     flex: 2;
     min-width: 300px;
 }
+.admin-form-container h2{
+    text-align: center;
+    margin: 2%;
+}
 
 #imagePreviewContainer {
     margin-top: 87%;
@@ -236,6 +236,8 @@
     pointer-events: none;
 }
 
+
+
 #selectedColorDisplay {
     margin-top: 20px;
     font-weight: 600;
@@ -254,6 +256,91 @@
     background-color: #000;
 }
 
+.admin-table {
+    width: 100%;
+    max-width: 850px;
+    min-width: 850px;
+    margin: 0 auto 30px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.admin-table thead {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+}
+
+.admin-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.admin-action-button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-action-button:hover {
+    background-color: #0056b3;
+}
+
+.admin-action-button.danger {
+    background-color: #dc3545;
+}
+
+.admin-action-button.danger:hover {
+    background-color: #a71d2a;
+}
+
+.admin-group-title {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.admin-quantity-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+#edit {
+    display: block;
+    width: 50%;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+    margin: 0 auto;
+}
+.admin-quantity-form input[type="number"] {
+    max-width: 80px;
+}
+
 @media (max-width: 992px) {
     .admin-page-layout {
         flex-direction: column;
@@ -267,6 +354,9 @@
         margin: 20px auto;
         padding: 20px;
     }
+    .admin-table {
+        max-width: 100%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -276,7 +366,6 @@
     #adminFormWrapper h2 {
         font-size: 1.8em;
     }
-
 }
 
 @media (max-width: 600px) {

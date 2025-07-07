@@ -25,6 +25,10 @@ public class InfoConsegnaBean implements Serializable {
         this.idUtente = idUtente;
     }
 
+    public InfoConsegnaBean() {
+        
+    }
+
     public Long getId() {
         return id;
     }

@@ -40,7 +40,6 @@
 <html lang="it">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Amministrazione Prodotti</title>
@@ -134,11 +133,11 @@
                         <div class="admin-form-group">
                             <label for="productCategoria">Categoria: </label>
                             <select id="productCategoria" name="productCategoria" required>
-                                    <option value="">-- Seleziona Categoria --</option>
-                                    <option value="Maglia" <%= "Maglia".equals(oldProductTaglia) ? "selected" : "" %>>Maglia</option>
-                                    <option value="Felpa" <%= "Felpa".equals(oldProductTaglia) ? "selected" : "" %>>Felpa</option>
-                                    <option value="Cappello" <%= "Cappello".equals(oldProductTaglia) ? "selected" : "" %>>Cappello</option>
-                                </select>
+                                <option value="">-- Seleziona Categoria --</option>
+                                <option value="Maglia" <%= "Maglia".equals(oldProductTaglia) ? "selected" : "" %>>Maglia</option>
+                                <option value="Felpa" <%= "Felpa".equals(oldProductTaglia) ? "selected" : "" %>>Felpa</option>
+                                <option value="Cappello" <%= "Cappello".equals(oldProductTaglia) ? "selected" : "" %>>Cappello</option>
+                            </select>
                         </div>
 
                         <div class="admin-form-group">

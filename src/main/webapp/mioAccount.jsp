@@ -36,7 +36,7 @@
     <a href="./adminUpload.jsp">
       <button type="button" class="add-button">Aggiungi Nuovi Prodotti</button>
     </a>
-    <a href="./modificaProdotti.jsp">
+    <a href="./adminEdit.jsp">
       <button type="button" class="add-button">Modifica Prodotti</button>
     </a>
   </div>
