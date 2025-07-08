@@ -9,7 +9,7 @@
   <title>Area Personale</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="./img/small_logo.png">
-  <link rel="stylesheet" type="text/css" href="./stylesheets/mioAccount.css?v=2.0">
+  <link rel="stylesheet" type="text/css" href="./stylesheets/mioAccount.css?v=2.1">
 </head>
 <body>
 <jsp:include page="header.jsp"/>

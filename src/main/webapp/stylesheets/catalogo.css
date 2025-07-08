@@ -10,7 +10,7 @@
 
 #banner {
     display: block;
-    max-width: 1000px;
+    max-width: 50%;
     box-shadow: var(--shadow);
     opacity: 0;
     margin-top: 2%;

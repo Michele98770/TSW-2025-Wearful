@@ -1,21 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const addBtn = document.getElementById('addAddressBtn');
     const formSection = document.getElementById('form-section');
+    const errorDiv = document.getElementById('form-error');
+    const submitBtn = document.getElementById('submit-button');
+
+    if (formSection) {
+        formSection.style.display = 'none';
+    }
 
     window.mostraForm = (id = '', destinatario = '', via = '', citta = '', cap = '', altro = '') => {
-        if (addBtn) {
-            addBtn.style.display = 'none';
+        if (formSection) {
+            if (addBtn) {
+                addBtn.style.display = 'none';
+            }
+            formSection.style.display = 'block';
+
+            document.getElementById('idConsegna').value = id;
+            document.getElementById('destinatario').value = destinatario;
+            document.getElementById('via').value = via;
+            document.getElementById('citta').value = citta;
+            document.getElementById('cap').value = cap;
+            document.getElementById('altro').value = altro;
+
+            submitBtn.value = id ? 'Salva Modifiche' : 'Aggiungi Indirizzo';
+
+            checkForm();
+            formSection.scrollIntoView({ behavior: 'smooth' });
         }
-        formSection.style.display = 'block';
-        document.getElementById('idConsegna').value = id;
-        document.getElementById('destinatario').value = destinatario;
-        document.getElementById('via').value = via;
-        document.getElementById('citta').value = citta;
-        document.getElementById('cap').value = cap;
-        document.getElementById('altro').value = altro;
-        const submitBtn = document.getElementById('submit-button');
-        submitBtn.value = id ? 'Salva Modifiche' : 'Aggiungi Indirizzo';
-        checkForm();
     };
 
     if (addBtn) {
@@ -24,23 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const form = document.getElementById('form-section');
-    const errorDiv = document.getElementById('form-error');
-    const submitBtn = document.getElementById('submit-button');
-
-    const fields = ['destinatario', 'via', 'citta', 'cap'].map(id => document.getElementById(id));
+    const requiredFields = ['destinatario', 'via', 'citta', 'cap'].map(id => document.getElementById(id));
 
     function checkForm() {
-        const destinatario = fields[0].value.trim();
-        const via = fields[1].value.trim();
-        const citta = fields[2].value.trim();
-        const cap = fields[3].value.trim();
-
         let errorMessage = '';
+        const isFormEmpty = requiredFields.some(field => field.value.trim() === '');
+        const capValue = document.getElementById('cap').value.trim();
 
-        if (!destinatario || !via || !citta || !cap) {
+        if (isFormEmpty) {
             errorMessage = 'Tutti i campi obbligatori devono essere compilati.';
-        } else if (!/^\d{5}$/.test(cap)) {
+        } else if (!/^\d{5}$/.test(capValue)) {
             errorMessage = 'Il CAP deve essere un numero di 5 cifre.';
         }
 
@@ -53,11 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    form.addEventListener('input', checkForm);
-    form.addEventListener('submit', (event) => {
-        checkForm();
-        if (submitBtn.disabled) {
-            event.preventDefault();
-        }
-    });
+    if (formSection) {
+        formSection.addEventListener('input', checkForm);
+        formSection.addEventListener('submit', (event) => {
+            checkForm();
+            if (submitBtn.disabled) {
+                event.preventDefault();
+            }
+        });
+    }
 });
