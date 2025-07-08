@@ -208,3 +208,10 @@ VALUES ('I am a Ducktor', 'Maglia unisex con papera divertente', 'M', 'Verde', '
        ('Maglia Gialla', 'Maglia unisex tinta unita gialla', 'XL','Giallo','#FFFF00','Maglia',15.00,22,3,true,'./img/uploads/giallo.png','admin@wearful.com',15),
        ('Maglia Gialla', 'Maglia unisex tinta unita gialla', 'S','Giallo','#FFFF00','Maglia',15.00,22,4,true,'./img/uploads/giallo.png','admin@wearful.com',15),
        ('Maglia Gialla', 'Maglia unisex tinta unita gialla', 'XS','Giallo','#FFFF00','Maglia',15.00,22,1,true,'./img/uploads/giallo.png','admin@wearful.com',15);
+
+
+INSERT INTO carrello(id,idUtente)
+    VALUES (1,'admin@wearful.com');
+
+INSERT INTO CartItem(id,idProdotto,idCarrello,quantita,personalizzato,imgPath)
+    VALUES (1,1,1,2,false,null);

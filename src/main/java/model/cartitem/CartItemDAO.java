@@ -12,28 +12,22 @@ import java.util.List;
 
 public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
 
-    public CartItemDAO() {
-
-    }
-
     @Override
     public CartItemBean doRetrieveByKey(Long id) throws SQLException {
+        String sql = "SELECT * FROM CartItem WHERE id = ?";
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        CartItemBean cartItem = null;
-
-        String sql = "SELECT * FROM CartItem WHERE id = ?";
+        CartItemBean item = null;
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                cartItem = new CartItemBean(
+                item = new CartItemBean(
                         resultSet.getLong("id"),
                         resultSet.getLong("idProdotto"),
                         resultSet.getLong("idCarrello"),
@@ -53,17 +47,16 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
                 }
             }
         }
-        return cartItem;
+        return item;
     }
 
     @Override
     public List<CartItemBean> doRetrieveAll() throws SQLException {
-        List<CartItemBean> cartItems = new ArrayList<>();
+        List<CartItemBean> items = new ArrayList<>();
+        String sql = "SELECT * FROM CartItem";
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
-
-        String sql = "SELECT * FROM CartItem";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -71,7 +64,7 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
             resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                cartItems.add(new CartItemBean(
+                items.add(new CartItemBean(
                         resultSet.getLong("id"),
                         resultSet.getLong("idProdotto"),
                         resultSet.getLong("idCarrello"),
@@ -91,33 +84,29 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
                 }
             }
         }
-        return cartItems;
+        return items;
     }
 
     @Override
-    public void doSave(CartItemBean cartItem) throws SQLException {
+    public void doSave(CartItemBean item) throws SQLException {
+        String sql = "INSERT INTO CartItem (idProdotto, idCarrello, quantita, personalizzato, imgPath) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
 
-        String sql = "INSERT INTO CartItem (idProdotto, idCarrello, quantita, personalizzato, imgPath) "
-                + "VALUES (?, ?, ?, ?, ?)";
-
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            statement.setLong(1, cartItem.getIdProdotto());
-            statement.setLong(2, cartItem.getIdCarrello());
-            statement.setInt(3, cartItem.getQuantita());
-            statement.setBoolean(4, cartItem.isPersonalizzato());
-            statement.setString(5, cartItem.getImgPath());
+            statement.setLong(1, item.getProductID());
+            statement.setLong(2, item.getIdCarrello());
+            statement.setInt(3, item.getQuantita());
+            statement.setBoolean(4, item.isPersonalizzato());
+            statement.setString(5, item.getImgPath());
 
             statement.executeUpdate();
-
             generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                cartItem.setId(generatedKeys.getLong(1));
+                item.setId(generatedKeys.getLong(1));
             }
         } finally {
             try {
@@ -133,24 +122,18 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
     }
 
     @Override
-    public void doUpdate(CartItemBean cartItem) throws SQLException {
+    public void doUpdate(CartItemBean item) throws SQLException {
+        String sql = "UPDATE CartItem SET quantita = ?, personalizzato = ?, imgPath = ? WHERE id = ?";
         Connection connection = null;
         PreparedStatement statement = null;
-
-        String sql = "UPDATE CartItem SET idProdotto = ?, idCarrello = ?, quantita = ?, "
-                + "personalizzato = ?, imgPath = ? WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
-            statement.setLong(1, cartItem.getIdProdotto());
-            statement.setLong(2, cartItem.getIdCarrello());
-            statement.setInt(3, cartItem.getQuantita());
-            statement.setBoolean(4, cartItem.isPersonalizzato());
-            statement.setString(5, cartItem.getImgPath());
-            statement.setLong(6, cartItem.getId());
-
+            statement.setInt(1, item.getQuantita());
+            statement.setBoolean(2, item.isPersonalizzato());
+            statement.setString(3, item.getImgPath());
+            statement.setLong(4, item.getId());
             statement.executeUpdate();
         } finally {
             try {
@@ -163,15 +146,13 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
 
     @Override
     public void doDelete(Long id) throws SQLException {
+        String sql = "DELETE FROM CartItem WHERE id = ?";
         Connection connection = null;
         PreparedStatement statement = null;
-
-        String sql = "DELETE FROM CartItem WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             statement.executeUpdate();
         } finally {
@@ -184,22 +165,20 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
     }
 
     public List<CartItemBean> doRetrieveByCarrello(Long idCarrello) throws SQLException {
-        List<CartItemBean> cartItems = new ArrayList<>();
+        List<CartItemBean> items = new ArrayList<>();
+        String sql = "SELECT * FROM CartItem WHERE idCarrello = ?";
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        String sql = "SELECT * FROM CartItem WHERE idCarrello = ?";
-
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, idCarrello);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                cartItems.add(new CartItemBean(
+                items.add(new CartItemBean(
                         resultSet.getLong("id"),
                         resultSet.getLong("idProdotto"),
                         resultSet.getLong("idCarrello"),
@@ -219,6 +198,44 @@ public class CartItemDAO implements DAOInterface<CartItemBean, Long> {
                 }
             }
         }
-        return cartItems;
+        return items;
+    }
+
+    public CartItemBean doRetrieveByProdottoAndCarrello(Long idProdotto, Long idCarrello) throws SQLException {
+        String sql = "SELECT * FROM CartItem WHERE idProdotto = ? AND idCarrello = ?";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        CartItemBean item = null;
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, idProdotto);
+            statement.setLong(2, idCarrello);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                item = new CartItemBean(
+                        resultSet.getLong("id"),
+                        resultSet.getLong("idProdotto"),
+                        resultSet.getLong("idCarrello"),
+                        resultSet.getInt("quantita"),
+                        resultSet.getBoolean("personalizzato"),
+                        resultSet.getString("imgPath")
+                );
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return item;
     }
 }

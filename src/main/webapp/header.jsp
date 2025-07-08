@@ -43,7 +43,7 @@
             </div>
         </div>
         <% }%>
-        <a href="" id="cart">
+        <a href="CarrelloServlet" id="cart">
             <i class="material-icons" >shopping_cart</i>
         </a>
     </div>

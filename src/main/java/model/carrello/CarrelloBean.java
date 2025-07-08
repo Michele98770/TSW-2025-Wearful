@@ -7,12 +7,16 @@ public class CarrelloBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String idUtente; // FK a Utente
+    private String idUtente;
 
 
     public CarrelloBean(Long id, String idUtente) {
         this.id = id;
         this.idUtente = idUtente;
+    }
+
+    public CarrelloBean() {
+
     }
 
 

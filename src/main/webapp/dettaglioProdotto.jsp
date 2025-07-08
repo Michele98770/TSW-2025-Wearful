@@ -27,7 +27,25 @@
   <meta charset="UTF-8">
   <title><%= productGroupName %> - Dettaglio Prodotto</title>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.4">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.5">
+  <style>
+    .product-image-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .custom-image-preview {
+      padding-right: 2%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 45%;
+      max-height: 45%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
 
@@ -35,12 +53,17 @@
 
 <div class="main-content product-detail-layout">
   <div class="product-image-gallery">
-    <img id="productImage" src="<%= mainProduct.getImgPath() %>" alt="<%= mainProduct.getNome() %>">
+    <div class="product-image-container">
+      <img id="productImage" src="<%= mainProduct.getImgPath() %>" alt="<%= mainProduct.getNome() %>">
+      <img id="customImagePreview" class="custom-image-preview" src="" alt="Anteprima Personalizzazione" style="display: none;">
+    </div>
   </div>
 
   <div class="product-details-container">
     <h1 id="productName"><%= productGroupName %></h1>
+    <% if (!mainProduct.isPersonalizzabile()){ %>
     <p class="product-description" id="productDescription"><%= mainProduct.getDescrizione() %></p>
+    <% }%>
     <p class="product-price" id="productPrice">€ <%= String.format("%.2f", mainProduct.getPrezzoFinale()) %></p>
 
     <div class="variant-selector color-selector">
@@ -88,6 +111,15 @@
         <label for="quantity">Quantità:</label>
         <input type="number" id="quantity" name="quantity" value="1" min="1" max="<%= mainProduct.getDisponibilita() %>" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>
       </div>
+
+      <% if(mainProduct.isPersonalizzabile()) { %>
+      <div class="custom-file-upload">
+        <label for="fileUploadBtn" class="upload-button">
+          Aggiungi Immagine
+        </label>
+        <input type="file" id="fileUploadBtn" accept="image/*">
+      </div>
+      <% }%>
       <button type="submit" class="btn btn-primary add-to-cart-btn" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>Aggiungi al Carrello</button>
     </form>
   </div>
@@ -99,6 +131,7 @@
   const productsData = <%= jsonProducts %>;
 </script>
 <script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.3"></script>
+<script src="./scripts/personalizza.js?v=1.0"></script>
 
 </body>
 </html>

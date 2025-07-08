@@ -285,6 +285,7 @@
 }
 
 .admin-action-button {
+    margin: 2%;
     padding: 8px 15px;
     font-size: 0.9em;
     background-color: #007bff;
@@ -315,11 +316,13 @@
     text-align: center;
 }
 
-.admin-quantity-form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
+.admin-quantity-form input[type="number"]{
+    width: 70px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    text-align: center;
 }
 
 #edit {
@@ -337,9 +340,7 @@
     box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
     margin: 0 auto;
 }
-.admin-quantity-form input[type="number"] {
-    max-width: 80px;
-}
+
 
 @media (max-width: 992px) {
     .admin-page-layout {

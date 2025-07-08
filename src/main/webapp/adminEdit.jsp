@@ -62,7 +62,7 @@
   <title>Modifica Linea di Prodotti</title>
   <link rel="icon" type="image/png" href="./img/small_logo.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.2">
+  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.3">
 </head>
 <body>
 
@@ -131,13 +131,13 @@
         <form method="post" action="AdminUpdateProductQuantityServlet" class="admin-quantity-form">
           <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
           <input type="number" name="newQuantity" value="<%= prodotto.getDisponibilita() %>" min="0" required>
-          <button type="submit" class="admin-action-button">Aggiorna</button>
-        </form>
       </td>
       <td>
+        <button type="submit" class="admin-action-button">Aggiorna</button>
+        </form>
         <form method="post" action="DeleteProductServlet" onsubmit="return confirm('Sicuro di voler rimuovere questo prodotto?');">
           <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
-          <button type="submit" class="admin-action-button danger">Rimuovi</button>
+          <button type="submit" class="admin-action-button danger"> Rimuovi</button>
         </form>
       </td>
     </tr>

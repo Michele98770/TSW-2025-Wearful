@@ -16,7 +16,7 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder; // Import per URL encoding
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,7 +51,6 @@ public class AdminUploadServlet extends HttpServlet {
         String errorMessageFromRedirect = request.getParameter("errorMessage"); // Cattura messaggio da redirect
         String successMessageFromRedirect = request.getParameter("successMessage"); // Cattura messaggio da redirect
 
-        // Imposta gli attributi della richiesta con i messaggi recuperati dall'URL
         if (errorMessageFromRedirect != null && !errorMessageFromRedirect.trim().isEmpty()) {
             request.setAttribute("errorMessage", errorMessageFromRedirect);
         }
@@ -65,7 +64,7 @@ public class AdminUploadServlet extends HttpServlet {
                 Long groupId = Long.valueOf(idGruppoParam);
                 selectedGroup = gruppoDAO.doRetrieveByKey(groupId);
                 if (selectedGroup == null) {
-                    // Imposta messaggio di errore solo se non già presente da un redirect precedente
+
                     if (errorMessageFromRedirect == null) {
                         request.setAttribute("errorMessage", "Il gruppo prodotti con ID " + idGruppoParam + " non è stato trovato.");
                     }
@@ -79,7 +78,7 @@ public class AdminUploadServlet extends HttpServlet {
             } catch (SQLException e) {
                 System.err.println("Errore SQL nel recupero del gruppo prodotti per doGet con ID " + idGruppoParam + ": " + e.getMessage());
                 e.printStackTrace();
-                // Imposta messaggio di errore solo se non già presente da un redirect precedente
+
                 if (errorMessageFromRedirect == null) {
                     request.setAttribute("errorMessage", "Errore database nel recupero del gruppo prodotti. Riprova.");
                 }
@@ -87,14 +86,10 @@ public class AdminUploadServlet extends HttpServlet {
         }
 
         request.setAttribute("currentSelectedGroup", selectedGroup);
-        // oldGroupName sarà popolato dalla JSP basandosi su currentSelectedGroup (derivato dal GET)
+
         request.setAttribute("oldGroupName", selectedGroup != null ? selectedGroup.getNome() : "");
 
 
-        // Inizializza i campi del prodotto per il form (svuotati per un nuovo inserimento di prodotto)
-        // Questi attributi sono usati per "sticky form" in caso di errori POST.
-        // Se si arriva qui tramite GET, dovrebbero essere vuoti per un nuovo inserimento.
-        // Se si arriva da un POST con errori, saranno popolati dalla POST.
         request.setAttribute("oldProductName", "");
         request.setAttribute("oldProductDescription", "");
         request.setAttribute("oldProductTaglia", "");
@@ -119,7 +114,6 @@ public class AdminUploadServlet extends HttpServlet {
         String groupName = request.getParameter("groupName");
         String groupIdStr = request.getParameter("groupId");
 
-        // Imposta gli attributi per i campi "sticky" del form in caso di errori di validazione (senza redirect)
         request.setAttribute("oldProductName", request.getParameter("productName"));
         request.setAttribute("oldProductDescription", request.getParameter("productDescription"));
         request.setAttribute("oldProductTaglia", request.getParameter("productTaglia"));
@@ -130,7 +124,7 @@ public class AdminUploadServlet extends HttpServlet {
         request.setAttribute("oldProductIva", request.getParameter("productIVA"));
         request.setAttribute("oldProductDisponibilita", request.getParameter("productDisponibilita"));
         request.setAttribute("oldProductPersonalizzabile", "true".equals(request.getParameter("personalizzabile")));
-        request.setAttribute("oldGroupName", groupName); // Mantiene il nome del gruppo per la ripopolazione in caso di errori
+        request.setAttribute("oldGroupName", groupName);
 
         GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
         ProdottoDAO prodottoDAO = new ProdottoDAO();
@@ -151,7 +145,6 @@ public class AdminUploadServlet extends HttpServlet {
                             validationErrors.add("Nome del gruppo non corrisponde all'ID esistente. Errore interno.");
                         }
                     } else {
-                        // ID Gruppo fornito ma non trovato, reindirizza a uno stato pulito con messaggio di errore
                         response.sendRedirect(request.getContextPath() + "/AdminUploadServlet?errorMessage=" + URLEncoder.encode("Il gruppo selezionato non esiste più. Si prega di riprovare.", "UTF-8"));
                         return;
                     }
@@ -159,7 +152,7 @@ public class AdminUploadServlet extends HttpServlet {
                 } catch (NumberFormatException e) {
                     validationErrors.add("ID gruppo prodotto non valido. Riprovare.");
                 }
-            } else { // Nessun groupIdStr, significa nuovo gruppo o gruppo esistente per nome
+            } else {
                 if (groupName == null || groupName.trim().isEmpty()) {
                     validationErrors.add("Il nome del gruppo non può essere vuoto.");
                 } else if (groupName.length() > 255) {
@@ -173,26 +166,18 @@ public class AdminUploadServlet extends HttpServlet {
 
                     if (foundGroup.isPresent()) {
                         currentSelectedGroup = foundGroup.get();
-                        // Il gruppo esiste per nome, lo si usa. Nessun reindirizzamento necessario qui.
                     } else {
-                        // CREAZIONE NUOVO GRUPPO - QUESTA È LA PARTE CHIAVE
                         GruppoProdottiBean newGroup = new GruppoProdottiBean();
                         newGroup.setNome(groupName.trim());
-                        gruppoDAO.doSave(newGroup); // Salva il nuovo gruppo per ottenere il suo ID
+                        gruppoDAO.doSave(newGroup);
                         currentSelectedGroup = newGroup;
 
-                        // Reindirizza a doGet con l'ID del nuovo gruppo e un messaggio di successo
                         String groupSuccessMsg = "Gruppo prodotto '" + groupName + "' creato con successo! Ora puoi aggiungere prodotti.";
                         response.sendRedirect(request.getContextPath() + "/AdminUploadServlet?id_gruppo=" + currentSelectedGroup.getId() + "&successMessage=" + URLEncoder.encode(groupSuccessMsg, "UTF-8"));
                         return; // IMPORTANTE: Termina l'esecuzione di doPost qui poiché sta avvenendo un redirect
                     }
                 }
             }
-
-            // Se si arriva qui, significa che:
-            // 1. Un gruppo esistente è stato selezionato (tramite ID o nome)
-            // 2. Ci sono stati errori di validazione relativi alla creazione/selezione del gruppo
-            // In questi casi, si procede alla creazione del prodotto o si ri-visualizza il form con gli errori.
 
             if (!validationErrors.isEmpty()) {
                 request.setAttribute("validationErrors", validationErrors);
@@ -339,9 +324,8 @@ public class AdminUploadServlet extends HttpServlet {
                     prodottoDAO.doSave(newProduct);
                     String productSuccessMsg = "Prodotto '" + productName + "' aggiunto con successo al gruppo '" + currentSelectedGroup.getNome() + "'!";
 
-                    // Reindirizza dopo la creazione del prodotto con l'ID del gruppo e un messaggio di successo
                     response.sendRedirect(request.getContextPath() + "/AdminUploadServlet?id_gruppo=" + currentSelectedGroup.getId() + "&successMessage=" + URLEncoder.encode(productSuccessMsg, "UTF-8"));
-                    return; // Termina l'esecuzione di doPost qui
+                    return;
 
                 } catch (SQLException e) {
                     System.err.println("Errore SQL nell'aggiunta del prodotto: " + e.getMessage());
@@ -365,10 +349,8 @@ public class AdminUploadServlet extends HttpServlet {
             validationErrors.add("Errore interno del server. Riprova.");
         }
 
-        // Questo blocco viene raggiunto solo se non si è verificato un reindirizzamento (es. a causa di errori di validazione)
         request.setAttribute("validationErrors", validationErrors);
-        request.setAttribute("currentSelectedGroup", currentSelectedGroup); // Reset per i campi "sticky"
-        // Nessun attributo successMessage impostato qui, poiché il successo porta a un reindirizzamento
+        request.setAttribute("currentSelectedGroup", currentSelectedGroup);
 
         request.getRequestDispatcher("adminUpload.jsp").forward(request, response);
     }
