@@ -58,8 +58,7 @@
         session.removeAttribute("welcomeMessageUsername");
     }
 %>
-
-
+<a href="DettaglioProdottoServlet?id=73"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
 <div class="main-content catalog-page-layout">
     <aside class="filter-sidebar">
         <h3>Filtra Prodotti</h3>

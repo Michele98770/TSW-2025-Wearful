@@ -2,12 +2,24 @@
 .catalog-page-layout {
     display: flex;
     max-width: 1200px;
-    margin: 30px auto 30px 10%;
+    margin: 0 auto 30px 10%;
     padding: 0 20px;
     gap: 30px;
     align-items: flex-start;
 }
 
+#banner {
+    display: block;
+    max-width: 1000px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-margin-collapse: collapse;
+    border-radius: 8px;
+    animation: fadeInUp 0.8s var(--transition-speed) forwards;
+}
 
 .filter-sidebar {
     margin: 3rem auto 10rem;
