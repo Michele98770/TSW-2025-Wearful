@@ -121,13 +121,14 @@
   </table>
 
   <div class="total-container">
+    <% if (!cartItemsWithProducts.isEmpty()) { %>
     <table>
       <tr>
         <td>Totale Carrello:</td>
         <td>€ <%= String.format("%.2f", totaleCarrello) %></td>
       </tr>
     </table>
-    <% if (!cartItemsWithProducts.isEmpty()) { %>
+
     <button class="checkout-btn">Procedi all'acquisto</button>
     <% } else { %>
     <a href="CatalogoServlet"><button class="checkout-btn">Vai al Catalogo</button></a>
@@ -137,37 +138,7 @@
 
 <jsp:include page="footer.jsp" />
 
-<script>
-  document.querySelectorAll('input[type="number"][data-product-id]').forEach(input => {
-    input.addEventListener('change', function() {
-      const productId = this.dataset.productId;
-      const productSize = this.dataset.productSize; // Taglia è necessaria per identificare univocamente il prodotto se ci sono più varianti dello stesso ID
-      const newQuantity = this.value;
-
-      fetch('CarrelloServlet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=aggiornaQuantita&idProdotto=${productId}&taglia=${productSize}&quantita=${newQuantity}`
-      })
-              .then(response => response.json())
-              .then(data => {
-                if(data.success) {
-                  location.reload();
-                } else {
-                  alert('Errore nell\'aggiornamento della quantità: ' + data.message);
-                  location.reload();
-                }
-              })
-              .catch(error => {
-                console.error('Errore durante l\'aggiornamento via AJAX:', error);
-                alert('Si è verificato un errore durante l\'aggiornamento.');
-                location.reload();
-              });
-    });
-  });
-</script>
+<script src="./scripts/carrello.js"></script>
 
 </body>
 </html>

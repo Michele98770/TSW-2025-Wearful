@@ -1,3 +1,34 @@
+/* --- Google Font & Variabili CSS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #3d0066;
+    --secondary-color: #8e44ad;
+    --accent-color: #3498db;
+    --title-color: #2c3e50;
+    --text-color: #333;
+    --light-text-color: #555;
+    --bg-color: #f9f9f9;
+    --content-bg: #ffffff;
+    --border-color: #eee;
+    --faq-border-color: #d6b3ff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition-speed: 0.3s ease-out;
+}
+
+/* --- Animazioni Keyframes --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Stili Base --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,56 +37,65 @@
 }
 
 body {
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
     margin: 0;
     line-height: 1.6;
-    color: #333;
+    color: var(--text-color);
 }
 
 main {
     max-width: 1000px;
     margin: 3rem auto 10rem;
     padding: 4rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    background-color: var(--content-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    /* Animazione d'ingresso per il contenitore principale */
+    opacity: 0;
+    animation: fadeInUp 0.8s var(--transition-speed) forwards;
 }
 
-
+/* --- Sezione Principale e Titoli --- */
 .menu-section {
     text-align: center;
     margin-bottom: 0;
 }
 
-.menu-section a{
+.menu-section a {
     color: inherit;
-    transition: color 0.3s ease;
+    transition: color var(--transition-speed);
     text-decoration: none;
 }
 
-.menu-section a:hover{
-    color: #3498db;
+.menu-section a:hover {
+    color: var(--accent-color);
 }
 
 .menu-section h1 {
     font-size: 2.8em;
-    color: #2c3e50;
+    color: var(--title-color);
     margin-bottom: 1rem;
     font-weight: 700;
+    /* Animazione per il titolo */
+    opacity: 0;
+    animation: fadeInUp 0.6s 0.2s ease-out forwards;
 }
 
 .menu-section p {
     font-size: 1.1em;
-    color: #555;
+    color: var(--light-text-color);
     max-width: 800px;
     margin: 0 auto 1.5rem auto;
     line-height: 1.8;
     text-align: center;
+    /* Animazione per il paragrafo */
+    opacity: 0;
+    animation: fadeInUp 0.6s 0.3s ease-out forwards;
 }
 
 .menu-section h2 {
     font-size: 2em;
-    color: #2c3e50;
+    color: var(--title-color);
     margin-top: 2.5rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -66,25 +106,34 @@ main {
     padding: 0;
     margin: 0 auto;
     max-width: 600px;
-    text-align: center;
 }
 
 .menu-section ul li {
     font-size: 1.1em;
     color: #444;
     padding: 0.8rem 0;
-    border-bottom: 1px solid #eee;
-    text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .menu-section ul li:last-child {
     border-bottom: none;
 }
 
+/* --- Sezione FAQ Accordion --- */
 .faq-item {
-    border-bottom: 1px solid #d6b3ff;
+    border-bottom: 1px solid var(--faq-border-color);
     margin-bottom: 15px;
+    /* Animazione a cascata per ogni domanda */
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
 }
+/* Staggered animation delay */
+.faq-item:nth-child(1) { animation-delay: 0.4s; }
+.faq-item:nth-child(2) { animation-delay: 0.5s; }
+.faq-item:nth-child(3) { animation-delay: 0.6s; }
+.faq-item:nth-child(4) { animation-delay: 0.7s; }
+/* Continua se ci sono più item... */
+
 
 .faq-item:last-child {
     border-bottom: none;
@@ -100,28 +149,28 @@ main {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    color: #3d0066;
+    color: var(--primary-color);
     font-size: 1.1em;
     font-weight: 600;
     outline: none;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color var(--transition-speed);
     border-radius: 5px;
 }
 
 .faq-question:hover {
-    background-color: #d6b3ff;
+    background-color: var(--faq-border-color);
 }
 
 .faq-answer {
     padding: 0 15px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-    color: #555;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+    color: var(--light-text-color);
 }
 
 .faq-item.active .faq-answer {
-    max-height: 500px;
+    max-height: 500px; /* Aumentato per contenuti lunghi */
     padding: 15px;
 }
 
@@ -131,14 +180,14 @@ main {
 
 .expand-icon {
     font-size: 1.5em;
-    color: #8e44ad;
-    transition: transform 0.3s ease-in-out;
+    color: var(--secondary-color);
+    transition: transform var(--transition-speed);
 }
 
+/* --- Contatti e Social --- */
 .social-info-container {
-    flex: 1;
-    min-width: 300px;
     padding: 25px;
+    margin-top: 3rem;
     border-radius: 8px;
     background-color: #F8F9FA;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
@@ -146,22 +195,9 @@ main {
 
 .social-info-container h3 {
     font-size: 1.8em;
-    color: #8E44AD;
+    color: var(--secondary-color);
     margin-bottom: 20px;
     text-align: center;
-}
-
-.social-info-container h4 {
-    font-size: 1.5em;
-    color: #8E44AD;
-    margin-top: 50px;
-    margin-bottom: 20px;
-}
-
-.social-info-container p {
-    color: #555;
-    margin-bottom: 25px;
-    font-size: 1em;
 }
 
 .social-links {
@@ -173,30 +209,20 @@ main {
 
 .social-links a {
     font-size: 2.5em;
-    color: #8E44AD;
-    transition: color 0.3s ease, transform 0.2s ease;
-    text-decoration: none; /* Rimosso la sottolineatura qui */
+    color: var(--secondary-color);
+    transition: color var(--transition-speed), transform 0.2s ease-in-out;
+    text-decoration: none;
 }
 
 .social-links a:hover {
-    color: #3498DB;
-    transform: translateY(-3px);
+    color: var(--accent-color);
+    transform: translateY(-5px); /* Animazione di "salto" più evidente */
 }
 
-.contact-details p {
-    text-align: center;
-}
-
-.contact-details p i.material-icons {
-    margin-right: 10px;
-    font-size: 1.5em;
-    color: #8E44AD;
-}
-
-
+/* --- Stili Generici e Helper --- */
 .welcome-message {
     padding: 10px;
-    color: #3d0066;
+    color: var(--primary-color);
     font-weight: bold;
     font-size: 35px;
     margin-top: 10px;
@@ -204,20 +230,61 @@ main {
     text-align: center;
 }
 
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-
 ::selection {
-    background-color: #8E44AD;
-    color: #ffffff;
+    background-color: var(--secondary-color);
+    color: var(--content-bg);
+}
+::-moz-selection {
+    background-color: var(--secondary-color);
+    color: var(--content-bg);
 }
 
-::-moz-selection {
-    background-color: #8E44AD;
-    color: #ffffff;
+
+/* --- MEDIA QUERIES PER LA RESPONSIVITÀ --- */
+
+/* Tablet e schermi piccoli */
+@media (max-width: 1024px) {
+    main {
+        margin: 2rem auto 8rem;
+        padding: 3rem;
+    }
+
+    .menu-section h1 { font-size: 2.5em; }
+    .menu-section h2 { font-size: 1.8em; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    body {
+        line-height: 1.5;
+    }
+
+    main {
+        width: 100%;
+        margin: 0;
+        padding: 2rem 1.5rem;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .menu-section h1 {
+        font-size: 2em;
+    }
+
+    .menu-section p {
+        font-size: 1em;
+    }
+
+    .menu-section h2 {
+        font-size: 1.5em;
+        margin-top: 2rem;
+    }
+
+    .faq-question {
+        font-size: 1em;
+    }
+
+    .social-links a {
+        font-size: 2.2em;
+    }
 }

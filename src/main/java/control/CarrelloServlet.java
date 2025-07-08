@@ -1,5 +1,6 @@
 package control;
 
+import com.google.gson.Gson;
 import model.carrello.CarrelloBean;
 import model.carrello.CarrelloDAO;
 import model.cartitem.CartItemBean;
@@ -26,12 +27,14 @@ public class CarrelloServlet extends HttpServlet {
     private CarrelloDAO carrelloDAO;
     private CartItemDAO cartItemDAO;
     private ProdottoDAO prodottoDAO;
+    private Gson gson;
 
     public void init() throws ServletException {
         super.init();
         carrelloDAO = new CarrelloDAO();
         cartItemDAO = new CartItemDAO();
         prodottoDAO = new ProdottoDAO();
+        gson = new Gson();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,6 +51,7 @@ public class CarrelloServlet extends HttpServlet {
                     carrelloUtente = new CarrelloBean();
                     carrelloUtente.setIdUtente(loggedUser.getEmail());
                     carrelloDAO.doSave(carrelloUtente);
+                    carrelloUtente = carrelloDAO.doRetrieveByUtente(loggedUser.getEmail());
                 }
 
                 List<CartItemBean> rawCartItems = cartItemDAO.doRetrieveByCarrello(carrelloUtente.getId());
@@ -57,11 +61,10 @@ public class CarrelloServlet extends HttpServlet {
                         cartItemsWithProducts.put(item, prodotto);
                     }
                 }
-            } else {
             }
 
-            session.setAttribute("carrello", carrelloUtente); // Il CarrelloBean ID-based
-            request.setAttribute("cartItemsWithProducts", cartItemsWithProducts); // La Map per la JSP
+            session.setAttribute("carrello", carrelloUtente);
+            request.setAttribute("cartItemsWithProducts", cartItemsWithProducts);
 
             request.getRequestDispatcher("/carrello.jsp").forward(request, response);
 
@@ -87,82 +90,95 @@ public class CarrelloServlet extends HttpServlet {
                 carrelloUtente = new CarrelloBean();
                 carrelloUtente.setIdUtente(loggedUser.getEmail());
                 carrelloDAO.doSave(carrelloUtente);
+                carrelloUtente = carrelloDAO.doRetrieveByUtente(loggedUser.getEmail());
             }
             session.setAttribute("carrello", carrelloUtente);
+
+            if ("aggiornaQuantita".equals(action)) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                Map<String, Object> responseMap = new LinkedHashMap<>();
+
+                try {
+                    Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
+                    int newQuantity = Integer.parseInt(request.getParameter("quantita"));
+
+                    ProdottoBean prodotto = prodottoDAO.doRetrieveByKey(idProdotto);
+                    if (prodotto == null) {
+                        responseMap.put("success", false);
+                        responseMap.put("message", "Prodotto non più esistente.");
+                    } else if (newQuantity > prodotto.getDisponibilita()) {
+                        responseMap.put("success", false);
+                        responseMap.put("message", "Disponibilità non sufficiente! Solo " + prodotto.getDisponibilita() + " pezzi disponibili.");
+                    } else {
+                        CartItemBean itemToUpdate = cartItemDAO.doRetrieveByProdottoAndCarrello(idProdotto, carrelloUtente.getId());
+                        if (itemToUpdate != null) {
+                            if (newQuantity > 0) {
+                                itemToUpdate.setQuantita(newQuantity);
+                                cartItemDAO.doUpdate(itemToUpdate);
+                                responseMap.put("success", true);
+                                responseMap.put("message", "Quantità aggiornata!");
+                            } else {
+                                cartItemDAO.doDelete(itemToUpdate.getId());
+                                responseMap.put("success", true);
+                                responseMap.put("message", "Prodotto rimosso!");
+                            }
+                        } else {
+                            responseMap.put("success", false);
+                            responseMap.put("message", "Prodotto non trovato nel carrello.");
+                        }
+                    }
+                } catch (SQLException | NumberFormatException e) {
+                    responseMap.put("success", false);
+                    responseMap.put("message", "Errore nei dati inviati o nel database.");
+                }
+
+                response.getWriter().write(gson.toJson(responseMap));
+                return;
+            }
 
             if ("aggiungi".equals(action)) {
                 Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
                 int quantita = Integer.parseInt(request.getParameter("quantita"));
-
                 ProdottoBean prodotto = prodottoDAO.doRetrieveByKey(idProdotto);
-                if (prodotto == null) {
-                    request.setAttribute("message", "Prodotto non trovato!");
-                    doGet(request, response);
-                    return;
-                }
+                if (prodotto != null) {
+                    CartItemBean existingItem = cartItemDAO.doRetrieveByProdottoAndCarrello(idProdotto, carrelloUtente.getId());
+                    int quantitaDaAggiungere = (existingItem != null) ? existingItem.getQuantita() + quantita : quantita;
 
-                CartItemBean existingItem = cartItemDAO.doRetrieveByProdottoAndCarrello(idProdotto, carrelloUtente.getId());
-
-                if (existingItem != null) {
-                    existingItem.setQuantita(existingItem.getQuantita() + quantita);
-                    cartItemDAO.doUpdate(existingItem);
-                    request.setAttribute("message", "Quantità prodotto aggiornata nel carrello!");
+                    if (quantitaDaAggiungere > prodotto.getDisponibilita()) {
+                        session.setAttribute("errorMessage", "Disponibilità non sufficiente!");
+                    } else {
+                        if (existingItem != null) {
+                            existingItem.setQuantita(quantitaDaAggiungere);
+                            cartItemDAO.doUpdate(existingItem);
+                            session.setAttribute("message", "Quantità aggiornata!");
+                        } else {
+                            CartItemBean newItem = new CartItemBean(idProdotto, carrelloUtente.getId(), quantita, prodotto.isPersonalizzabile(), prodotto.getImgPath());
+                            cartItemDAO.doSave(newItem);
+                            session.setAttribute("message", "Prodotto aggiunto!");
+                        }
+                    }
                 } else {
-                    CartItemBean newItem = new CartItemBean(
-                            idProdotto,
-                            carrelloUtente.getId(),
-                            quantita,
-                            prodotto.isPersonalizzabile(),
-                            prodotto.getImgPath()
-                    );
-                    cartItemDAO.doSave(newItem);
-                    request.setAttribute("message", "Prodotto aggiunto al carrello!");
+                    session.setAttribute("errorMessage", "Prodotto non trovato!");
                 }
-
             } else if ("rimuovi".equals(action)) {
                 Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
                 CartItemBean itemToRemove = cartItemDAO.doRetrieveByProdottoAndCarrello(idProdotto, carrelloUtente.getId());
-
                 if (itemToRemove != null) {
                     cartItemDAO.doDelete(itemToRemove.getId());
-                    request.setAttribute("message", "Prodotto rimosso dal carrello!");
-                } else {
-                    request.setAttribute("message", "Prodotto non trovato nel carrello!");
-                }
-
-            } else if ("aggiornaQuantita".equals(action)) {
-                Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
-                int newQuantity = Integer.parseInt(request.getParameter("quantita"));
-
-                CartItemBean itemToUpdate = cartItemDAO.doRetrieveByProdottoAndCarrello(idProdotto, carrelloUtente.getId());
-                if (itemToUpdate != null) {
-                    if (newQuantity > 0) {
-                        itemToUpdate.setQuantita(newQuantity);
-                        cartItemDAO.doUpdate(itemToUpdate);
-                        request.setAttribute("message", "Quantità aggiornata!");
-                    } else {
-                        cartItemDAO.doDelete(itemToUpdate.getId());
-                        request.setAttribute("message", "Prodotto rimosso dal carrello (quantità a zero)!");
-                    }
-                } else {
-                    request.setAttribute("message", "Prodotto non trovato nel carrello per l'aggiornamento!");
-                }
-
-                if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"success\": true, \"message\": \"" + request.getAttribute("message") + "\"}");
-                    return;
+                    session.setAttribute("message", "Prodotto rimosso!");
                 }
             }
 
-            doGet(request, response);
+            response.sendRedirect(request.getContextPath() + "/CarrelloServlet");
 
         } catch (SQLException e) {
-            request.setAttribute("errorMessage", "Errore durante l'operazione sul carrello: " + e.getMessage());
+            request.setAttribute("errorMessage", "Errore DB: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Dati input non validi.");
-            doGet(request, response);
+            session.setAttribute("errorMessage", "Dati input non validi.");
+            response.sendRedirect(request.getContextPath() + "/CarrelloServlet");
         }
     }
 }

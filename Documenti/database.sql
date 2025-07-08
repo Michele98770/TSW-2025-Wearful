@@ -214,4 +214,5 @@ INSERT INTO carrello(id,idUtente)
     VALUES (1,'admin@wearful.com');
 
 INSERT INTO CartItem(id,idProdotto,idCarrello,quantita,personalizzato,imgPath)
-    VALUES (1,1,1,2,false,null);
+    VALUES (1,1,1,2,false,null),
+           (2,45,1,3,false,null);

@@ -1,3 +1,20 @@
+/* --- Google Font & Variabili CSS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+:root {
+    --primary-text-color: #333;
+    --secondary-text-color: #555;
+    --hover-color: #3498db;
+    --danger-color: #dc3545;
+    --header-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --dropdown-bg: #ffffff;
+    --dropdown-hover-bg: #f1f1f1;
+    --border-color: #eee;
+    --transition-speed: 0.3s ease-out;
+}
+
+/* --- Stili Base --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,32 +26,28 @@ body {
     background-color: #f9f9f9;
 }
 
-:root {
-    --primary-text-color: #333;
-    --secondary-text-color: #555;
-    --hover-color: #3498db;
-    --header-bg: #f8f9fa;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --box-bg: #fff;
-    --dropdown-bg: #f9f9f9;
-    --dropdown-hover-bg: #f1f1f1;
-}
-
+/* --- Header Principale --- */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 40px;
     background-color: var(--header-bg);
-    box-shadow: 0 2px 5px var(--shadow-color);
+    box-shadow: 0 2px 8px var(--shadow-color);
     position: relative;
+    z-index: 1000;
 }
 
 .logo img {
     height: 50px;
     object-fit: contain;
+    transition: transform var(--transition-speed);
+}
+.logo img:hover {
+    transform: scale(1.05);
 }
 
+/* --- Menu di Navigazione Desktop --- */
 .menu {
     display: flex;
     gap: 30px;
@@ -44,149 +57,211 @@ body {
     text-decoration: none;
     color: var(--primary-text-color);
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color var(--transition-speed);
+    position: relative;
+    padding: 5px 0;
 }
 
-.menu a:hover {
+/* Sottolineatura animata */
+.menu a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--hover-color);
+    transition: width var(--transition-speed);
+}
+
+/* CORREZIONE: Stili per lo stato attivo e hover */
+.menu a:hover,
+.menu a.active-link { /* Applica lo stesso stile a :hover e alla classe .active-link */
     color: var(--hover-color);
 }
 
-.box {
-    height: 30px;
-    display: flex;
-    cursor: pointer;
-    padding: 10px 10px;
-    background: var(--box-bg);
-    border-radius: 30px;
-    align-items: center;
-    box-shadow: 0 10px 25px var(--shadow-color);
-    margin-bottom: 7px;
-    min-width: 40px; /* Larghezza minima per l'icona di ricerca */
-    transition: all 0.3s ease;
+.menu a:hover::after,
+.menu a.active-link::after { /* Mostra la barra sia su hover che per il link attivo */
+    width: 100%;
 }
 
-.box input {
-    width: 0;
-    outline: none;
-    border: none;
-    background: transparent;
-    transition: width 0.8s ease; /* Transizione solo per la larghezza dell'input */
-}
 
+/* --- Azioni Utente e Ricerca --- */
 .user-actions {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+.box {
+    height: 40px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px;
+    background: var(--dropdown-hover-bg);
+    border-radius: 40px;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all var(--transition-speed);
+}
+.box:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+.box input {
+    width: 0;
+    outline: none;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    background: transparent;
+    transition: width 0.4s ease-in-out;
+}
+.box:hover input, .box input:focus {
+    width: 200px;
+    padding: 0 10px;
+}
+.box .material-icons {
+    color: var(--secondary-text-color);
+    transition: transform 0.4s ease-in-out;
+}
+.box:hover .material-icons {
+    transform: rotate(360deg);
+}
+
 .user-actions a {
     color: var(--secondary-text-color);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--transition-speed), transform var(--transition-speed);
+    display: flex;
+    align-items: center;
 }
-
 .user-actions a:hover {
     color: var(--hover-color);
+    transform: translateY(-2px);
 }
-
 .user-actions .material-icons {
     font-size: 28px;
-    vertical-align: middle;
-    color: var(--secondary-text-color);
 }
 
-.language {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#accedi {
-    margin-bottom: 7px;
-}
-
+/* --- Dropdown Menu Utente --- */
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-toggle {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    padding-bottom: 30%; /* Mantieni il padding-bottom esistente, se necessario */
-}
-
 .dropdown-menu {
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.2s ease, visibility 0.2s ease 0.3s;
     position: absolute;
     background-color: var(--dropdown-bg);
-    min-width: 160px;
+    min-width: 180px;
     box-shadow: 0px 8px 16px 0px var(--shadow-color);
     z-index: 100;
     right: 0;
-    top: 100%;
-    margin-top: 5px;
-    border-radius: 5px;
+    top: calc(100% + 10px);
+    border-radius: 8px;
     overflow: hidden;
+    transform: translateY(10px);
+    transition: all 0.25s ease-in-out;
 }
 
 .dropdown:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;
-    transition-delay: 0s;
+    transform: translateY(0);
 }
 
-.logout-form {
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid #eee;
-}
-
-.logout-button {
-    background: none;
-    border: none;
-    color: var(--primary-text-color);
-    padding: 12px 16px;
-    text-align: left;
-    display: block;
-    width: 100%;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-    box-sizing: border-box;
-}
-
-.logout-button:hover {
-    color: #dc3545;
-}
-
-.dropdown-menu a {
+.dropdown-menu a, .logout-button {
     color: var(--primary-text-color);
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
-    white-space: nowrap;
-    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    border-bottom: 1px solid var(--border-color);
 }
-
-.dropdown-menu a:last-of-type {
+.dropdown-menu a:last-child, .dropdown-menu .logout-form {
     border-bottom: none;
 }
-
 .dropdown-menu a:hover {
     background-color: var(--dropdown-hover-bg);
 }
 
-.user-actions #cart {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-bottom: 8px;
+.logout-form { margin: 0; }
+.logout-button {
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: left;
+}
+.logout-button:hover {
+    background-color: var(--dropdown-hover-bg);
+    color: var(--danger-color);
+}
+
+/* --- Menu Mobile (Hamburger) --- */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+.mobile-menu {
+    display: none;
+}
+
+/* --- MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+    .header { padding: 15px 20px; }
+    .menu { gap: 20px; }
+    .box:hover input, .box input:focus { width: 150px; }
+}
+
+@media (max-width: 768px) {
+    .menu { display: none; }
+    .menu-toggle { display: block; z-index: 1002; }
+    .user-actions { gap: 15px; }
+
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100%;
+        background-color: var(--header-bg);
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transform: translateX(100%);
+        transition: transform 0.4s ease-in-out;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        padding-top: 80px;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu a {
+        padding: 15px 25px;
+        text-decoration: none;
+        color: var(--primary-text-color);
+        font-size: 1.1em;
+        font-weight: 500;
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color var(--transition-speed);
+    }
+    .mobile-menu a:hover { background-color: var(--dropdown-hover-bg); }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+        z-index: 1000;
+    }
+    .overlay.active { display: block; }
 }
