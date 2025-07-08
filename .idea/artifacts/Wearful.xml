@@ -13,6 +13,7 @@
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:4.29.0" />
           <element id="library" level="project" name="google.gson" />
         </element>
+        <element id="library" level="project" name="google.gson" />
       </element>
       <element id="javaee-facet-resources" facet="Wearful/web/Web2" />
       <element id="javaee-facet-resources" facet="Wearful/web/Web" />

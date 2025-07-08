@@ -243,7 +243,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         }
     }
 
-    // NUOVO APPROCCIO PER DO_RETRIEVE_ALL_FILTERED
     public List<ProdottoBean> doRetrieveAllFiltered(
             String category,
             Float minPrice,
@@ -262,7 +261,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         StringBuilder sqlBuilder = new StringBuilder("SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE id IN (SELECT MIN(id) FROM Prodotto WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
-        // Aggiungi condizioni di ricerca testuale alla subquery
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             sqlBuilder.append(" AND (LOWER(nome) LIKE ? OR LOWER(descrizione) LIKE ? OR LOWER(categoria) LIKE ?)");
             String searchPattern = "%" + searchQuery.toLowerCase() + "%";
@@ -271,7 +269,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             params.add(searchPattern);
         }
 
-        // Aggiungi filtri alla subquery
         if (category != null && !category.isEmpty()) {
             sqlBuilder.append(" AND categoria = ?");
             params.add(category);
@@ -299,9 +296,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             sqlBuilder.append(")");
         }
 
-        sqlBuilder.append(" GROUP BY nome)"); // Chiude la subquery e raggruppa per nome al suo interno
+        sqlBuilder.append(" GROUP BY nome)");
 
-        // Aggiungi l'ordinamento e la paginazione alla query esterna
         if (sortBy != null && !sortBy.isEmpty()) {
             switch (sortBy.toLowerCase()) {
                 case "nome_asc":
@@ -317,11 +313,11 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
                     sqlBuilder.append(" ORDER BY prezzo DESC");
                     break;
                 default:
-                    sqlBuilder.append(" ORDER BY id ASC"); // Ordine di default
+                    sqlBuilder.append(" ORDER BY id ASC");
                     break;
             }
         } else {
-            sqlBuilder.append(" ORDER BY id ASC"); // Ordine di default
+            sqlBuilder.append(" ORDER BY id ASC");
         }
 
         sqlBuilder.append(" LIMIT ? OFFSET ?");
@@ -329,8 +325,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         params.add(offset);
 
         String sql = sqlBuilder.toString();
-        System.out.println("SQL Query for filtered products: " + sql);
-        System.out.println("Parameters: " + params);
 
         try {
             connection = ConnectionPool.getConnection();
@@ -383,7 +377,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         return prodotti;
     }
 
-    // COUNT_ALL_FILTERED: Questo metodo rimane come prima, il COUNT(DISTINCT nome) è corretto
     public int countAllFiltered(
             String category,
             Float minPrice,
@@ -435,8 +428,6 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         }
 
         String sql = sqlBuilder.toString();
-        System.out.println("SQL Count Query: " + sql);
-        System.out.println("Count Parameters: " + params);
 
         try {
             connection = ConnectionPool.getConnection();
@@ -518,5 +509,51 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             }
         }
         return prodottiDelGruppo;
+    }
+
+    public List<ProdottoBean> doRetrieveByPersonalizzabile(boolean personalizzabile) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<ProdottoBean> prodotti = new ArrayList<>();
+
+        String sql = "SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE personalizzabile = ?";
+
+        try {
+            connection = ConnectionPool.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, personalizzabile);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                prodotti.add(new ProdottoBean(
+                        resultSet.getLong("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("descrizione"),
+                        resultSet.getString("taglia"),
+                        resultSet.getString("colore"),
+                        resultSet.getString("codiceColore"),
+                        resultSet.getString("categoria"),
+                        resultSet.getFloat("prezzo"),
+                        resultSet.getInt("IVA"),
+                        resultSet.getInt("disponibilita"),
+                        resultSet.getBoolean("personalizzabile"),
+                        resultSet.getString("imgPath"),
+                        resultSet.getString("publisher"),
+                        resultSet.getLong("gruppo")
+                ));
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } finally {
+                try {
+                    if (statement != null) statement.close();
+                } finally {
+                    ConnectionPool.releaseConnection(connection);
+                }
+            }
+        }
+        return prodotti;
     }
 }
