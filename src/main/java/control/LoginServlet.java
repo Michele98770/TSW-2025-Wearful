@@ -11,15 +11,16 @@ import java.sql.SQLException;
 import model.utente.UtenteBean;
 import model.utente.UtenteDAO;
 import control.Security;
+import control.CarrelloServlet;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String rememberMe = request.getParameter("rememberMe");
 
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("errorMessage", "Email e password non possono essere vuoti.");
@@ -46,10 +47,24 @@ public class LoginServlet extends HttpServlet {
 
             session.setAttribute("welcomeMessageUsername", utenteLoggato.getUsername());
 
+            try {
+                CarrelloServlet.mergeGuestCartToUserCart(request, response, utenteLoggato.getEmail());
+            } catch (SQLException e) {
+                System.err.println("Errore durante la fusione del carrello guest per l'utente " + utenteLoggato.getEmail() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+
             if(utenteLoggato.isAdmin()) {
                 response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
             } else {
-                response.sendRedirect("CatalogoServlet");
+                response.sendRedirect(request.getContextPath() + "/CatalogoServlet");
+            }
+
+            try {
+                session.setAttribute("cartCount", CarrelloServlet.getCartItemCount(request, utenteLoggato.getEmail()));
+            } catch (SQLException e) {
+                System.err.println("Errore nel recupero del cartCount all'avvio: " + e.getMessage());
+                session.setAttribute("cartCount", 0);
             }
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");

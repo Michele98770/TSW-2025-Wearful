@@ -41,7 +41,7 @@
     <link rel="icon" type="image/png" href="./img/small_logo.png">
     <meta charset="UTF-8">
     <title>Catalogo Prodotti</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.0">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/catalogo.css?v=1.2"> <%-- Ho incrementato la versione per il cache busting --%>
 </head>
 <body>
 
@@ -58,14 +58,19 @@
         session.removeAttribute("welcomeMessageUsername");
     }
 %>
-<a href="DettaglioProdottoServlet?id=73"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
-<div class="main-content catalog-page-layout">
-    <aside class="filter-sidebar">
+
+<%-- <!-- NUOVO: Overlay per la sidebar mobile. Utile per chiuderla cliccando fuori. --> --%>
+<div class="overlay" id="page-overlay"></div>
+
+<div class="catalog-page-layout">
+    <aside class="filter-sidebar" id="filter-sidebar">
+        <%-- <!-- NUOVO: Pulsante di chiusura per la sidebar mobile --> --%>
+        <button class="close-sidebar-btn" id="close-sidebar-btn" aria-label="Chiudi filtri">×</button>
         <h3>Filtra Prodotti</h3>
+
         <form action="<%= request.getContextPath() %>/CatalogoServlet" method="get">
             <input type="hidden" name="page" value="1">
             <input type="hidden" name="action" value="filter">
-
             <input type="hidden" name="searchQuery" value="<%= currentSearchQuery %>">
 
             <div class="filter-group category-filters">
@@ -78,8 +83,9 @@
 
             <div class="filter-group price-filter">
                 <label for="minPrice">Prezzo:</label>
-                <div>
+                <div class="price-inputs"> <%-- Ho aggiunto un div per uno styling potenziale --%>
                     <input type="number" id="minPrice" name="minPrice" placeholder="Min" step="0.01" min="0" value="<%= minPriceStr != null ? minPriceStr : "" %>">
+                    <span>-</span>
                     <input type="number" id="maxPrice" name="maxPrice" placeholder="Max" step="0.01" min="0" value="<%= maxPriceStr != null ? maxPriceStr : "" %>">
                 </div>
             </div>
@@ -98,63 +104,110 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Applica Filtri</button>
-            <button type="reset" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="window.location.href='<%= request.getContextPath() %>/CatalogoServlet'">Reset Filtri</button>
+            <button type="submit" class="apply-filters-btn" style="width: 100%; margin-top: 20px; padding: 12px; font-weight: bold; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Applica Filtri</button>
+            <a href="<%= request.getContextPath() %>/CatalogoServlet" class="reset-filters-btn" style="display: block; width: 100%; margin-top: 10px; padding: 12px; text-align: center; background-color: #e0e0e0; color: #333; border: 1px solid #ccc; border-radius: 5px; text-decoration: none;">Reset Filtri</a>
         </form>
     </aside>
 
-    <main class="product-grid">
-        <% if (products.isEmpty()) { %>
-        <img src="./img/search.png" alt="not found" style="width: 100%;">
-        <p class="no-products-message">Nessun prodotto trovato...</p>
-        <% } else { %>
-        <% for (ProdottoBean product : products) {
-            if(!product.isPersonalizzabile()){
-        %>
-        <a href="<%= request.getContextPath() %>/DettaglioProdottoServlet?id=<%= product.getId() %>" class="product-card">
-            <div class="product-card-image">
-                <%
-                    String finalImagePath = product.getImgPath();
-                %>
-                <img src="<%= finalImagePath %>" alt="<%= product.getNome() %>">
+    <div class="main-content">
+        <a href="DettaglioProdottoServlet?id=73"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
+        <div class="mobile-filter-controls">
+            <button id="filter-toggle-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1.5A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+                </svg>
+                Filtra
+            </button>
+        </div>
+
+        <main class="product-grid">
+            <% if (products.isEmpty()) { %>
+            <div class="no-products-container"> <%-- Contenitore per messaggio --%>
+                <img src="./img/search.png" alt="not found" style="max-width: 300px; margin: 0 auto;">
+                <p class="no-products-message">Nessun prodotto trovato che corrisponda ai filtri selezionati.</p>
             </div>
-            <div class="product-card-content">
-                <h4><%= product.getNome() %></h4>
-                <div class="price">€ <%= String.format("%.2f", product.getPrezzoFinale()) %></div>
-            </div>
-        </a>
+            <% } else { %>
+            <% for (ProdottoBean product : products) { %>
+            <a href="<%= request.getContextPath() %>/DettaglioProdottoServlet?id=<%= product.getId() %>" class="product-card">
+                <div class="product-card-image">
+                    <img src="<%= product.getImgPath() %>" alt="<%= product.getNome() %>">
+                </div>
+                <div class="product-card-content">
+                    <h4><%= product.getNome() %></h4>
+                    <div class="price">€ <%= String.format("%.2f", product.getPrezzoFinale()) %></div>
+                </div>
+            </a>
+            <% } %>
+            <% } %>
+        </main>
+
+        <%-- La paginazione va dentro main-content per essere associata alla griglia --%>
+        <% if (totalPages > 1) { %>
+        <div class="pagination">
+            <% for (int i = 1; i <= totalPages; i++) {
+                StringBuilder queryStringBuilder = new StringBuilder("?page=" + i);
+                queryStringBuilder.append("&action=filter");
+
+                if (currentCategory != null && !currentCategory.isEmpty()) queryStringBuilder.append("&category=").append(URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString()));
+                if (minPriceStr != null && !minPriceStr.isEmpty()) queryStringBuilder.append("&minPrice=").append(URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString()));
+                if (maxPriceStr != null && !maxPriceStr.isEmpty()) queryStringBuilder.append("&maxPrice=").append(URLEncoder.encode(maxPriceStr, StandardCharsets.UTF_8.toString()));
+                for (String size : selectedSizes) {
+                    queryStringBuilder.append("&size=").append(URLEncoder.encode(size, StandardCharsets.UTF_8.toString()));
+                }
+                if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
+                    queryStringBuilder.append("&searchQuery=").append(URLEncoder.encode(currentSearchQuery, StandardCharsets.UTF_8.toString()));
+                }
+                String queryString = queryStringBuilder.toString();
+            %>
+            <% if (i == currentPage) { %>
+            <span class="current-page"><%= i %></span>
+            <% } else { %>
+            <a href="<%= request.getContextPath() %>/CatalogoServlet<%= queryString %>"><%= i %></a>
+            <% } %>
+            <% } %>
+        </div>
         <% } %>
-        <% } }%>
-    </main>
+    </div>
 </div>
-
-<div class="pagination">
-    <% for (int i = 1; i <= totalPages; i++) {
-        StringBuilder queryStringBuilder = new StringBuilder("?page=" + i);
-        queryStringBuilder.append("&action=filter");
-
-        if (currentCategory != null && !currentCategory.isEmpty()) queryStringBuilder.append("&category=").append(URLEncoder.encode(currentCategory, StandardCharsets.UTF_8.toString()));
-        if (minPriceStr != null && !minPriceStr.isEmpty()) queryStringBuilder.append("&minPrice=").append(URLEncoder.encode(minPriceStr, StandardCharsets.UTF_8.toString()));
-        if (maxPriceStr != null && !maxPriceStr.isEmpty()) queryStringBuilder.append("&maxPrice=").append(URLEncoder.encode(maxPriceStr, StandardCharsets.UTF_8.toString()));
-        for (String size : selectedSizes) {
-            queryStringBuilder.append("&size=").append(URLEncoder.encode(size, StandardCharsets.UTF_8.toString()));
-        }
-
-        if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
-            queryStringBuilder.append("&searchQuery=").append(URLEncoder.encode(currentSearchQuery, StandardCharsets.UTF_8.toString()));
-        }
-        String queryString = queryStringBuilder.toString();
-    %>
-    <% if (i == currentPage) { %>
-    <span class="current-page"><%= i %></span>
-    <% } else { %>
-    <a href="<%= request.getContextPath() %>/CatalogoServlet<%= queryString %>"><%= i %></a>
-    <% } %>
-    <% } %>
-</div>
-
 
 <jsp:include page="footer.jsp" />
+
+<%-- <!-- SCRIPT: JavaScript per gestire l'apertura/chiusura della sidebar --> --%>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterToggleBtn = document.getElementById('filter-toggle-btn');
+        const sidebar = document.getElementById('filter-sidebar');
+        const overlay = document.getElementById('page-overlay');
+        const closeBtn = document.getElementById('close-sidebar-btn');
+
+        // Funzione per aprire la sidebar
+        const openSidebar = () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
+        };
+
+        // Funzione per chiudere la sidebar
+        const closeSidebar = () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = ''; // Riabilita lo scroll
+        };
+
+        // Event listener per il pulsante principale
+        if (filterToggleBtn) {
+            filterToggleBtn.addEventListener('click', openSidebar);
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeSidebar);
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', closeSidebar);
+        }
+    });
+</script>
 
 </body>
 </html>

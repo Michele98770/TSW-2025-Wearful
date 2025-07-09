@@ -1,7 +1,6 @@
 const productImage = document.getElementById('productImage');
-const productName = document.getElementById('productName');
-const productDescription = document.getElementById('productDescription');
-const productPrice = document.getElementById('productPrice');
+const productDescriptionDisplay = document.getElementById('productDescription');
+const productPriceDisplay = document.getElementById('productPrice');
 const availabilityStatus = document.getElementById('availabilityStatus');
 const selectedProductIdInput = document.getElementById('selectedProductId');
 const quantityInput = document.getElementById('quantity');
@@ -10,7 +9,6 @@ const addToCartBtn = document.querySelector('.add-to-cart-btn');
 const colorOptions = document.querySelectorAll('.color-option');
 const sizeOptionsContainer = document.querySelector('.size-options');
 const selectedColorDisplay = document.getElementById('selectedColorDisplay');
-const selectedSizeDisplay = document.getElementById('selectedSizeDisplay');
 
 let currentSelectedColor;
 let currentSelectedSize;
@@ -31,7 +29,7 @@ function sortSizes(sizes) {
 }
 
 function updateProductDetails() {
-    if (!currentSelectedColor || !currentSelectedSize) {
+    if (!currentSelectedColor || !currentSelectedSize || !productsData || !productsData[currentSelectedColor] || !productsData[currentSelectedColor][currentSelectedSize]) {
         availabilityStatus.textContent = 'Seleziona colore e taglia.';
         availabilityStatus.classList.add('out-of-stock');
         quantityInput.disabled = true;
@@ -43,42 +41,38 @@ function updateProductDetails() {
         return;
     }
 
-    const selectedProduct = productsData[currentSelectedColor] ? productsData[currentSelectedColor][currentSelectedSize] : null;
+    const selectedProduct = productsData[currentSelectedColor][currentSelectedSize];
 
-    if (selectedProduct) {
-        productImage.src = selectedProduct.imgPath;
-        productImage.alt = selectedProduct.nome;
+    productImage.src = selectedProduct.imgPath;
+    productImage.alt = selectedProduct.nome;
 
-        selectedProductIdInput.value = selectedProduct.id;
+    selectedProductIdInput.value = selectedProduct.id;
 
-        const availability = selectedProduct.disponibilita;
-        quantityInput.max = availability;
+    if (productDescriptionDisplay && !selectedProduct.isPersonalizzabile) {
+        productDescriptionDisplay.textContent = selectedProduct.descrizione;
+    }
 
-        if (parseInt(quantityInput.value) > availability || parseInt(quantityInput.value) < 1 || isNaN(parseInt(quantityInput.value))) {
-            quantityInput.value = Math.min(1, availability);
-        }
+    const availability = selectedProduct.disponibilita;
+    quantityInput.max = availability;
 
-        if (availability <= 0) {
-            availabilityStatus.textContent = 'Esaurito';
-            availabilityStatus.classList.add('out-of-stock');
-            quantityInput.disabled = true;
-            addToCartBtn.disabled = true;
-            quantityInput.value = 0;
-        } else {
-            availabilityStatus.textContent = `Disponibili: ${availability}`;
-            availabilityStatus.classList.remove('out-of-stock');
-            quantityInput.disabled = false;
-            addToCartBtn.disabled = false;
-        }
-    } else {
-        availabilityStatus.textContent = 'Non disponibile con questa combinazione.';
+    let currentQuantityValue = parseInt(quantityInput.value);
+    if (isNaN(currentQuantityValue) || currentQuantityValue < 1 || currentQuantityValue > availability) {
+        quantityInput.value = Math.min(1, Math.max(0, availability));
+    }
+
+    if (availability <= 0) {
+        availabilityStatus.textContent = 'Esaurito';
         availabilityStatus.classList.add('out-of-stock');
         quantityInput.disabled = true;
         addToCartBtn.disabled = true;
-        selectedProductIdInput.value = '';
         quantityInput.value = 0;
-        productImage.src = '';
+    } else {
+        availabilityStatus.textContent = `Disponibili: ${availability}`;
+        availabilityStatus.classList.remove('out-of-stock');
+        quantityInput.disabled = false;
+        addToCartBtn.disabled = false;
     }
+
     selectedColorDisplay.textContent = currentSelectedColor;
 }
 
@@ -86,7 +80,6 @@ function updateSizeOptions() {
     sizeOptionsContainer.innerHTML = '';
 
     const sizesForCurrentColor = productsData[currentSelectedColor] ? Object.keys(productsData[currentSelectedColor]) : [];
-
     const sortedSizes = sortSizes(sizesForCurrentColor);
 
     let newSizeToSelect = null;
@@ -112,7 +105,7 @@ function updateSizeOptions() {
     currentSelectedSize = newSizeToSelect;
 
     sortedSizes.forEach(size => {
-        const productVariant = productsData[currentSelectedColor][size];
+        const productVariant = productsData[currentSelectedColor] ? productsData[currentSelectedColor][size] : null;
         const isAvailable = productVariant && productVariant.disponibilita > 0;
         const sizeDiv = document.createElement('div');
         sizeDiv.classList.add('size-option');
@@ -128,7 +121,12 @@ function updateSizeOptions() {
         }
 
         sizeDiv.addEventListener('click', () => {
-            if (!sizeDiv.classList.contains('unavailable') || sortedSizes.every(s => productsData[currentSelectedColor][s] && productsData[currentSelectedColor][s].disponibilita <= 0)) {
+            const canSelectUnavailable = sortedSizes.every(s => {
+                const p = productsData[currentSelectedColor]?.[s];
+                return p && p.disponibilita <= 0;
+            });
+
+            if (!sizeDiv.classList.contains('unavailable') || canSelectUnavailable) {
                 document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
                 sizeDiv.classList.add('selected');
                 currentSelectedSize = sizeDiv.dataset.size;
@@ -140,7 +138,6 @@ function updateSizeOptions() {
 
     updateProductDetails();
 }
-
 
 colorOptions.forEach(option => {
     option.addEventListener('click', () => {
@@ -185,6 +182,7 @@ quantityInput.addEventListener('change', () => {
         quantityInput.value = max;
     }
 });
+
 quantityInput.addEventListener('input', () => {
     let value = parseInt(quantityInput.value);
     let max = parseInt(quantityInput.max);

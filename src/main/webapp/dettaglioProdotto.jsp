@@ -28,24 +28,6 @@
   <title><%= productGroupName %> - Dettaglio Prodotto</title>
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
   <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/dettaglioProdotto.css?v=1.5">
-  <style>
-    .product-image-container {
-      position: relative;
-      display: inline-block;
-    }
-
-    .custom-image-preview {
-      padding-right: 2%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 45%;
-      max-height: 45%;
-      object-fit: contain;
-      pointer-events: none;
-    }
-  </style>
 </head>
 <body>
 
@@ -55,7 +37,7 @@
   <div class="product-image-gallery">
     <div class="product-image-container">
       <img id="productImage" src="<%= mainProduct.getImgPath() %>" alt="<%= mainProduct.getNome() %>">
-      <img id="customImagePreview" class="custom-image-preview" src="" alt="Anteprima Personalizzazione" style="display: none;">
+      <img id="customImagePreview" class="custom-image-preview" src="">
     </div>
   </div>
 
@@ -80,7 +62,7 @@
     </div>
 
     <div class="variant-selector size-selector">
-      <h3>Taglia:</h3>
+      <h3>Taglia: <span id="selectedSizeDisplay"></span></h3>
       <div class="size-options">
         <%
           List<String> currentSizesForSelectedColor = sizesByColor.get(selectedColor);
@@ -105,11 +87,12 @@
       </p>
     </div>
 
-    <form action="<%= request.getContextPath() %>/AggiungiAlCarrelloServlet" method="post" class="add-to-cart-form">
-      <input type="hidden" name="productId" id="selectedProductId" value="<%= mainProduct.getId() %>">
+    <form action="<%= request.getContextPath() %>/CarrelloServlet" method="post" class="add-to-cart-form">
+      <input type="hidden" name="action" value="aggiungi">
+      <input type="hidden" name="idProdotto" id="selectedProductId" value="<%= mainProduct.getId() %>">
       <div class="quantity-selector">
         <label for="quantity">Quantità:</label>
-        <input type="number" id="quantity" name="quantity" value="1" min="1" max="<%= mainProduct.getDisponibilita() %>" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>
+        <input type="number" id="quantity" name="quantita" value="1" min="1" max="<%= mainProduct.getDisponibilita() %>" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>
       </div>
 
       <% if(mainProduct.isPersonalizzabile()) { %>
@@ -130,8 +113,8 @@
 <script>
   const productsData = <%= jsonProducts %>;
 </script>
-<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.3"></script>
-<script src="./scripts/personalizza.js?v=1.0"></script>
+<script src="<%= request.getContextPath() %>/scripts/prodotto.js?v=1.5"></script>
+<script src="<%= request.getContextPath() %>/scripts/personalizza.js?v=1.0"></script>
 
 </body>
 </html>

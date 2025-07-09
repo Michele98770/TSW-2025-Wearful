@@ -261,6 +261,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         StringBuilder sqlBuilder = new StringBuilder("SELECT id, nome, descrizione, taglia, colore, codiceColore, categoria, prezzo, IVA, disponibilita, personalizzabile, imgPath, publisher, gruppo FROM Prodotto WHERE id IN (SELECT MIN(id) FROM Prodotto WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
+        sqlBuilder.append(" AND personalizzabile = FALSE");
+
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             sqlBuilder.append(" AND (LOWER(nome) LIKE ? OR LOWER(descrizione) LIKE ? OR LOWER(categoria) LIKE ?)");
             String searchPattern = "%" + searchQuery.toLowerCase() + "%";
@@ -377,6 +379,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
         return prodotti;
     }
 
+
     public int countAllFiltered(
             String category,
             Float minPrice,
@@ -391,6 +394,8 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
 
         StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(DISTINCT nome) FROM Prodotto WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
+
+        sqlBuilder.append(" AND personalizzabile = FALSE");
 
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             sqlBuilder.append(" AND (LOWER(nome) LIKE ? OR LOWER(descrizione) LIKE ? OR LOWER(categoria) LIKE ?)");

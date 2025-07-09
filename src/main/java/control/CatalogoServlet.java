@@ -2,12 +2,14 @@ package control;
 
 import model.prodotto.ProdottoBean;
 import model.prodotto.ProdottoDAO;
+import model.utente.UtenteBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class CatalogoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private ProdottoDAO prodottoDAO;
-    private static final int ITEMS_PER_PAGE = 8;
+    private static final int ITEMS_PER_PAGE = 9;
 
     public void init() throws ServletException {
         super.init();
@@ -29,7 +31,15 @@ public class CatalogoServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session= request.getSession();
+        UtenteBean loggedUser= (UtenteBean) session.getAttribute("user");
 
+        try {
+            session.setAttribute("cartCount", CarrelloServlet.getCartItemCount(request, loggedUser != null ? loggedUser.getEmail() : null));
+        } catch (SQLException e) {
+            System.err.println("Errore nel recupero del cartCount all'avvio: " + e.getMessage());
+            session.setAttribute("cartCount", 0);
+        }
 
         String action = request.getParameter("action");
         if (action == null || action.isEmpty()) {
@@ -114,14 +124,12 @@ public class CatalogoServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Errore nel caricamento dei prodotti dal database.");
         }
 
-        // Imposta gli attributi per la JSP
         request.setAttribute("products", products);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("filterCategory", category);
         request.setAttribute("filterMinPrice", minPrice != null ? String.valueOf(minPrice) : "");
         request.setAttribute("filterMaxPrice", maxPrice != null ? String.valueOf(maxPrice) : "");
-        // Rimuovi request.setAttribute("filterColors", colors); se non lo usi
         request.setAttribute("filterSizes", sizes);
         request.setAttribute("filterSortBy", sortBy);
         request.setAttribute("searchQuery", searchQuery); // Per mantenere la query nella barra di ricerca del catalogo
