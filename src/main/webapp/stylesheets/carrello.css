@@ -60,17 +60,18 @@ table {
 }
 thead { background-color: var(--secondary-color); }
 th {
-    padding: 15px 20px;
+    padding: 18px 20px; /* Aumentato leggermente il padding verticale */
     color: white;
     font-weight: 600;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-thead th:nth-child(1) { width: 55%; text-align: left; }
-thead th:nth-child(2) { width: 15%; }
-thead th:nth-child(3) { width: 15%; }
-thead th:nth-child(4) { width: 15%; font-size: 0; }
+/* --- MIGLIORAMENTO: Ribilanciamento larghezza colonne --- */
+thead th:nth-child(1) { width: 60%; text-align: left; } /* Più spazio per il prodotto */
+thead th:nth-child(2) { width: 13%; } /* Meno spazio, è sufficiente */
+thead th:nth-child(3) { width: 15%; } /* Meno spazio, è sufficiente */
+thead th:nth-child(4) { width: 12%; font-size: 0; } /* Meno spazio, è sufficiente */
 thead tr th:first-child { border-top-left-radius: var(--border-radius-sm); }
 thead tr th:last-child { border-top-right-radius: var(--border-radius-sm); }
 
@@ -82,8 +83,9 @@ tbody tr:hover:not(:has(.void-cart)) {
     z-index: 10;
 }
 
+/* --- MIGLIORAMENTO: Aumento padding verticale per più aria tra le righe --- */
 td {
-    padding: 25px 10px;
+    padding: 30px 15px; /* Aumentato da 25px a 30px (verticale) e 10px a 15px (orizzontale) */
     vertical-align: middle;
     border-bottom: 1px solid var(--border-color);
     text-align: center;
@@ -95,10 +97,11 @@ td {
     align-items: center;
     text-align: left;
 }
+/* --- MIGLIORAMENTO: Immagini prodotto più grandi --- */
 .product-image {
-    width: 120px;
-    height: 120px;
-    margin-right: 25px;
+    width: 140px;
+    height: 140px;
+    margin-right: 30px; /* Aumentato lo spazio tra immagine e testo */
     flex-shrink: 0;
 }
 .product-image img {
@@ -169,9 +172,10 @@ td input[type="number"]::-webkit-inner-spin-button {
     color: var(--primary-color);
 }
 
+/* --- MIGLIORAMENTO: Maggiore separazione per la sezione totale --- */
 .total-container {
-    margin-top: 40px;
-    padding-top: 30px;
+    margin-top: 50px; /* Aumentato da 40px */
+    padding-top: 40px; /* Aumentato da 30px */
     border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -208,6 +212,10 @@ td input[type="number"]::-webkit-inner-spin-button {
 .cart-page:has(.void-cart) .total-container {
     justify-content: center;
 }
+
+/**************************************************/
+/**       SEZIONI RESPONSIVE - INVARIATE       **/
+/**************************************************/
 
 @media screen and (max-width: 1200px) {
     .cart-page { width: auto; margin: 60px 40px; }

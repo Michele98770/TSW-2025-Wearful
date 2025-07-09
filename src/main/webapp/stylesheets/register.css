@@ -34,7 +34,12 @@
     font-size: 0.85em;
     margin-top: 5px;
     text-align: left;
-    display: none; /* Inizialmente nascosto */
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .form-container {
@@ -46,6 +51,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 .form-container h2 {
@@ -152,12 +158,4 @@
 
 .login-link a:hover {
     text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-    .form-container {
-        margin: 20px 10px;
-        padding: 20px;
-        width: calc(100% - 20px);
-    }
 }

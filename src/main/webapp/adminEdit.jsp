@@ -68,91 +68,104 @@
 
 <jsp:include page="header.jsp" />
 
-<div class="admin-form-container">
-  <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
-  <div class="admin-feedback-messages admin-error-message">
-    <p><%= errorMessage %></p>
+<div class="main-admin-content">
+  <div class="admin-page-layout">
+    <div class="admin-form-section">
+      <div id="adminFormWrapper">
+        <div class="admin-form-container">
+          <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+          <div class="admin-feedback-messages admin-error-message">
+            <p><%= errorMessage %></p>
+          </div>
+          <% } %>
+          <% if (successMessage != null && !successMessage.isEmpty()) { %>
+          <div class="admin-feedback-messages admin-success-message">
+            <p><%= successMessage %></p>
+          </div>
+          <% } %>
+
+          <h2>Gestione Linea di Prodotti</h2>
+
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+              <tr>
+                <th>Nome Linea Prodotti</th>
+                <th>Azioni</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% if (gruppi != null && !gruppi.isEmpty()) { %>
+              <% for (GruppoProdottiBean gruppo : gruppi) { %>
+              <tr>
+                <td><%= gruppo.getNome() %></td>
+                <td>
+                  <form method="get" action="">
+                    <input type="hidden" name="groupId" value="<%= gruppo.getId() %>">
+                    <button type="submit" class="admin-action-button">Visualizza Prodotti</button>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+              <% } else { %>
+              <tr>
+                <td colspan="2">Nessuna linea di prodotti trovato.</td>
+              </tr>
+              <% } %>
+              </tbody>
+            </table>
+          </div>
+          <% if (selectedGroup != null) { %>
+          <h3 class="admin-group-title">Prodotti della Linea: <%= selectedGroup.getNome() %></h3>
+
+          <% if (prodottiGruppo != null && !prodottiGruppo.isEmpty()) { %>
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Taglia</th>
+                <th>Quantità</th>
+                <th>Azioni</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% for (ProdottoBean prodotto : prodottiGruppo) { %>
+              <tr>
+                <td><%= prodotto.getNome() %></td>
+                <td><%= prodotto.getTaglia() %></td>
+                <td>
+                  <form method="post" action="AdminUpdateProductQuantityServlet" class="admin-quantity-form">
+                    <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
+                    <input type="number" name="newQuantity" value="<%= prodotto.getDisponibilita() %>" min="0" required>
+                </td>
+                <td>
+                  <button type="submit" class="admin-action-button">Aggiorna</button>
+                  </form>
+                  <form method="post" action="DeleteProductServlet" onsubmit="return confirm('Sicuro di voler rimuovere questo prodotto?');">
+                    <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
+                    <button type="submit" class="admin-action-button danger"> Rimuovi</button>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <p>Questa linea non ha ancora prodotti.</p>
+          <% } %>
+          <form method="get" action="AdminUploadServlet">
+            <input type="hidden" name="id_gruppo" value="<%= selectedGroup.getId() %>">
+            <button type="submit" id="edit" class="admin-submit-button">Aggiungi Prodotto a questa Linea</button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
   </div>
-  <% } %>
-  <% if (successMessage != null && !successMessage.isEmpty()) { %>
-  <div class="admin-feedback-messages admin-success-message">
-    <p><%= successMessage %></p>
-  </div>
-  <% } %>
-
-  <h2>Gestione Linea di Prodotti</h2>
-
-  <table class="admin-table">
-    <thead>
-    <tr>
-      <th>Nome Linea Prodotti</th>
-      <th>Azioni</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% if (gruppi != null && !gruppi.isEmpty()) { %>
-    <% for (GruppoProdottiBean gruppo : gruppi) { %>
-    <tr>
-      <td><%= gruppo.getNome() %></td>
-      <td>
-        <form method="get" action="">
-          <input type="hidden" name="groupId" value="<%= gruppo.getId() %>">
-          <button type="submit" class="admin-action-button">Visualizza Prodotti</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-    <% } else { %>
-    <tr>
-      <td colspan="2">Nessuna linea di prodotti trovato.</td>
-    </tr>
-    <% } %>
-    </tbody>
-  </table>
-  <% if (selectedGroup != null) { %>
-  <h3 class="admin-group-title">Prodotti della Linea: <%= selectedGroup.getNome() %></h3>
-
-  <% if (prodottiGruppo != null && !prodottiGruppo.isEmpty()) { %>
-  <table class="admin-table">
-    <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Taglia</th>
-      <th>Quantità</th>
-      <th>Azioni</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% for (ProdottoBean prodotto : prodottiGruppo) { %>
-    <tr>
-      <td><%= prodotto.getNome() %></td>
-        <td><%= prodotto.getTaglia() %></td>
-      <td>
-        <form method="post" action="AdminUpdateProductQuantityServlet" class="admin-quantity-form">
-          <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
-          <input type="number" name="newQuantity" value="<%= prodotto.getDisponibilita() %>" min="0" required>
-      </td>
-      <td>
-        <button type="submit" class="admin-action-button">Aggiorna</button>
-        </form>
-        <form method="post" action="DeleteProductServlet" onsubmit="return confirm('Sicuro di voler rimuovere questo prodotto?');">
-          <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
-          <button type="submit" class="admin-action-button danger"> Rimuovi</button>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-    </tbody>
-  </table>
-  <% } else { %>
-  <p>Questa linea non ha ancora prodotti.</p>
-  <% } %>
-  <form method="get" action="AdminUploadServlet">
-    <input type="hidden" name="id_gruppo" value="<%= selectedGroup.getId() %>">
-    <button type="submit" id="edit" class="admin-submit-button">Aggiungi Prodotto a questa Linea</button>
-  </form>
-  <% } %>
 </div>
+
 <jsp:include page="footer.jsp" />
 </body>
 </html>

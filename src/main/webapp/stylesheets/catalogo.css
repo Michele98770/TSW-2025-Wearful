@@ -377,6 +377,7 @@ body {
         align-items: center;
         justify-content: center;
         gap: 8px;
+        animation: fadeInUp 0.8s 0.2s ease-out forwards;
     }
 
     .overlay {

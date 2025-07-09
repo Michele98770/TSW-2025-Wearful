@@ -51,7 +51,7 @@
 
 .section-heading {
     font-size: 2.2em;
-    color: #8E44AD; /* Dalla palette di common.css */
+    color: #8E44AD;
     margin-top: 3rem;
     margin-bottom: 1.8rem;
     font-weight: 600;
@@ -79,7 +79,7 @@
 
 .info-display strong {
     display: inline-block;
-    width: 150px; /* Larghezza fissa per le etichette */
+    width: 150px;
     color: #2c3e50;
     font-weight: 600;
 }

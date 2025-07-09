@@ -124,7 +124,7 @@
             <% if (products.isEmpty()) { %>
             <div class="no-products-container"> <%-- Contenitore per messaggio --%>
                 <img src="./img/search.png" alt="not found" style="max-width: 300px; margin: 0 auto;">
-                <p class="no-products-message">Nessun prodotto trovato che corrisponda ai filtri selezionati.</p>
+                <p class="no-products-message">Nessun prodotto trovato...</p>
             </div>
             <% } else { %>
             <% for (ProdottoBean product : products) { %>

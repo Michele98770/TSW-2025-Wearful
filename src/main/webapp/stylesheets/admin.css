@@ -1,10 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #660099;
+    --primary-hover-color: #550077;
+    --text-color: #333;
+    --light-text-color: #555;
+    --bg-color: #f9f9f9;
+    --content-bg: #ffffff;
+    --border-color: #ddd;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition-speed: 0.3s ease;
+    --button-bg-color: #007bff;
+    --button-hover-bg-color: #0056b3;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.main-admin-content {
+    padding: 20px;
+}
+
+.admin-page-layout {
+    display: flex;
+    gap: 30px;
+    max-width: 1500px;
+    margin: 20px auto;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 0 20px;
+}
+
+#adminFormWrapper{
+    margin-top: 40px;
+}
+
 #adminFormWrapper .admin-form-container {
     max-width: 900px;
-    margin: 40px auto;
-    background-color: #ffffff;
+    margin: 0 auto;
+    background-color: var(--content-bg);
     padding: 30px 40px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 #adminFormWrapper h2 {
@@ -24,6 +96,7 @@
     margin-bottom: 8px;
     font-weight: 600;
     font-size: 0.95em;
+    color: var(--light-text-color);
 }
 
 #adminFormWrapper input[type="text"],
@@ -34,11 +107,11 @@
 #adminFormWrapper textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1em;
-    color: #495057;
-    background-color: #fff;
+    color: var(--text-color);
+    background-color: var(--content-bg);
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     box-sizing: border-box;
@@ -48,8 +121,8 @@
 #adminFormWrapper input[type="number"]:focus,
 #adminFormWrapper select:focus,
 #adminFormWrapper textarea:focus {
-    border-color: #66b5ff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 0, 153, 0.25);
     outline: none;
 }
 
@@ -117,7 +190,7 @@
 
 #adminFormWrapper input[type="file"] {
     padding: 10px;
-    border: 1px dashed #ced4da;
+    border: 1px dashed var(--border-color);
     background-color: #e9ecef;
     cursor: pointer;
 }
@@ -127,7 +200,7 @@
     box-sizing: border-box;
     max-width: 90%;
     padding: 10px;
-    border: 1px dashed #ced4da;
+    border: 1px dashed var(--border-color);
     background-color: #e9ecef;
     cursor: pointer;
 }
@@ -136,7 +209,7 @@
     display: block;
     width: 100%;
     padding: 15px 25px;
-    background-color: #007bff;
+    background-color: var(--button-bg-color);
     color: white;
     border: none;
     border-radius: 8px;
@@ -144,11 +217,11 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 #adminFormWrapper .admin-submit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--button-hover-bg-color);
     transform: translateY(-2px);
 }
 
@@ -187,41 +260,30 @@
     margin-bottom: 5px;
 }
 
-.main-admin-content {
-    padding: 20px;
-}
-
-.admin-page-layout {
-    display: flex;
-    gap: 30px;
-    max-width: 1500px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    align-items: flex-start;
-}
-
 .admin-form-section {
     flex: 2;
     min-width: 300px;
 }
-.admin-form-container h2{
+
+.admin-form-container h2 {
     text-align: center;
     margin: 2%;
 }
 
 #imagePreviewContainer {
-    margin-top: 87%;
     flex: 1;
     min-width: 250px;
-    background-color: #fff;
+    background-color: var(--content-bg);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     text-align: center;
+    margin-top: 80%;
+    align-self: flex-start;
 }
 
 #imagePreviewContainer canvas {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     max-width: 100%;
     height: auto;
@@ -236,12 +298,10 @@
     pointer-events: none;
 }
 
-
-
 #selectedColorDisplay {
     margin-top: 20px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,13 +316,17 @@
     background-color: #000;
 }
 
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 0 auto 30px auto;
+}
+
 .admin-table {
     width: 100%;
-    max-width: 850px;
-    min-width: 850px;
-    margin: 0 auto 30px auto;
+    min-width: 800px;
     border-collapse: collapse;
-    background-color: #fff;
+    background-color: var(--content-bg);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -270,14 +334,15 @@
 
 .admin-table th, .admin-table td {
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     text-align: center;
+    white-space: nowrap;
 }
 
 .admin-table thead {
     background-color: #f5f5f5;
     font-weight: 600;
-    color: #333;
+    color: var(--text-color);
 }
 
 .admin-table tbody tr:nth-child(even) {
@@ -285,19 +350,20 @@
 }
 
 .admin-action-button {
-    margin: 2%;
+    margin: 5px;
     padding: 8px 15px;
     font-size: 0.9em;
-    background-color: #007bff;
+    background-color: var(--button-bg-color);
     color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .admin-action-button:hover {
-    background-color: #0056b3;
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-1px);
 }
 
 .admin-action-button.danger {
@@ -316,7 +382,7 @@
     text-align: center;
 }
 
-.admin-quantity-form input[type="number"]{
+.admin-quantity-form input[type="number"] {
     width: 70px;
     padding: 8px;
     border: 1px solid #ccc;
@@ -329,7 +395,7 @@
     display: block;
     width: 50%;
     padding: 15px 25px;
-    background-color: #007bff;
+    background-color: var(--button-bg-color);
     color: white;
     border: none;
     border-radius: 8px;
@@ -337,52 +403,141 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
     margin: 0 auto;
 }
-
 
 @media (max-width: 992px) {
     .admin-page-layout {
         flex-direction: column;
         align-items: stretch;
+        padding: 0 15px;
     }
-    .admin-form-section, #imagePreviewContainer {
-        flex: auto;
-        width: 100%;
+
+    .admin-form-section {
+        order: 1;
     }
+
+    #imagePreviewContainer {
+        order: 2;
+        margin-top: 20px;
+    }
+
     #adminFormWrapper .admin-form-container {
         margin: 20px auto;
         padding: 20px;
     }
+
+    .admin-table-wrapper {
+        margin: 20px auto 30px auto;
+    }
+
     .admin-table {
-        max-width: 100%;
+        min-width: unset;
     }
 }
 
 @media (max-width: 768px) {
-    #adminFormWrapper .admin-form-container {
-        padding: 20px;
+    .admin-page-layout {
+        padding: 0 10px;
     }
+
+    #adminFormWrapper .admin-form-container {
+        padding: 15px;
+    }
+
     #adminFormWrapper h2 {
-        font-size: 1.8em;
+        font-size: 1.6em;
+        margin-bottom: 20px;
+    }
+
+    #adminFormWrapper input[type="text"],
+    #adminFormWrapper input[type="number"],
+    #adminFormWrapper input[type="email"],
+    #adminFormWrapper input[type="password"],
+    #adminFormWrapper select,
+    #adminFormWrapper textarea {
+        padding: 10px 12px;
+        font-size: 0.95em;
+    }
+
+    #adminFormWrapper .admin-submit-button, #edit {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 10px 8px;
+        font-size: 0.9em;
+    }
+
+    .admin-action-button {
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+
+    .admin-quantity-form input[type="number"] {
+        width: 60px;
+        padding: 6px;
     }
 }
 
-@media (max-width: 600px) {
-    #adminFormWrapper .admin-form-container {
-        padding: 15px;
-        border-radius: 8px;
-    }
-    #adminFormWrapper .admin-submit-button {
-        padding: 12px 15px;
-        font-size: 1em;
-    }
-    .main-admin-content {
-        padding: 10px;
+@media (max-width: 480px) {
+    .admin-page-layout {
+        padding: 0 5px;
     }
 
-    #imagePreviewContainer{
-        margin-top:0%;
+    #adminFormWrapper .admin-form-container {
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    #adminFormWrapper h2 {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+    }
+
+    #adminFormWrapper .admin-form-group {
+        margin-bottom: 15px;
+    }
+
+    #adminFormWrapper label {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    #adminFormWrapper input[type="text"],
+    #adminFormWrapper input[type="number"],
+    #adminFormWrapper input[type="email"],
+    #adminFormWrapper input[type="password"],
+    #adminFormWrapper select,
+    #adminFormWrapper textarea {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+
+    #adminFormWrapper .admin-radio-group label {
+        font-size: 0.85em;
+        margin-right: 15px;
+    }
+
+    #adminFormWrapper .admin-submit-button, #edit {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 8px 5px;
+        font-size: 0.8em;
+    }
+
+    .admin-action-button {
+        padding: 5px 8px;
+        font-size: 0.75em;
+    }
+
+    .admin-group-title {
+        font-size: 1em;
+        margin-bottom: 15px;
     }
 }

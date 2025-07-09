@@ -37,7 +37,7 @@
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
   <meta charset="UTF-8">
   <title>Carrello</title>
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/carrello.css?v=1.7">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/carrello.css?v=1.8">
 </head>
 <body>
 
