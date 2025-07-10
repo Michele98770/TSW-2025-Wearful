@@ -48,8 +48,8 @@ public class AdminUploadServlet extends HttpServlet {
         GruppoProdottiBean selectedGroup = null;
 
         String idGruppoParam = request.getParameter("id_gruppo");
-        String errorMessageFromRedirect = request.getParameter("errorMessage"); // Cattura messaggio da redirect
-        String successMessageFromRedirect = request.getParameter("successMessage"); // Cattura messaggio da redirect
+        String errorMessageFromRedirect = request.getParameter("errorMessage");
+        String successMessageFromRedirect = request.getParameter("successMessage");
 
         if (errorMessageFromRedirect != null && !errorMessageFromRedirect.trim().isEmpty()) {
             request.setAttribute("errorMessage", errorMessageFromRedirect);
@@ -71,7 +71,6 @@ public class AdminUploadServlet extends HttpServlet {
                 }
             } catch (NumberFormatException e) {
                 System.err.println("Invalid id_gruppo parameter: " + idGruppoParam + ". Error: " + e.getMessage());
-                // Imposta messaggio di errore solo se non già presente da un redirect precedente
                 if (errorMessageFromRedirect == null) {
                     request.setAttribute("errorMessage", "ID gruppo prodotto non valido. Si prega di inserire un numero valido.");
                 }
@@ -174,7 +173,7 @@ public class AdminUploadServlet extends HttpServlet {
 
                         String groupSuccessMsg = "Gruppo prodotto '" + groupName + "' creato con successo! Ora puoi aggiungere prodotti.";
                         response.sendRedirect(request.getContextPath() + "/AdminUploadServlet?id_gruppo=" + currentSelectedGroup.getId() + "&successMessage=" + URLEncoder.encode(groupSuccessMsg, "UTF-8"));
-                        return; // IMPORTANTE: Termina l'esecuzione di doPost qui poiché sta avvenendo un redirect
+                        return;
                     }
                 }
             }

@@ -1,29 +1,22 @@
-/* --- ROOT VARIABLES & GENERAL STYLES --- */
 :root {
     --primary-color: #660099;
     --secondary-color: #d6b3ff;
     --accent-color: #007bff;
     --accent-hover-color: #0056b3;
-
     --text-dark: #333;
     --text-light: #666;
     --text-white: #fff;
-
     --background-light: #fff;
     --background-muted: #f9f9f9;
     --border-color: #ddd;
-
     --shadow-sm: 0 2px 5px rgba(0,0,0,0.08);
     --shadow-md: 0 4px 10px rgba(0,0,0,0.1);
-
     --border-radius-sm: 5px;
     --border-radius-md: 8px;
-
     --transition-fast: 0.2s ease-out;
     --transition-smooth: 0.3s ease-in-out;
 }
 
-/* Base reset e font scaling */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -40,7 +33,6 @@ body {
     background-color: #f4f5f7;
 }
 
-/* --- KEYFRAME ANIMATIONS --- */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -64,8 +56,6 @@ body {
     }
 }
 
-
-/* --- MAIN LAYOUT --- */
 .product-detail-layout {
     display: flex;
     flex-wrap: wrap;
@@ -79,7 +69,6 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
-/* --- PRODUCT IMAGE GALLERY --- */
 .product-image-gallery {
     flex: 1 1 45%;
     min-width: 300px;
@@ -95,14 +84,9 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    /* La transizione non è più necessaria qui, ma possiamo lasciarla per eventuali futuri effetti */
     transition: transform var(--transition-smooth);
 }
 
-/* REGOLA CSS RIMOSSA PER ELIMINARE L'EFFETTO ZOOM SULL'IMMAGINE */
-
-
-/* --- PRODUCT DETAILS --- */
 .product-details-container {
     flex: 2 1 50%;
     min-width: 350px;
@@ -131,7 +115,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* --- VARIANT SELECTOR --- */
 .variant-selector {
     margin-bottom: 1.5rem;
 }
@@ -208,8 +191,6 @@ body {
     transform: none;
 }
 
-
-/* --- FORM & BUTTONS --- */
 .add-to-cart-form {
     margin-top: auto;
     padding-top: 1.5rem;
@@ -240,9 +221,6 @@ body {
     font-weight: 600;
 }
 
-
-/* --- STILI PERSONALIZZAZIONE IMMAGINE (ORIGINALI) --- */
-
 .product-image-container {
     position: relative;
     display: inline-block;
@@ -261,17 +239,17 @@ body {
 }
 
 .custom-file-upload {
-    display: inline-block;
+    display: block;
+    text-align: center;
     margin-top: 15px;
 }
-
 
 .custom-file-upload input[type="file"] {
     display: none;
 }
 
-
 .custom-file-upload .upload-button {
+    align-content: center;
     background-color: #d6b3ff;
     color: #333;
     padding: 12px 25px;
@@ -296,9 +274,6 @@ body {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-/* --- FINE SEZIONI ORIGINALI --- */
-
 
 .btn.add-to-cart-btn {
     padding: 14px 28px;
@@ -328,10 +303,6 @@ body {
     transform: none;
 }
 
-
-/* --- RESPONSIVE DESIGN --- */
-
-/* Tablet View */
 @media (max-width: 992px) {
     .product-detail-layout {
         gap: 30px;
@@ -345,8 +316,6 @@ body {
     }
 }
 
-
-/* Mobile View */
 @media (max-width: 768px) {
     .product-detail-layout {
         flex-direction: column;

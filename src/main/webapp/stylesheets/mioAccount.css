@@ -181,14 +181,14 @@
 }
 
 .back-link a {
-    color: #3d0066; /* Colore link dalla palette */
+    color: #3d0066;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
 .back-link a:hover {
-    color: #8E44AD; /* Colore più chiaro all'hover */
+    color: #8E44AD;
     text-decoration: underline;
 }
 

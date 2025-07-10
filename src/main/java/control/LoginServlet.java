@@ -54,11 +54,7 @@ public class LoginServlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-            if(utenteLoggato.isAdmin()) {
-                response.sendRedirect(request.getContextPath() + "/adminUpload.jsp");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/CatalogoServlet");
-            }
+            response.sendRedirect(request.getContextPath() + "/CatalogoServlet");
 
             try {
                 session.setAttribute("cartCount", CarrelloServlet.getCartItemCount(request, utenteLoggato.getEmail()));

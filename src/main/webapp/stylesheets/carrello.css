@@ -60,18 +60,18 @@ table {
 }
 thead { background-color: var(--secondary-color); }
 th {
-    padding: 18px 20px; /* Aumentato leggermente il padding verticale */
+    padding: 18px 20px;
     color: white;
     font-weight: 600;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-/* --- MIGLIORAMENTO: Ribilanciamento larghezza colonne --- */
-thead th:nth-child(1) { width: 60%; text-align: left; } /* Più spazio per il prodotto */
-thead th:nth-child(2) { width: 13%; } /* Meno spazio, è sufficiente */
-thead th:nth-child(3) { width: 15%; } /* Meno spazio, è sufficiente */
-thead th:nth-child(4) { width: 12%; font-size: 0; } /* Meno spazio, è sufficiente */
+
+thead th:nth-child(1) { width: 60%; text-align: left; }
+thead th:nth-child(2) { width: 13%; }
+thead th:nth-child(3) { width: 15%; }
+thead th:nth-child(4) { width: 12%; font-size: 0; }
 thead tr th:first-child { border-top-left-radius: var(--border-radius-sm); }
 thead tr th:last-child { border-top-right-radius: var(--border-radius-sm); }
 
@@ -83,9 +83,9 @@ tbody tr:hover:not(:has(.void-cart)) {
     z-index: 10;
 }
 
-/* --- MIGLIORAMENTO: Aumento padding verticale per più aria tra le righe --- */
+
 td {
-    padding: 30px 15px; /* Aumentato da 25px a 30px (verticale) e 10px a 15px (orizzontale) */
+    padding: 30px 15px;
     vertical-align: middle;
     border-bottom: 1px solid var(--border-color);
     text-align: center;
@@ -97,11 +97,11 @@ td {
     align-items: center;
     text-align: left;
 }
-/* --- MIGLIORAMENTO: Immagini prodotto più grandi --- */
+
 .product-image {
     width: 140px;
     height: 140px;
-    margin-right: 30px; /* Aumentato lo spazio tra immagine e testo */
+    margin-right: 30px;
     flex-shrink: 0;
 }
 .product-image img {
@@ -144,8 +144,11 @@ td input[type="number"]::-webkit-inner-spin-button {
     transform: translateY(-2px);
 }
 
-.cart-page:has(.void-cart) table,
-.cart-page:has(.void-cart) thead,
+
+.cart-page:has(.void-cart) thead {
+    display: none;
+}
+
 .cart-page:has(.void-cart) tbody,
 .cart-page:has(.void-cart) tr,
 .cart-page:has(.void-cart) td {
@@ -172,10 +175,9 @@ td input[type="number"]::-webkit-inner-spin-button {
     color: var(--primary-color);
 }
 
-/* --- MIGLIORAMENTO: Maggiore separazione per la sezione totale --- */
 .total-container {
-    margin-top: 50px; /* Aumentato da 40px */
-    padding-top: 40px; /* Aumentato da 30px */
+    margin-top: 50px;
+    padding-top: 40px;
     border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -213,9 +215,6 @@ td input[type="number"]::-webkit-inner-spin-button {
     justify-content: center;
 }
 
-/**************************************************/
-/**       SEZIONI RESPONSIVE - INVARIATE       **/
-/**************************************************/
 
 @media screen and (max-width: 1200px) {
     .cart-page { width: auto; margin: 60px 40px; }
@@ -225,13 +224,36 @@ td input[type="number"]::-webkit-inner-spin-button {
     .void-text { text-align: center; }
 }
 
+
 @media screen and (max-width: 768px) {
     .cart-page {
-        margin: 20px;
-        padding: 20px;
+        margin: 15px;
+        padding: 15px;
+        border-radius: var(--border-radius-md);
     }
     .cart-page h2 {
         font-size: 2rem;
+    }
+
+
+    .void-text h1 {
+        font-size: 1.9rem;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+    .void-cart img {
+        max-width: 180px;
+    }
+
+    .void-cart .checkout-btn,
+    .total-container .checkout-btn {
+        padding: 14px 25px;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .total-container {
+        width: 100%;
     }
 
     .cart-page:not(:has(.void-cart)) thead {
@@ -240,6 +262,11 @@ td input[type="number"]::-webkit-inner-spin-button {
     .cart-page:not(:has(.void-cart)) tbody {
         display: block;
     }
+
+    .cart-page:not(:has(.void-cart)) th {
+        display: none;
+    }
+
 
     .product-row {
         display: flex;
@@ -296,7 +323,6 @@ td input[type="number"]::-webkit-inner-spin-button {
 
 
     .product-row .product-image img {
-
         object-fit: contain;
     }
 

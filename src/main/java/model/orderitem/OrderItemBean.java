@@ -9,8 +9,8 @@ public class OrderItemBean implements Serializable {
 
     private Long id;
     private String nome;
-    private Long idProdotto; // FK a Prodotto
-    private Long idOrdine; // FK a Ordine
+    private Long idProdotto;
+    private Long idOrdine;
     private float prezzo;
     private int quantita;
     private int iva;
@@ -26,7 +26,6 @@ public class OrderItemBean implements Serializable {
         this.iva = iva;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

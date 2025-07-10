@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateTelefono() {
         const telefono = telefonoInput.value.trim();
-        // Regex per telefono: deve iniziare con '+' e avere esattamente 12 cifre
         const telefonoPattern = /^\+\d{12}$/;
 
         if (telefono === '') {
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePassword() {
         const password = passwordInput.value;
         const minLength = 8;
-        // Regex per password: minimo 8 caratteri, nient'altro richiesto
         const passwordPattern = /^.{8,}$/;
 
         if (password === '') {

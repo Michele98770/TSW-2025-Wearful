@@ -18,7 +18,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
 
     @Override
     public GruppoProdottiBean doRetrieveByKey(Long id) throws SQLException {
-        Connection connection = null; // Dichiarazione qui per il blocco finally
+        Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         GruppoProdottiBean gruppo = null; // Inizializzazione a null
@@ -26,7 +26,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
         String sql = "SELECT * FROM GruppoProdotti WHERE id = ?";
 
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
@@ -39,14 +39,13 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
                 );
             }
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (resultSet != null) resultSet.close();
             } finally {
                 try {
                     if (statement != null) statement.close();
                 } finally {
-                    ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -63,7 +62,7 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
         String sql = "SELECT * FROM GruppoProdotti";
 
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            connection = ConnectionPool.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
 
@@ -74,14 +73,13 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
                 ));
             }
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (resultSet != null) resultSet.close();
             } finally {
                 try {
                     if (statement != null) statement.close();
                 } finally {
-                    ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -90,34 +88,31 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
 
     @Override
     public void doSave(GruppoProdottiBean gruppo) throws SQLException {
-        Connection connection = null; // Dichiarazione qui per il blocco finally
+        Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet generatedKeys = null; // Per le chiavi generate automaticamente
+        ResultSet generatedKeys = null;
 
         String sql = "INSERT INTO GruppoProdotti (nome) VALUES (?)";
 
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
-            // Specifica RETURN_GENERATED_KEYS quando crei il PreparedStatement
+            connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, gruppo.getNome());
             statement.executeUpdate();
 
-            // Recupera le chiavi generate (come l'ID auto-incrementato)
             generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 gruppo.setId(generatedKeys.getLong(1));
             }
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (generatedKeys != null) generatedKeys.close();
             } finally {
                 try {
                     if (statement != null) statement.close();
                 } finally {
-                    ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                    ConnectionPool.releaseConnection(connection);
                 }
             }
         }
@@ -125,47 +120,45 @@ public class GruppoProdottiDAO implements DAOInterface<GruppoProdottiBean, Long>
 
     @Override
     public void doUpdate(GruppoProdottiBean gruppo) throws SQLException {
-        Connection connection = null; // Dichiarazione qui per il blocco finally
+        Connection connection = null;
         PreparedStatement statement = null;
 
         String sql = "UPDATE GruppoProdotti SET nome = ? WHERE id = ?";
 
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setString(1, gruppo.getNome());
             statement.setLong(2, gruppo.getId());
             statement.executeUpdate();
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (statement != null) statement.close();
             } finally {
-                ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                ConnectionPool.releaseConnection(connection);
             }
         }
     }
 
     @Override
     public void doDelete(Long id) throws SQLException {
-        Connection connection = null; // Dichiarazione qui per il blocco finally
+        Connection connection = null;
         PreparedStatement statement = null;
 
         String sql = "DELETE FROM GruppoProdotti WHERE id = ?";
 
         try {
-            connection = ConnectionPool.getConnection(); // Ottieni una connessione dal pool
+            connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
             statement.executeUpdate();
         } finally {
-            // Rilascia le risorse JDBC nell'ordine inverso di acquisizione
             try {
                 if (statement != null) statement.close();
             } finally {
-                ConnectionPool.releaseConnection(connection); // Rilascia la connessione al pool
+                ConnectionPool.releaseConnection(connection);
             }
         }
     }

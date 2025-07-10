@@ -1,7 +1,6 @@
 package model.prodotto;
 
 import java.io.Serializable;
-//import java.math.BigDecimal;
 
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -11,7 +10,7 @@ public class ProdottoBean implements Serializable {
     private String descrizione;
     private String taglia;
     private String colore;
-    private String codiceColore; // NUOVO CAMPO AGGIUNTO
+    private String codiceColore;
     private String categoria;
     private float prezzo;
     private int iva;
@@ -21,7 +20,7 @@ public class ProdottoBean implements Serializable {
     private String publisher;
     private Long gruppo;
 
-    // Costruttore completo aggiornato
+
     public ProdottoBean(Long id, String nome, String descrizione, String taglia,
                         String colore, String codiceColore, String categoria, float prezzo, int iva, int disponibilita,
                         boolean personalizzabile, String imgPath, String publisher, Long gruppo) {
@@ -30,7 +29,7 @@ public class ProdottoBean implements Serializable {
         this.descrizione = descrizione;
         this.taglia = taglia;
         this.colore = colore;
-        this.codiceColore = codiceColore; // Assegna il nuovo campo
+        this.codiceColore = codiceColore;
         this.categoria = categoria;
         this.prezzo = prezzo;
         this.iva = iva;
@@ -42,11 +41,9 @@ public class ProdottoBean implements Serializable {
     }
 
     public ProdottoBean() {
-        // Costruttore vuoto, inizializza codiceColore a null o valore predefinito
         this.codiceColore = null;
     }
 
-    // Getter e Setter per codiceColore
     public String getCodiceColore() {
         return codiceColore;
     }
@@ -55,7 +52,6 @@ public class ProdottoBean implements Serializable {
         this.codiceColore = codiceColore;
     }
 
-    // --- Metodi esistenti (getters e setters) ---
     public Long getId() {
         return id;
     }

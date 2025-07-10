@@ -65,6 +65,10 @@ body {
     opacity: 0;
     animation: fadeInUp 0.8s 0.2s ease-out forwards;
 }
+#banner:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
 
 .filter-sidebar {
     flex: 0 0 280px;
@@ -308,6 +312,10 @@ body {
         max-width: 100%;
         margin-top: 2%;
         animation: fadeInUp 0.8s var(--transition-speed) forwards;
+    }
+    #banner:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
     }
 
     .filter-sidebar {

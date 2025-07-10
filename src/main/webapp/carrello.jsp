@@ -37,7 +37,7 @@
   <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/img/small_logo.png">
   <meta charset="UTF-8">
   <title>Carrello</title>
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/carrello.css?v=1.8">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/stylesheets/carrello.css?v=1.9">
 </head>
 <body>
 
@@ -46,12 +46,6 @@
 <div class="cart-page">
   <h2>Il tuo Carrello</h2>
 
-  <% if (message != null && !message.isEmpty()) { %>
-  <div class="cart-message success-message"><%= message %></div>
-  <% } %>
-  <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
-  <div class="cart-message error-message"><%= errorMessage %></div>
-  <% } %>
 
   <div class="cart-table-container">
     <table>

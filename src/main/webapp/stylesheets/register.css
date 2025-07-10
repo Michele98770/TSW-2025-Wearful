@@ -77,12 +77,12 @@
 .registration-form input[type="text"],
 .registration-form input[type="tel"],
 .registration-form input[type="password"] {
-    width: calc(100% - 20px); /* Mantiene il calcolo per padding */
+    width: calc(100% - 20px);
     padding: 12px 10px;
     border: 1px solid #ced4da;
     border-radius: 5px;
     font-size: 1em;
-    box-sizing: border-box; /* Include padding e border nella larghezza */
+    box-sizing: border-box;
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 

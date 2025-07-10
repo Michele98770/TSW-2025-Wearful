@@ -92,7 +92,6 @@ public class RegisterServlet extends HttpServlet {
             nuovoUtente.setUsername(username);
             nuovoUtente.setTelefono(telefono);
 
-            // Hashing della password con SHA-256
             String hashedPassword = hashPasswordSHA256(password);
             nuovoUtente.setPassword(hashedPassword);
 

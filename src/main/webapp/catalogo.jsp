@@ -59,12 +59,10 @@
     }
 %>
 
-<%-- <!-- NUOVO: Overlay per la sidebar mobile. Utile per chiuderla cliccando fuori. --> --%>
 <div class="overlay" id="page-overlay"></div>
 
 <div class="catalog-page-layout">
     <aside class="filter-sidebar" id="filter-sidebar">
-        <%-- <!-- NUOVO: Pulsante di chiusura per la sidebar mobile --> --%>
         <button class="close-sidebar-btn" id="close-sidebar-btn" aria-label="Chiudi filtri">×</button>
         <h3>Filtra Prodotti</h3>
 
@@ -172,42 +170,7 @@
 
 <jsp:include page="footer.jsp" />
 
-<%-- <!-- SCRIPT: JavaScript per gestire l'apertura/chiusura della sidebar --> --%>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterToggleBtn = document.getElementById('filter-toggle-btn');
-        const sidebar = document.getElementById('filter-sidebar');
-        const overlay = document.getElementById('page-overlay');
-        const closeBtn = document.getElementById('close-sidebar-btn');
-
-        // Funzione per aprire la sidebar
-        const openSidebar = () => {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Blocca lo scroll della pagina
-        };
-
-        // Funzione per chiudere la sidebar
-        const closeSidebar = () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = ''; // Riabilita lo scroll
-        };
-
-        // Event listener per il pulsante principale
-        if (filterToggleBtn) {
-            filterToggleBtn.addEventListener('click', openSidebar);
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeSidebar);
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', closeSidebar);
-        }
-    });
-</script>
+<script src="./scripts/catalogo.js"></script>
 
 </body>
 </html>

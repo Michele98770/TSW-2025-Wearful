@@ -132,7 +132,7 @@ public class CatalogoServlet extends HttpServlet {
         request.setAttribute("filterMaxPrice", maxPrice != null ? String.valueOf(maxPrice) : "");
         request.setAttribute("filterSizes", sizes);
         request.setAttribute("filterSortBy", sortBy);
-        request.setAttribute("searchQuery", searchQuery); // Per mantenere la query nella barra di ricerca del catalogo
+        request.setAttribute("searchQuery", searchQuery);
 
         request.getRequestDispatcher("/catalogo.jsp").forward(request, response);
     }

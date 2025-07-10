@@ -109,7 +109,7 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
             }
 
             request.setAttribute("message", message);
-            response.sendRedirect(request.getContextPath() + "/CarrelloServlet?message=" + URLEncoder.encode(message, StandardCharsets.UTF_8.toString()));
+            response.sendRedirect(request.getContextPath() + "/aggiuntaCarrello.jsp?message=" + URLEncoder.encode(message, StandardCharsets.UTF_8.toString()));
 
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "Quantità o ID prodotto non validi.");

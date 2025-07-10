@@ -253,6 +253,7 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
             String sortBy,
             String searchQuery
     ) throws SQLException {
+
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -278,12 +279,12 @@ public class ProdottoDAO implements DAOInterface<ProdottoBean, Long> {
 
         if (minPrice != null) {
             sqlBuilder.append(" AND prezzo >= ?");
-            params.add(minPrice);
+            params.add(minPrice-((minPrice/100)*22));
         }
 
         if (maxPrice != null) {
             sqlBuilder.append(" AND prezzo <= ?");
-            params.add(maxPrice);
+            params.add(maxPrice-((maxPrice/100)*22));
         }
 
         if (sizes != null && !sizes.isEmpty()) {

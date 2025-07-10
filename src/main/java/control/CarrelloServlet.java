@@ -10,6 +10,7 @@ import model.prodotto.ProdottoBean;
 import model.prodotto.ProdottoDAO;
 import model.utente.UtenteBean;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -69,7 +70,7 @@ public class CarrelloServlet extends HttpServlet {
                         cartItemsWithProducts.put(item, prodotto);
                     }
                 }
-                cartCount = rawCartItems.size(); // Conta gli elementi distinti nel carrello dell'utente
+                cartCount = rawCartItems.size();
 
             } else {
                 Map<Long, Integer> guestCartData = getGuestCartFromCookies(request);
@@ -83,12 +84,12 @@ public class CarrelloServlet extends HttpServlet {
                         cartItemsWithProducts.put(virtualItem, prodotto);
                     }
                 }
-                cartCount = guestCartData.size(); // Conta gli elementi distinti nel carrello guest
+                cartCount = guestCartData.size();
             }
 
             session.setAttribute("carrello", carrelloUtente);
             request.setAttribute("cartItemsWithProducts", cartItemsWithProducts);
-            session.setAttribute("cartCount", cartCount); // Imposta il contatore in sessione
+            session.setAttribute("cartCount", cartCount);
 
             String message = request.getParameter("message");
             if (message != null && !message.isEmpty()) {
@@ -137,6 +138,7 @@ public class CarrelloServlet extends HttpServlet {
                     int newQuantity = Integer.parseInt(request.getParameter("quantita"));
 
                     ProdottoBean prodotto = prodottoDAO.doRetrieveByKey(idProdotto);
+                    request.setAttribute("prodotto", prodotto);
                     if (prodotto == null) {
                         responseMap.put("success", false);
                         responseMap.put("message", "Prodotto non più esistente.");
@@ -201,6 +203,7 @@ public class CarrelloServlet extends HttpServlet {
                 Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
                 int quantita = Integer.parseInt(request.getParameter("quantita"));
                 ProdottoBean prodotto = prodottoDAO.doRetrieveByKey(idProdotto);
+
                 if (prodotto != null) {
                     int quantitaDisponibile = prodotto.getDisponibilita();
                     boolean cartModified = false;
@@ -221,7 +224,7 @@ public class CarrelloServlet extends HttpServlet {
                                 CartItemBean newItem = new CartItemBean(idProdotto, carrelloUtente.getId(), quantita, prodotto.isPersonalizzabile(), prodotto.getImgPath());
                                 cartItemDAO.doSave(newItem);
                                 session.setAttribute("message", "Prodotto aggiunto!");
-                                cartModified = true; // Nuovo elemento aggiunto, il conteggio potrebbe aumentare
+                                cartModified = true;
                             }
                         }
                     } else {
@@ -232,20 +235,28 @@ public class CarrelloServlet extends HttpServlet {
                         if (quantitaDopoAggiuntaGuest > quantitaDisponibile) {
                             session.setAttribute("errorMessage", "Disponibilità non sufficiente! Solo " + quantitaDisponibile + " pezzi disponibili.");
                         } else {
-                            if (!guestCart.containsKey(idProdotto)) { // Se l'articolo è nuovo nel carrello guest
+                            if (!guestCart.containsKey(idProdotto)) {
                                 cartModified = true;
                             }
                             guestCart.put(idProdotto, quantitaDopoAggiuntaGuest);
                             saveGuestCartToCookies(response, guestCart);
-                            session.setAttribute("message", "Prodotto aggiunto al carrello guest!");
                         }
                     }
-                    if (cartModified) { // Aggiorna il contatore solo se un nuovo elemento distinto è stato aggiunto
+                    if (cartModified) {
                         session.setAttribute("cartCount", getCartItemCount(request, loggedUser != null ? loggedUser.getEmail() : null));
                     }
                 } else {
                     session.setAttribute("errorMessage", "Prodotto non trovato!");
                 }
+
+                request.setAttribute("prodotto", prodotto);
+                if(prodotto != null) {
+                    session.setAttribute("cartCount", CarrelloServlet.getCartItemCount(request, loggedUser != null ? loggedUser.getEmail() : null));
+                    RequestDispatcher rs = request.getRequestDispatcher("/aggiuntaCarrello.jsp");
+                    rs.forward(request, response);
+                    return;
+                }
+
             } else if ("rimuovi".equals(action)) {
                 Long idProdotto = Long.parseLong(request.getParameter("idProdotto"));
                 boolean cartModified = false;
@@ -270,7 +281,7 @@ public class CarrelloServlet extends HttpServlet {
                         session.setAttribute("errorMessage", "Prodotto non trovato nel carrello guest.");
                     }
                 }
-                if (cartModified) { // Aggiorna il contatore solo se un elemento è stato rimosso
+                if (cartModified) {
                     session.setAttribute("cartCount", getCartItemCount(request, loggedUser != null ? loggedUser.getEmail() : null));
                 }
             }

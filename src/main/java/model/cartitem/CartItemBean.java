@@ -24,7 +24,6 @@ public class CartItemBean implements Serializable {
         this.imgPath = imgPath;
     }
 
-    // Per la creazione di un nuovo CartItem prima del salvataggio (l'ID sarà generato)
     public CartItemBean(Long idProdotto, Long idCarrello, int quantita, boolean personalizzato, String imgPath) {
         this(null, idProdotto, idCarrello, quantita, personalizzato, imgPath);
     }
