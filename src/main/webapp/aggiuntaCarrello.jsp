@@ -1,9 +1,11 @@
 <%@ page import="model.prodotto.ProdottoBean" %>
+<%@ page import="model.cartitem.CartItemBean" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="it">
 <%
     ProdottoBean prodotto = (ProdottoBean) request.getAttribute("prodotto");
+    CartItemBean item= (CartItemBean) request.getAttribute("item");
 %>
 <head>
     <meta charset="UTF-8">
@@ -18,7 +20,7 @@
 <div class="done-container">
     <div class="done-box">
 
-        <% if (prodotto != null) { %>
+        <% if (prodotto != null && item != null) { %>
 
         <div class="done-image">
             <img src="<%= request.getContextPath() %>/img/aggiuntaCarrello.png" alt="Prodotto Aggiunto con Successo">
@@ -32,8 +34,13 @@
                     <img src="<%= request.getContextPath() %>/<%= prodotto.getImgPath() %>" alt="<%= prodotto.getNome() %>">
                 </div>
                 <div class="added-product-details">
+                    <%if(!item.isPersonalizzato()){%>
                     <h4><%= prodotto.getNome() %></h4>
-                    <span class="price"><%= String.format("€ %.2f", prodotto.getPrezzo()) %></span>
+                    <span class="price"><%= String.format("€ %.2f", prodotto.getPrezzoFinale()) %></span>
+                    <%} else{%>
+                    <h4><%= prodotto.getNome()%> <b> Personalizzato</b></h4>
+                    <span class="price"><%= String.format("€ %.2f", prodotto.getPrezzoFinale()+((prodotto.getPrezzoFinale()/100)*20)) %></span>
+                    <%}%>
                 </div>
             </div>
 

@@ -24,9 +24,6 @@
   double totaleCarrello = 0.0;
   for (Map.Entry<CartItemBean, ProdottoBean> entry : cartItemsWithProducts.entrySet()) {
     ProdottoBean prodotto = entry.getValue();
-    if (prodotto != null) {
-      totaleCarrello += prodotto.getPrezzoFinale() * entry.getKey().getQuantita();
-    }
   }
 %>
 
@@ -78,7 +75,13 @@
         for (Map.Entry<CartItemBean, ProdottoBean> entry : cartItemsWithProducts.entrySet()) {
           CartItemBean item = entry.getKey();
           ProdottoBean prodotto = entry.getValue();
-          double subtotaleItem = prodotto.getPrezzoFinale() * item.getQuantita();
+          double subtotaleItem;
+          if(!item.isPersonalizzato())
+            subtotaleItem= prodotto.getPrezzoFinale() * item.getQuantita();
+          else {
+            subtotaleItem= (prodotto.getPrezzoFinale()+ ((prodotto.getPrezzoFinale()/100)*20))*item.getQuantita();
+          }
+          totaleCarrello= totaleCarrello+subtotaleItem;
       %>
       <tr class="product-row">
         <td>
@@ -90,7 +93,12 @@
               <p><%= prodotto.getNome() %></p>
               <small>Taglia: <%= prodotto.getTaglia() %></small><br>
               <small>Colore: <%= prodotto.getColore() %></small><br>
+              <% if(!item.isPersonalizzato()) {%>
               <small>Prezzo Unità: €<%= String.format("%.2f", prodotto.getPrezzoFinale()) %></small>
+              <%}else{%>
+              <small>Personalizzato <b>+20%</b></small><br>
+              <small>Prezzo Unità: €<%= String.format("%.2f", prodotto.getPrezzoFinale()+((prodotto.getPrezzoFinale()/100)*20)) %></small>
+              <%}%>
             </div>
           </div>
         </td>

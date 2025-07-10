@@ -87,9 +87,10 @@
       </p>
     </div>
 
-    <form action="<%= request.getContextPath() %>/CarrelloServlet" method="post" class="add-to-cart-form">
+    <form action="<%= request.getContextPath() %>/AggiungiAlCarrelloServlet" method="post" class="add-to-cart-form" enctype="multipart/form-data">
       <input type="hidden" name="action" value="aggiungi">
       <input type="hidden" name="idProdotto" id="selectedProductId" value="<%= mainProduct.getId() %>">
+      <input type="hidden" name="isPersonalized" id="isPersonalized" value="false">
       <div class="quantity-selector">
         <label for="quantity">Quantità:</label>
         <input type="number" id="quantity" name="quantita" value="1" min="1" max="<%= mainProduct.getDisponibilita() %>" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>
@@ -100,7 +101,7 @@
         <label for="fileUploadBtn" class="upload-button">
           Aggiungi Immagine
         </label>
-        <input type="file" id="fileUploadBtn" accept="image/*">
+        <input type="file" id="fileUploadBtn" name="customImageFile" accept="image/*">
       </div>
       <% }%>
       <button type="submit" class="btn btn-primary add-to-cart-btn" <%= mainProduct.getDisponibilita() <= 0 ? "disabled" : "" %>>Aggiungi al Carrello</button>

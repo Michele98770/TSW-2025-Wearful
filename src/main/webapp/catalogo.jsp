@@ -4,8 +4,10 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
+<%@ page import="model.utente.UtenteBean" %>
 
 <%
+    UtenteBean utente= (UtenteBean) session.getAttribute("user");
     List<ProdottoBean> products = (List<ProdottoBean>) request.getAttribute("products");
     if (products == null) {
         products = new ArrayList<>();
@@ -108,7 +110,14 @@
     </aside>
 
     <div class="main-content">
-        <a href="DettaglioProdottoServlet?id=73"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
+        <%String bannerPath;
+        if(utente!=null)
+            bannerPath="DettaglioProdottoServlet?id=73";
+        else
+            bannerPath="./login.jsp";
+        %>
+        <a href="<%=bannerPath%>"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
+
         <div class="mobile-filter-controls">
             <button id="filter-toggle-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
