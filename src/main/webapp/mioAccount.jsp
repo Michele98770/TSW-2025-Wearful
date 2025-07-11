@@ -99,7 +99,7 @@
     </div>
     <div class="form-group-user">
       <label for="cap">CAP:</label>
-      <input type="number" id="cap" name="cap" required>
+      <input type="number" id="cap" name="cap" max="99999" required>
     </div>
     <div class="form-group-user">
       <label for="altro">Altre informazioni (es. Scala, Interno):</label>

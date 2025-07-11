@@ -62,7 +62,7 @@
   <title>Modifica Linea di Prodotti</title>
   <link rel="icon" type="image/png" href="./img/small_logo.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.3">
+  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.5">
 </head>
 <body>
 

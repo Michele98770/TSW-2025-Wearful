@@ -55,8 +55,6 @@
   <p class="login-link">Non hai un account? <a href="RegisterServlet">Registrati qui</a></p>
 </div>
 
-<br><br><br><br><br>
-
 <script src="./scripts/login.js"></script>
 
 <jsp:include page="footer.jsp" />

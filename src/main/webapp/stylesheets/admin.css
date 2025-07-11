@@ -10,8 +10,8 @@
     --border-color: #ddd;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --transition-speed: 0.3s ease;
-    --button-bg-color: #007bff;
-    --button-hover-bg-color: #0056b3;
+    --button-bg-color: #3498db;
+    --button-hover-bg-color: #2c80b4;
 }
 
 @keyframes fadeIn {
@@ -212,7 +212,7 @@ body {
     background-color: var(--button-bg-color);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
     font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
@@ -438,13 +438,32 @@ body {
 }
 
 @media (max-width: 768px) {
-    .admin-page-layout {
-        padding: 0 10px;
+
+   #adminFormWrapper .admin-form-container{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .admin-page-layout{
+        margin:0;
     }
 
-    #adminFormWrapper .admin-form-container {
-        padding: 15px;
+
+    #adminFormWrapper{
+        margin:0;
+        padding: 0;
     }
+
+    .main-admin-content{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
 
     #adminFormWrapper h2 {
         font-size: 1.6em;
@@ -483,14 +502,31 @@ body {
 }
 
 @media (max-width: 480px) {
-    .admin-page-layout {
-        padding: 0 5px;
+   #adminFormWrapper .admin-form-container{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 
-    #adminFormWrapper .admin-form-container {
-        padding: 10px;
-        border-radius: 8px;
+    .admin-page-layout{
+        margin: 0;
+        padding:0;
     }
+
+    #adminFormWrapper{
+        margin:0;
+    }
+
+    .main-admin-content{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
 
     #adminFormWrapper h2 {
         font-size: 1.4em;

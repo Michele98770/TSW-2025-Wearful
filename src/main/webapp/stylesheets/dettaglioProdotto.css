@@ -1,8 +1,8 @@
 :root {
     --primary-color: #660099;
     --secondary-color: #d6b3ff;
-    --accent-color: #007bff;
-    --accent-hover-color: #0056b3;
+    --accent-color: #3498db;
+    --accent-hover-color: #2c80b4;
     --text-dark: #333;
     --text-light: #666;
     --text-white: #fff;
@@ -175,7 +175,7 @@ body {
 }
 
 .size-option.selected {
-    background-color: var(--secondary-color);
+    background-color: #e7b7fb;
     color: var(--text-dark);
     font-weight: 700;
     border-color: var(--primary-color);
@@ -281,7 +281,7 @@ body {
     background-color: var(--accent-color);
     color: var(--text-white);
     border: none;
-    border-radius: var(--border-radius-md);
+    border-radius: 50px;
     cursor: pointer;
     transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
     font-weight: bold;
@@ -318,9 +318,12 @@ body {
 
 @media (max-width: 768px) {
     .product-detail-layout {
+        width: 100%;
+        margin: 0;
+        padding: 2rem 1.5rem;
+        border-radius: 0;
+        box-shadow: none;
         flex-direction: column;
-        padding: 20px;
-        margin: 20px 15px;
         gap: 25px;
     }
 

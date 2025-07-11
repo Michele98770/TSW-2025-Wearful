@@ -7,7 +7,6 @@ import model.cartitem.CartItemDAO;
 import model.prodotto.ProdottoBean;
 import model.prodotto.ProdottoDAO;
 import model.utente.UtenteBean;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.lang.reflect.Type;
 import java.util.UUID;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

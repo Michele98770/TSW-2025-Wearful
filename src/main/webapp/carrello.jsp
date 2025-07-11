@@ -129,7 +129,7 @@
         <td>€ <%= String.format("%.2f", totaleCarrello) %></td>
       </tr>
     </table>
-    <button class="checkout-btn">Procedi all'acquisto</button>
+    <button class="checkout-btn" onclick="location.href='<%= request.getContextPath() %>/CheckoutServlet'">Procedi all'acquisto</button>
     <% } else { %>
     <a href="CatalogoServlet" class="checkout-btn">Vai al Catalogo</a>
     <% } %>

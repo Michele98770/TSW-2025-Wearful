@@ -227,9 +227,11 @@ td input[type="number"]::-webkit-inner-spin-button {
 
 @media screen and (max-width: 768px) {
     .cart-page {
-        margin: 15px;
-        padding: 15px;
-        border-radius: var(--border-radius-md);
+        width: 100%;
+        margin: 0;
+        padding: 2rem 1.5rem;
+        border-radius: 0;
+        box-shadow: none;
     }
     .cart-page h2 {
         font-size: 2rem;
