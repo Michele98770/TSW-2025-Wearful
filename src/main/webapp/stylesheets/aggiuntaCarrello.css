@@ -202,7 +202,7 @@ body {
 
 @media (max-width: 576px) {
     .done-container {
-        padding: 20px 15px;
+        padding:0;
     }
 
     .done-box {

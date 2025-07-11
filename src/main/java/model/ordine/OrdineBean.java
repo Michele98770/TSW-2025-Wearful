@@ -18,6 +18,10 @@ public class OrdineBean implements Serializable {
         this.dataOrdine = dataOrdine;
     }
 
+    public OrdineBean() {
+
+    }
+
     public Long getId() {
         return id;
     }

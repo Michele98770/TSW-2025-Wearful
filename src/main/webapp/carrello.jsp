@@ -79,7 +79,8 @@
           if(!item.isPersonalizzato())
             subtotaleItem= prodotto.getPrezzoFinale() * item.getQuantita();
           else {
-            subtotaleItem= (prodotto.getPrezzoFinale()+ ((prodotto.getPrezzoFinale()/100)*20))*item.getQuantita();
+            float prezzo=  (prodotto.getPrezzo()+ (prodotto.getPrezzo()/100)*20);
+            subtotaleItem= (prezzo+((prezzo/100)*prodotto.getIva()))*item.getQuantita();
           }
           totaleCarrello= totaleCarrello+subtotaleItem;
       %>
@@ -97,7 +98,8 @@
               <small>Prezzo Unità: €<%= String.format("%.2f", prodotto.getPrezzoFinale()) %></small>
               <%}else{%>
               <small>Personalizzato <b>+20%</b></small><br>
-              <small>Prezzo Unità: €<%= String.format("%.2f", prodotto.getPrezzoFinale()+((prodotto.getPrezzoFinale()/100)*20)) %></small>
+              <% float prezzo=  (prodotto.getPrezzo()+ (prodotto.getPrezzo()/100)*20);%>
+              <small>Prezzo Unità: €<%= String.format("%.2f",prezzo+((prezzo/100)* prodotto.getIva())) %></small>
               <%}%>
             </div>
           </div>

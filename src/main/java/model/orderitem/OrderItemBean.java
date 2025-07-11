@@ -26,6 +26,10 @@ public class OrderItemBean implements Serializable {
         this.iva = iva;
     }
 
+    public OrderItemBean() {
+
+    }
+
     public Long getId() {
         return id;
     }
