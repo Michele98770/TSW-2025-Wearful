@@ -117,8 +117,12 @@
   </div>
 
   <div class="back-link">
+    <a href="<%= request.getContextPath() %>/FatturaServlet?id_ordine=<%= ordine.getId()%>" class="button">Genera fattura</a>
+  </div>
+  <div class="back-link">
     <a href="<%= request.getContextPath() %>/OrdiniServlet" class="button">Torna ai Miei Ordini</a>
   </div>
+
   <% } %>
 </div>
 

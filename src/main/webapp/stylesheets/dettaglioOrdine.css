@@ -31,7 +31,8 @@ body {
 }
 
 .order-detail-page {
-    max-width: 900px;
+    max-width: 1000px;
+    min-width: 80%;
     margin: 80px auto;
     padding: 40px;
     background-color: var(--white-bg);
@@ -189,11 +190,7 @@ body {
     color: #c0392b;
 }
 
-@media (min-width: 1400px ) {
-    .order-detail-page{
-        min-width: 65%;
-    }
-}
+
 
 @media screen and (max-width: 992px) {
     .order-detail-page {

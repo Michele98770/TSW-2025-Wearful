@@ -105,7 +105,7 @@
             </div>
 
             <button type="submit" class="apply-filters-btn" style="width: 100%; margin-top: 20px; padding: 12px; font-weight: bold; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Applica Filtri</button>
-            <a href="<%= request.getContextPath() %>/CatalogoServlet" class="reset-filters-btn" style="display: block; width: 100%; margin-top: 10px; padding: 12px; text-align: center; background-color: #e0e0e0; color: #333; border: 1px solid #ccc; border-radius: 5px; text-decoration: none;">Reset Filtri</a>
+            <a href="<%= request.getContextPath() %>/CatalogoServlet" class="apply-filters-btn" style="display: block; width: 100%; margin-top: 10px; padding: 12px; text-align: center; background-color: #e0e0e0; color: #333; border: 1px solid #ccc; border-radius: 5px; text-decoration: none;">Reset Filtri</a>
         </form>
     </aside>
 

@@ -16,31 +16,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    searchIcon.addEventListener('mouseover', function (){
-        expandSearch();
-    });
+    function performSearch(query) {
+        if (query) {
+            const targetUrl = `./CatalogoServlet?searchQuery=${encodeURIComponent(query)}`;
+            window.location.href = targetUrl;
+        }
+    }
 
-    searchInput.addEventListener('blur', function() {
-        setTimeout(() => {
-            collapseSearchIfEmpty();
-        }, 100);
-    });
+    searchIcon.addEventListener('mouseover', expandSearch);
+    searchIcon.addEventListener('click', expandSearch);
 
     searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         const query = this.value.trim();
 
         if (query.length === 0) {
-            collapseSearchIfEmpty();
             return;
         }
 
-        expandSearch();
-
         searchTimeout = setTimeout(() => {
-            const targetUrl = `./CatalogoServlet?searchQuery=${encodeURIComponent(query)}`;
-            window.location.href = targetUrl;
-        }, 500);
+            performSearch(query);
+        }, 750);
     });
 
     searchInput.addEventListener('keydown', function(event) {
@@ -48,18 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             clearTimeout(searchTimeout);
             const query = this.value.trim();
-            const targetUrl = `./CatalogoServlet?searchQuery=${encodeURIComponent(query)}`;
-            window.location.href = targetUrl;
+            performSearch(query);
         }
     });
 
-    searchIcon.addEventListener('click', function() {
-        expandSearch();
+    searchInput.addEventListener('blur', function() {
+        setTimeout(() => {
+            collapseSearchIfEmpty();
+        }, 150);
     });
 
     if (searchInput.value.trim() !== '') {
         searchInput.style.width = '250px';
-
         searchInput.focus();
         const valueLength = searchInput.value.length;
         searchInput.setSelectionRange(valueLength, valueLength);

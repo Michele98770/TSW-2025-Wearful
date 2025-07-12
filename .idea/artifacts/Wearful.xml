@@ -12,6 +12,12 @@
           <element id="library" level="project" name="Maven: com.mysql:mysql-connector-j:9.2.0" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:4.29.0" />
           <element id="library" level="project" name="google.gson" />
+          <element id="library" level="project" name="Maven: com.itextpdf:bouncy-castle-connector:8.0.4" />
+          <element id="library" level="project" name="Maven: com.itextpdf:io:8.0.4" />
+          <element id="library" level="project" name="Maven: com.itextpdf:layout:8.0.4" />
+          <element id="library" level="project" name="Maven: com.itextpdf:kernel:8.0.4" />
+          <element id="library" level="project" name="Maven: com.itextpdf:commons:8.0.4" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.36" />
         </element>
         <element id="library" level="project" name="google.gson" />
       </element>

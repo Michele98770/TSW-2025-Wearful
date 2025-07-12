@@ -259,18 +259,8 @@ body {
     display: none;
 }
 
+
 @media (max-width: 1024px) {
-    .header { padding: 15px 20px; }
-    .menu { gap: 20px; }
-    .box:hover input, .box input:focus { width: 50%; }
-}
-
-@media (max-width: 768px) {
-    .header {
-        padding: 10px 15px;
-        justify-content: space-between;
-    }
-
     .logo-desktop { display: none; }
     .logo-mobile { display: block; }
     .logo img { transform: none !important; }
@@ -281,7 +271,12 @@ body {
 
     .menu-toggle { display: block; }
 
-    .user-actions { gap: 10px; }
+    .user-actions {
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+
     .box {
         padding: 0;
         background: transparent;
@@ -289,13 +284,16 @@ body {
         border-radius: 20px;
         box-shadow: none;
         height: 38px;
+        flex: 1;
+        min-width: 0;
     }
     .box:hover {
         box-shadow: none;
         border-color: var(--hover-color);
     }
+
     .box input {
-        width: 50% !important;
+        width: 100% !important;
         padding: 0 15px;
         transition: none;
         height: 100%;
