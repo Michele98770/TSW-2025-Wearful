@@ -36,7 +36,7 @@
     }
   %>
 
-  <form action="LoginServlet" method="post" class="registration-form" id="loginForm"> <%-- Changed id to loginForm --%>
+  <form action="LoginServlet" method="post" class="registration-form" id="loginForm">
     <div class="form-group">
       <label for="email" id="emailLabel">Email:</label>
       <input type="email" id="email" name="email" required value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">

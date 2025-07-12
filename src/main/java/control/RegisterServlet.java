@@ -98,8 +98,8 @@ public class RegisterServlet extends HttpServlet {
             nuovoUtente.setAdmin(false);
 
             utenteDAO.doSave(nuovoUtente);
-
-            response.sendRedirect(request.getContextPath() + "/login.jsp?email=" + email );
+            String success= "Registrazione avvenuta con successo!";
+            response.sendRedirect(request.getContextPath() + "/LoginServlet?email=" + email +"&success="+success);
 
 
         } catch (SQLException e) {

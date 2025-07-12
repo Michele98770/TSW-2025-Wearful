@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <header class="header">
-    <link rel="stylesheet" type="text/css" href="./stylesheets/stileheader.css?v=1.5">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/stileheader.css?v=1.6">
     <link rel="stylesheet" type="text/css" href="./stylesheets/common.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
@@ -44,7 +44,7 @@
             </a>
             <div class="dropdown-menu">
                 <a href="<%= request.getContextPath() %>/AreaRiservataServlet">Il mio account</a>
-                <a href="<%= request.getContextPath() %>/I miei ordiniServlet">I miei ordini</a>
+                <a href="<%= request.getContextPath() %>/OrdiniServlet">I miei ordini</a>
                 <form action="<%= request.getContextPath() %>/LogoutServlet" method="post" class="logout-form">
                     <button type="submit" class="logout-button">
                         <i class="material-icons">logout</i> Logout
@@ -89,7 +89,7 @@
     <a href="<%= request.getContextPath() %>/AreaRiservataServlet">
         <i class="material-icons">person_outline</i> Il mio account
     </a>
-    <a href="<%= request.getContextPath() %>/I miei ordiniServlet">
+    <a href="<%= request.getContextPath() %>/OrdiniServlet">
         <i class="material-icons">receipt_long</i> I miei ordini
     </a>
     <form action="<%= request.getContextPath() %>/LogoutServlet" method="post" class="logout-form">

@@ -245,6 +245,21 @@ main {
 }
 
 @media (max-width: 768px) {
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    a,
+    button,
+    input[type="submit"],
+    input[type="button"] {
+        -webkit-tap-highlight-color: transparent;
+    }
+    *:focus {
+        outline: none;
+    }
+
     body {
         line-height: 1.5;
     }

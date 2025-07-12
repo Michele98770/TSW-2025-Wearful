@@ -22,7 +22,7 @@
             <p>Grazie per il tuo acquisto. Il tuo ordine è stato ricevuto e sarà elaborato a breve.</p>
 
             <div class="done-buttons">
-                <a href="<%= request.getContextPath() %>/OrderHistoryServlet" class="primary">Vai ai miei ordini</a>
+                <a href="<%= request.getContextPath() %>/OrdiniServlet" class="primary">Vai ai miei ordini</a>
                 <a href="<%= request.getContextPath() %>/CatalogoServlet" class="secondary">Continua lo shopping</a>
             </div>
         </div>

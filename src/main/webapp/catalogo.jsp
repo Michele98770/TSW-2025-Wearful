@@ -111,10 +111,13 @@
 
     <div class="main-content">
         <%String bannerPath;
-        if(utente!=null)
-            bannerPath="DettaglioProdottoServlet?id=73";
-        else
-            bannerPath="./login.jsp";
+        if(utente!=null) {
+            bannerPath = "DettaglioProdottoServlet?id=73";
+        }
+        else {
+            String error= "Devi fare il login per poter personalizzare le maglie";
+            bannerPath = "LoginServlet?error="+error;
+        }
         %>
         <a href="<%=bannerPath%>"> <img src="./img/banner.jpg" alt="banner" id="banner"></a>
 
@@ -129,7 +132,7 @@
 
         <main class="product-grid">
             <% if (products.isEmpty()) { %>
-            <div class="no-products-container"> <%-- Contenitore per messaggio --%>
+            <div class="no-products-container">
                 <img src="./img/search.png" alt="not found" style="max-width: 300px; margin: 0 auto;">
                 <p class="no-products-message">Nessun prodotto trovato...</p>
             </div>
@@ -148,7 +151,6 @@
             <% } %>
         </main>
 
-        <%-- La paginazione va dentro main-content per essere associata alla griglia --%>
         <% if (totalPages > 1) { %>
         <div class="pagination">
             <% for (int i = 1; i <= totalPages; i++) {

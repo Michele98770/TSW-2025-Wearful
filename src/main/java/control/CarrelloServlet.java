@@ -104,7 +104,7 @@ public class CarrelloServlet extends HttpServlet {
 
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore nel caricamento del carrello: " + e.getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/500.jsp").forward(request, response);
         }
     }
 
@@ -290,7 +290,7 @@ public class CarrelloServlet extends HttpServlet {
 
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore DB: " + e.getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/500.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             session.setAttribute("errorMessage", "Dati input non validi.");
             response.sendRedirect(request.getContextPath() + "/CarrelloServlet");

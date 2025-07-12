@@ -245,7 +245,7 @@ body {
     font-size: 1.2rem;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
     cursor: pointer;
     transition: all var(--transition-smooth);
 }

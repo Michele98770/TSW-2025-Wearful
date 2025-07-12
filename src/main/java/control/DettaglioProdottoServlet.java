@@ -106,7 +106,7 @@ public class DettaglioProdottoServlet extends HttpServlet {
             System.err.println("Errore SQL nella DettaglioProdottoServlet: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("errorMessage", "Errore nel caricamento dei dettagli del prodotto.");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/500.jsp").forward(request, response);
         }
     }
 
