@@ -119,7 +119,7 @@ Il **Model** rappresenta i dati e la logica di business dell'applicazione. È re
 La **View** è responsabile della presentazione dei dati all'utente. Si occupa esclusivamente dell'interfaccia utente (UI) e non contiene logica di business.
 *   **Dove si trova:** `src/main/webapp/`
 *   **Componenti:**
-    *   **JSP (JavaServer Pages):** Pagine dinamiche che ricevono i dati dal Controller e generano l'HTML da inviare al browser. Utilizzano JSTL ed Expression Language per visualizzare i dati in modo pulito.
+    *   **JSP (JavaServer Pages):** Pagine dinamiche che ricevono i dati dal Controller e generano l'HTML da inviare al browser.
     *   **HTML, CSS, JavaScript:** Risorse statiche che definiscono la struttura, lo stile e l'interattività client-side delle pagine.
 
 ### 🔴 Controller
