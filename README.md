@@ -131,5 +131,5 @@ Il **Controller** agisce da intermediario tra il Model e la View. Gestisce le ri
 ## 👨‍💻 Autori
 
 *   **Michele** - [Michele98770](https://github.com/Michele98770)
-*  **Felicia** - [Felicia](https://github.com/ljcia4)
-*  **Giovanni** - [Giovanni](https://github.com/Giodr03)
+*  **Felicia** - [ljcia4](https://github.com/ljcia4)
+*  **Giovanni** - [GioDr03](https://github.com/Giodr03)
