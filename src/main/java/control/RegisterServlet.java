@@ -12,9 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
@@ -92,14 +89,14 @@ public class RegisterServlet extends HttpServlet {
             nuovoUtente.setUsername(username);
             nuovoUtente.setTelefono(telefono);
 
-            String hashedPassword = hashPasswordSHA256(password);
+            String hashedPassword = Security.hashPassword(password);
             nuovoUtente.setPassword(hashedPassword);
 
             nuovoUtente.setAdmin(false);
 
             utenteDAO.doSave(nuovoUtente);
-            String success= "Registrazione avvenuta con successo!";
-            response.sendRedirect(request.getContextPath() + "/LoginServlet?email=" + email +"&success="+success);
+            String success = "Registrazione avvenuta con successo!";
+            response.sendRedirect(request.getContextPath() + "/LoginServlet?email=" + email + "&success=" + success);
 
 
         } catch (SQLException e) {
@@ -107,17 +104,6 @@ public class RegisterServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Si è verificato un errore durante la registrazione. Riprova più tardi.");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
-    }
-
-    private String hashPasswordSHA256(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Errore: Algoritmo SHA-256 non trovato. " + e.getMessage());
-            throw new RuntimeException("Errore interno durante l'hashing della password.", e);
         }
     }
 }

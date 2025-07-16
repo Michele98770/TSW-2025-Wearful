@@ -4,7 +4,6 @@ import model.utente.UtenteBean;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -34,8 +33,6 @@ public class AdminFilter implements Filter {
             isLoggedIn = true;
             isAdmin = currentUser.isAdmin();
         }
-
-        String loginPage = httpRequest.getContextPath() + "/login.jsp";
 
         if (!isLoggedIn || !isAdmin) {
             System.out.println("AdminFilter: Access denied. Redirecting to login.");

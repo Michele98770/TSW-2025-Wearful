@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search');
     const searchIcon = searchBox.querySelector('.material-icons');
 
-    let searchTimeout = null;
-
     function expandSearch() {
         searchInput.style.width = '250px';
         searchInput.focus();
@@ -26,23 +24,14 @@ document.addEventListener('DOMContentLoaded', function() {
     searchIcon.addEventListener('mouseover', expandSearch);
     searchIcon.addEventListener('click', expandSearch);
 
-    searchInput.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        const query = this.value.trim();
-
-        if (query.length === 0) {
-            return;
-        }
-
-        searchTimeout = setTimeout(() => {
-            performSearch(query);
-        }, 750);
+    searchIcon.addEventListener('click', () => {
+        const query = searchInput.value.trim();
+        performSearch(query);
     });
 
     searchInput.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            clearTimeout(searchTimeout);
             const query = this.value.trim();
             performSearch(query);
         }
