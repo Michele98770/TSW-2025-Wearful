@@ -60,7 +60,7 @@ public class DettaglioOrdineServlet extends HttpServlet {
             idOrdine = Long.parseLong(request.getParameter("idOrdine"));
         } catch (NumberFormatException e) {
             session.setAttribute("errorMessage", "ID ordine non valido.");
-            response.sendRedirect(request.getContextPath() + "/MieiOrdiniServlet");
+            response.sendRedirect(request.getContextPath() + "/OrdiniServlet");
             return;
         }
 
@@ -72,9 +72,9 @@ public class DettaglioOrdineServlet extends HttpServlet {
         try {
             ordine = ordineDAO.doRetrieveByKey(idOrdine);
 
-            if (ordine == null || !ordine.getIdUtente().equals(utente.getEmail())) {
-                session.setAttribute("errorMessage", "Ordine non trovato o non autorizzato.");
-                response.sendRedirect(request.getContextPath() + "/MieiOrdiniServlet");
+            if (ordine == null || (!ordine.getIdUtente().equals(utente.getEmail()) && !utente.isAdmin())) {
+                session.setAttribute("errorMessage", "Ordine non trovato o non sei autorizzato a visualizzarlo.");
+                response.sendRedirect(request.getContextPath() + "/OrdiniServlet");
                 return;
             }
 
@@ -93,7 +93,7 @@ public class DettaglioOrdineServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             session.setAttribute("errorMessage", "Si è verificato un errore durante il recupero dei dettagli dell'ordine.");
-            response.sendRedirect(request.getContextPath() + "/MieiOrdiniServlet");
+            response.sendRedirect(request.getContextPath() + "/OrdiniServlet");
             return;
         }
 

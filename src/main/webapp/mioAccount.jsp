@@ -39,7 +39,7 @@
     <a href="./adminEdit.jsp">
       <button type="button" class="add-button">Modifica Prodotti</button>
     </a>
-    <a href="./oridiniAdmin.jsp">
+    <a href="OrdiniAdmin">
       <button type="button" class="add-button">Gestione Ordini</button>
     </a>
   </div>

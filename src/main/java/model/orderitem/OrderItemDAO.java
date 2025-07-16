@@ -22,13 +22,11 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         OrderItemBean orderItem = null;
-
         String sql = "SELECT * FROM OrderItem WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
 
@@ -63,7 +61,6 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
-
         String sql = "SELECT * FROM OrderItem";
 
         try {
@@ -101,21 +98,17 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
-
-        String sql = "INSERT INTO OrderItem (nome, idProdotto, idOrdine, prezzo, quantita, IVA) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO OrderItem (nome, idProdotto, idOrdine, prezzo, quantita, IVA) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
             statement.setString(1, orderItem.getNome());
             statement.setLong(2, orderItem.getIdProdotto());
             statement.setLong(3, orderItem.getIdOrdine());
             statement.setFloat(4, orderItem.getPrezzo());
             statement.setInt(5, orderItem.getQuantita());
             statement.setInt(6, orderItem.getIva());
-
             statement.executeUpdate();
 
             generatedKeys = statement.getGeneratedKeys();
@@ -139,14 +132,11 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
     public void doUpdate(OrderItemBean orderItem) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
-        String sql = "UPDATE OrderItem SET nome = ?, idProdotto = ?, idOrdine = ?, "
-                + "prezzo = ?, quantita = ?, IVA = ? WHERE id = ?";
+        String sql = "UPDATE OrderItem SET nome = ?, idProdotto = ?, idOrdine = ?, prezzo = ?, quantita = ?, IVA = ? WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setString(1, orderItem.getNome());
             statement.setLong(2, orderItem.getIdProdotto());
             statement.setLong(3, orderItem.getIdOrdine());
@@ -154,7 +144,6 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
             statement.setInt(5, orderItem.getQuantita());
             statement.setInt(6, orderItem.getIva());
             statement.setLong(7, orderItem.getId());
-
             statement.executeUpdate();
         } finally {
             try {
@@ -169,13 +158,11 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
     public void doDelete(Long id) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
         String sql = "DELETE FROM OrderItem WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             statement.executeUpdate();
         } finally {
@@ -192,13 +179,11 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-
         String sql = "SELECT * FROM OrderItem WHERE idOrdine = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, idOrdine);
             resultSet = statement.executeQuery();
 
@@ -225,5 +210,20 @@ public class OrderItemDAO implements DAOInterface<OrderItemBean, Long> {
             }
         }
         return orderItems;
+    }
+
+    public void doDeleteByOrdine(Long idOrdine, Connection connection) throws SQLException {
+        PreparedStatement statement = null;
+        String sql = "DELETE FROM OrderItem WHERE idOrdine = ?";
+
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, idOrdine);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 }

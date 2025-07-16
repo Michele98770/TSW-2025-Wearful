@@ -357,3 +357,55 @@ td input[type="number"]::-webkit-inner-spin-button {
         margin: 0 auto;
     }
 }
+
+.personalized-item {
+    cursor: pointer;
+    position: relative;
+}
+
+.personalization-toggle .arrow-down {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.personalized-item.active .arrow-down {
+    transform: rotate(180deg);
+}
+
+.personalization-details-row {
+    display: none;
+}
+
+.personalization-details-row td {
+    padding: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.personalization-content {
+    background-color: #f8f5fa;
+    padding: 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.personalization-content p {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.personalization-content img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+    .personalization-content img {
+        max-width: 150px;
+    }
+}

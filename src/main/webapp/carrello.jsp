@@ -76,15 +76,20 @@
           CartItemBean item = entry.getKey();
           ProdottoBean prodotto = entry.getValue();
           double subtotaleItem;
-          if(!item.isPersonalizzato())
+
+          boolean isPersonalizzato = item.isPersonalizzato();
+
+          if(!isPersonalizzato) {
             subtotaleItem= prodotto.getPrezzoFinale() * item.getQuantita();
-          else {
+          } else {
             float prezzo=  (prodotto.getPrezzo()+ (prodotto.getPrezzo()/100)*20);
             subtotaleItem= (prezzo+((prezzo/100)*prodotto.getIva()))*item.getQuantita();
           }
           totaleCarrello= totaleCarrello+subtotaleItem;
+
+          String rowClass = isPersonalizzato ? "product-row personalized-item" : "product-row";
       %>
-      <tr class="product-row">
+      <tr class="<%= rowClass %>">
         <td>
           <div class="cart-info">
             <a href="DettaglioProdottoServlet?id=<%= prodotto.getId() %>" class="product-image">
@@ -94,10 +99,12 @@
               <p><%= prodotto.getNome() %></p>
               <small>Taglia: <%= prodotto.getTaglia() %></small><br>
               <small>Colore: <%= prodotto.getColore() %></small><br>
-              <% if(!item.isPersonalizzato()) {%>
+              <% if(!isPersonalizzato) { %>
               <small>Prezzo Unità: €<%= String.format("%.2f", prodotto.getPrezzoFinale()) %></small>
               <%}else{%>
-              <small>Personalizzato <b>+20%</b></small><br>
+              <small class="personalization-toggle">
+                Personalizzato <b>+20%</b> <span class="arrow-down">▼</span>
+              </small><br>
               <% float prezzo=  (prodotto.getPrezzo()+ (prodotto.getPrezzo()/100)*20);%>
               <small>Prezzo Unità: €<%= String.format("%.2f",prezzo+((prezzo/100)* prodotto.getIva())) %></small>
               <%}%>
@@ -117,6 +124,16 @@
           </form>
         </td>
       </tr>
+      <% if (isPersonalizzato) { %>
+      <tr class="personalization-details-row">
+        <td colspan="4">
+          <div class="personalization-content">
+            <p><b>La tua personalizzazione:</b></p>
+            <img src="<%= item.getImgPath() %>" alt="Immagine personalizzata">
+          </div>
+        </td>
+      </tr>
+      <% } %>
       <% } %>
       <% } %>
       </tbody>

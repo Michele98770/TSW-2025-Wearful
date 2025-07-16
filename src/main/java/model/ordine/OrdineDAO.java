@@ -23,13 +23,11 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         OrdineBean ordine = null;
-
         String sql = "SELECT * FROM Ordine WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
 
@@ -61,7 +59,6 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
-
         String sql = "SELECT * FROM Ordine";
 
         try {
@@ -96,17 +93,14 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
-
         String sql = "INSERT INTO Ordine (idUtente, infoConsegna, dataOrdine) VALUES (?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
             statement.setString(1, ordine.getIdUtente());
             statement.setLong(2, ordine.getInfoConsegna());
             statement.setTimestamp(3, new Timestamp(ordine.getDataOrdine().getTime()));
-
             statement.executeUpdate();
 
             generatedKeys = statement.getGeneratedKeys();
@@ -130,18 +124,15 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
     public void doUpdate(OrdineBean ordine) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
         String sql = "UPDATE Ordine SET idUtente = ?, infoConsegna = ?, dataOrdine = ? WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setString(1, ordine.getIdUtente());
             statement.setLong(2, ordine.getInfoConsegna());
             statement.setTimestamp(3, new Timestamp(ordine.getDataOrdine().getTime()));
             statement.setLong(4, ordine.getId());
-
             statement.executeUpdate();
         } finally {
             try {
@@ -156,13 +147,11 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
     public void doDelete(Long id) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-
         String sql = "DELETE FROM Ordine WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setLong(1, id);
             statement.executeUpdate();
         } finally {
@@ -179,13 +168,11 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-
         String sql = "SELECT * FROM Ordine WHERE idUtente = ? ORDER BY dataOrdine DESC";
 
         try {
             connection = ConnectionPool.getConnection();
             statement = connection.prepareStatement(sql);
-
             statement.setString(1, idUtente);
             resultSet = statement.executeQuery();
 
@@ -209,5 +196,20 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
             }
         }
         return ordini;
+    }
+
+    public void doDelete(Long id, Connection connection) throws SQLException {
+        PreparedStatement statement = null;
+        String sql = "DELETE FROM Ordine WHERE id = ?";
+
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 }
