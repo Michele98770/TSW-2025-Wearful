@@ -6,18 +6,21 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.DecimalFormat" %>
 
 <%
+  DecimalFormat df = new DecimalFormat("0.00");
+
   GruppoProdottiDAO gruppoDAO = new GruppoProdottiDAO();
   List<GruppoProdottiBean> gruppi = new ArrayList<>();
-  String errorMessage = null;
-  String successMessage = null;
+  String errorMessage = request.getParameter("errorMessage");
+  String successMessage = request.getParameter("successMessage");
 
   try {
     gruppi = gruppoDAO.doRetrieveAll();
   } catch (SQLException e) {
-    errorMessage = "Errore database nel recupero dei gruppi di prodotti: " + e.getMessage();
-    System.err.println("SQL Exception in adminGroups.jsp (doRetrieveAll): " + e.getMessage());
+    if (errorMessage == null) errorMessage = "Errore database nel recupero dei gruppi: " + e.getMessage();
+    System.err.println("SQL Exception in adminEdit.jsp (doRetrieveAll): " + e.getMessage());
     e.printStackTrace();
   }
 
@@ -25,31 +28,29 @@
   GruppoProdottiBean selectedGroup = null;
   List<ProdottoBean> prodottiGruppo = null;
 
-  long groupID = -1;
-
-  if (selectedGroupId != null && !selectedGroupId.isEmpty()) {
+  if (selectedGroupId != null && !selectedGroupId.isEmpty() && !"null".equalsIgnoreCase(selectedGroupId)) {
     try {
-      groupID = Long.parseLong(selectedGroupId);
+      long groupID = Long.parseLong(selectedGroupId);
       selectedGroup = gruppoDAO.doRetrieveByKey(groupID);
       if (selectedGroup == null) {
-        errorMessage = "Il gruppo prodotti con ID " + selectedGroupId + " non è stato trovato.";
+        if (errorMessage == null) errorMessage = "Il gruppo prodotti con ID " + selectedGroupId + " non è stato trovato.";
       } else {
         ProdottoDAO prodottoDAO = new ProdottoDAO();
         try {
           prodottiGruppo = prodottoDAO.doRetrieveByGruppo(selectedGroup.getId());
         } catch (SQLException e) {
-          errorMessage = "Errore database nel recupero dei prodotti del gruppo: " + e.getMessage();
-          System.err.println("SQL Exception in adminGroups.jsp (doRetrieveByGruppo): " + e.getMessage());
+          if (errorMessage == null) errorMessage = "Errore DB nel recupero dei prodotti del gruppo: " + e.getMessage();
+          System.err.println("SQL Exception in adminEdit.jsp (doRetrieveByGruppo): " + e.getMessage());
           e.printStackTrace();
         }
       }
     } catch (NumberFormatException e) {
-      errorMessage = "ID gruppo prodotto non valido. Si prega di inserire un numero valido.";
-      System.err.println("NumberFormatException in adminGroups.jsp: " + selectedGroupId + ". Error: " + e.getMessage());
+      if (errorMessage == null) errorMessage = "ID gruppo prodotto non valido: " + selectedGroupId;
+      System.err.println("NumberFormatException in adminEdit.jsp: " + selectedGroupId + ". Error: " + e.getMessage());
       e.printStackTrace();
     } catch (SQLException e) {
-      errorMessage = "Errore database nel recupero del gruppo prodotti: " + e.getMessage();
-      System.err.println("SQL Exception in adminGroups.jsp (doRetrieveByKey): " + e.getMessage());
+      if (errorMessage == null) errorMessage = "Errore DB nel recupero del gruppo: " + e.getMessage();
+      System.err.println("SQL Exception in adminEdit.jsp (doRetrieveByKey): " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -62,7 +63,7 @@
   <title>Modifica Linea di Prodotti</title>
   <link rel="icon" type="image/png" href="./img/small_logo.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.5">
+  <link rel="stylesheet" href="./stylesheets/admin.css?v=1.6">
 </head>
 <body>
 
@@ -100,7 +101,7 @@
               <tr>
                 <td><%= gruppo.getNome() %></td>
                 <td>
-                  <form method="get" action="">
+                  <form method="get" action="adminEdit.jsp">
                     <input type="hidden" name="groupId" value="<%= gruppo.getId() %>">
                     <button type="submit" class="admin-action-button">Visualizza Prodotti</button>
                   </form>
@@ -109,12 +110,13 @@
               <% } %>
               <% } else { %>
               <tr>
-                <td colspan="2">Nessuna linea di prodotti trovato.</td>
+                <td colspan="2">Nessuna linea di prodotti trovata.</td>
               </tr>
               <% } %>
               </tbody>
             </table>
           </div>
+
           <% if (selectedGroup != null) { %>
           <h3 class="admin-group-title">Prodotti della Linea: <%= selectedGroup.getNome() %></h3>
 
@@ -126,25 +128,30 @@
                 <th>Nome</th>
                 <th>Taglia</th>
                 <th>Quantità</th>
+                <th>Prezzo (€)</th>
                 <th>Azioni</th>
               </tr>
               </thead>
               <tbody>
               <% for (ProdottoBean prodotto : prodottiGruppo) { %>
+              <% String formId = "update-form-" + prodotto.getId(); %>
               <tr>
                 <td><%= prodotto.getNome() %></td>
                 <td><%= prodotto.getTaglia() %></td>
                 <td>
-                  <form method="post" action="AdminUpdateProductQuantityServlet" class="admin-quantity-form">
-                    <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
-                    <input type="number" name="newQuantity" value="<%= prodotto.getDisponibilita() %>" min="0" required>
+                  <input form="<%= formId %>" type="number" name="newQuantity" value="<%= prodotto.getDisponibilita() %>" min="0" required>
                 </td>
                 <td>
-                  <button type="submit" class="admin-action-button">Aggiorna</button>
-                  </form>
-                  <form method="post" action="DeleteProductServlet" onsubmit="return confirm('Sicuro di voler rimuovere questo prodotto?');">
+                  <input form="<%= formId %>" type="number" name="newPrice" value="<%= df.format(prodotto.getPrezzo()).replace(',', '.') %>" min="0.00" step="0.01" required>
+                </td>
+                <td>
+                  <form id="<%= formId %>" method="post" action="AdminUpdateProductServlet" style="display: inline;">
                     <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
-                    <button type="submit" class="admin-action-button danger"> Rimuovi</button>
+                    <button type="submit" class="admin-action-button">Aggiorna</button>
+                  </form>
+                  <form method="post" action="DeleteProductServlet" onsubmit="return confirm('Sicuro di voler rimuovere questo prodotto?');" style="display: inline;">
+                    <input type="hidden" name="productId" value="<%= prodotto.getId() %>">
+                    <button type="submit" class="admin-action-button danger">Rimuovi</button>
                   </form>
                 </td>
               </tr>
@@ -152,7 +159,7 @@
               </tbody>
             </table>
           </div>
-          <% } else { %>
+          <% } else if (prodottiGruppo != null) { %>
           <p>Questa linea non ha ancora prodotti.</p>
           <% } %>
           <form method="get" action="AdminUploadServlet">
