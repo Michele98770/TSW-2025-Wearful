@@ -23,7 +23,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         OrdineBean ordine = null;
-        String sql = "SELECT * FROM Ordine WHERE id = ?";
+        String sql = "SELECT id, idUtente, infoConsegna, dataOrdine, stato FROM Ordine WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -36,7 +36,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
                         resultSet.getLong("id"),
                         resultSet.getString("idUtente"),
                         resultSet.getLong("infoConsegna"),
-                        resultSet.getTimestamp("dataOrdine")
+                        resultSet.getTimestamp("dataOrdine"),
+                        resultSet.getString("stato")
                 );
             }
         } finally {
@@ -59,7 +60,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
-        String sql = "SELECT * FROM Ordine";
+        String sql = "SELECT id, idUtente, infoConsegna, dataOrdine, stato FROM Ordine";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -71,7 +72,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
                         resultSet.getLong("id"),
                         resultSet.getString("idUtente"),
                         resultSet.getLong("infoConsegna"),
-                        resultSet.getTimestamp("dataOrdine")
+                        resultSet.getTimestamp("dataOrdine"),
+                        resultSet.getString("stato")
                 ));
             }
         } finally {
@@ -93,7 +95,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
-        String sql = "INSERT INTO Ordine (idUtente, infoConsegna, dataOrdine) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Ordine (idUtente, infoConsegna, dataOrdine, stato) VALUES (?, ?, ?, ?)";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -101,6 +103,12 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
             statement.setString(1, ordine.getIdUtente());
             statement.setLong(2, ordine.getInfoConsegna());
             statement.setTimestamp(3, new Timestamp(ordine.getDataOrdine().getTime()));
+            if (ordine.getStato() == null || ordine.getStato().isEmpty()) {
+                statement.setString(4, "Spedito");
+                ordine.setStato("Spedito");
+            } else {
+                statement.setString(4, ordine.getStato());
+            }
             statement.executeUpdate();
 
             generatedKeys = statement.getGeneratedKeys();
@@ -124,7 +132,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
     public void doUpdate(OrdineBean ordine) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-        String sql = "UPDATE Ordine SET idUtente = ?, infoConsegna = ?, dataOrdine = ? WHERE id = ?";
+        String sql = "UPDATE Ordine SET idUtente = ?, infoConsegna = ?, dataOrdine = ?, stato = ? WHERE id = ?";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -132,7 +140,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
             statement.setString(1, ordine.getIdUtente());
             statement.setLong(2, ordine.getInfoConsegna());
             statement.setTimestamp(3, new Timestamp(ordine.getDataOrdine().getTime()));
-            statement.setLong(4, ordine.getId());
+            statement.setString(4, ordine.getStato());
+            statement.setLong(5, ordine.getId());
             statement.executeUpdate();
         } finally {
             try {
@@ -168,7 +177,7 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        String sql = "SELECT * FROM Ordine WHERE idUtente = ? ORDER BY dataOrdine DESC";
+        String sql = "SELECT id, idUtente, infoConsegna, dataOrdine, stato FROM Ordine WHERE idUtente = ? ORDER BY dataOrdine DESC";
 
         try {
             connection = ConnectionPool.getConnection();
@@ -181,7 +190,8 @@ public class OrdineDAO implements DAOInterface<OrdineBean, Long> {
                         resultSet.getLong("id"),
                         resultSet.getString("idUtente"),
                         resultSet.getLong("infoConsegna"),
-                        resultSet.getTimestamp("dataOrdine")
+                        resultSet.getTimestamp("dataOrdine"),
+                        resultSet.getString("stato")
                 ));
             }
         } finally {

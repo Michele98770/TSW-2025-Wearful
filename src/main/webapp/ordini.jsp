@@ -9,7 +9,6 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.concurrent.TimeUnit" %>
 
 <%
   List<OrdineBean> ordiniUtente = (List<OrdineBean>) request.getAttribute("ordiniUtente");
@@ -24,7 +23,6 @@
 
   NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.ITALY);
   SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-  Date currentDate = new Date();
 %>
 
 <!DOCTYPE html>
@@ -68,20 +66,22 @@
         }
       }
 
-      long diffInMillies = Math.abs(currentDate.getTime() - ordine.getDataOrdine().getTime());
-      long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+      String orderStatus = ordine.getStato();
+      String statusClass;
 
-      String orderStatus = "";
-      String statusClass = "";
-      if (diffInDays >= 3) {
-        orderStatus = "Consegnato";
-        statusClass = "delivered";
-      } else if(diffInDays==2) {
-        orderStatus="In Consegna";
-        statusClass="pending";
-      }else{
-        orderStatus = "Spedito";
-        statusClass = "shipped";
+      switch (orderStatus) {
+        case "Spedito":
+          statusClass = "shipped";
+          break;
+        case "In Consegna":
+          statusClass = "pending";
+          break;
+        case "Consegnato":
+          statusClass = "delivered";
+          break;
+        default:
+          statusClass = "unknown";
+          break;
       }
     %>
     <a href="<%= request.getContextPath() %>/DettaglioOrdineServlet?idOrdine=<%= ordine.getId() %>" class="order-card-link">

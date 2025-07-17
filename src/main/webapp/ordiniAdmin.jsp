@@ -84,22 +84,6 @@
                         }
                     }
                 }
-
-                long diffInMillies = Math.abs(currentDate.getTime() - ordine.getDataOrdine().getTime());
-                long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-                String orderStatus;
-                String statusClass;
-                if (diffInDays >= 3) {
-                    orderStatus = "Consegnato";
-                    statusClass = "delivered";
-                } else if(diffInDays==2) {
-                    orderStatus="In Consegna";
-                    statusClass="pending";
-                } else {
-                    orderStatus = "Spedito";
-                    statusClass = "shipped";
-                }
             %>
             <tr>
                 <td data-label="ID Ordine" class="clickable-cell" onclick="window.location='<%= request.getContextPath() %>/DettaglioOrdineServlet?idOrdine=<%= ordine.getId() %>'">
@@ -114,8 +98,12 @@
                 <td data-label="Totale" class="clickable-cell" onclick="window.location='<%= request.getContextPath() %>/DettaglioOrdineServlet?idOrdine=<%= ordine.getId() %>'">
                     <%= currencyFormatter.format(totaleOrdineConIva) %>
                 </td>
-                <td data-label="Stato" class="clickable-cell" onclick="window.location='<%= request.getContextPath() %>/DettaglioOrdineServlet?idOrdine=<%= ordine.getId() %>'">
-                    <span class="status <%= statusClass %>"><%= orderStatus %></span>
+                <td data-label="Stato">
+                    <select class="status-select" onchange="updateOrderStatus(this, <%= ordine.getId() %>)">
+                        <option value="Spedito" <%= "Spedito".equals(ordine.getStato()) ? "selected" : "" %>>Spedito</option>
+                        <option value="In Consegna" <%= "In Consegna".equals(ordine.getStato()) ? "selected" : "" %>>In Consegna</option>
+                        <option value="Consegnato" <%= "Consegnato".equals(ordine.getStato()) ? "selected" : "" %>>Consegnato</option>
+                    </select>
                 </td>
                 <td data-label="Azione">
                     <a href="RimuoviOrdineServlet?idOrdine=<%= ordine.getId() %>"
@@ -133,5 +121,30 @@
 </div>
 
 <jsp:include page="footer.jsp" />
+
+<script>
+    function updateOrderStatus(selectElement, orderId) {
+        const newStatus = selectElement.value;
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '<%= request.getContextPath() %>/UpdateOrderServlet';
+
+        const orderIdInput = document.createElement('input');
+        orderIdInput.type = 'hidden';
+        orderIdInput.name = 'idOrdine';
+        orderIdInput.value = orderId;
+        form.appendChild(orderIdInput);
+
+        const statusInput = document.createElement('input');
+        statusInput.type = 'hidden';
+        statusInput.name = 'nuovoStato';
+        statusInput.value = newStatus;
+        form.appendChild(statusInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
 </body>
 </html>

@@ -9,7 +9,6 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.concurrent.TimeUnit" %>
 
 <%
   OrdineBean ordine = (OrdineBean) request.getAttribute("ordine");
@@ -19,7 +18,6 @@
 
   NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.ITALY);
   SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-  Date currentDate = new Date(); // Ottieni la data corrente
 
   double totaleOrdineConIva = 0.0;
   if (orderItems != null) {
@@ -30,19 +28,21 @@
 
   String orderStatus = "";
   String statusClass = "";
-  if (ordine != null && ordine.getDataOrdine() != null) {
-    long diffInMillies = Math.abs(currentDate.getTime() - ordine.getDataOrdine().getTime());
-    long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-    if (diffInDays >= 3) {
-      orderStatus = "Consegnato";
-      statusClass = "delivered";
-    } else if (diffInDays == 2) {
-      orderStatus = "In Consegna";
-      statusClass = "pending";
-    } else {
-      orderStatus = "Spedito";
-      statusClass = "shipped";
+  if (ordine != null && ordine.getStato() != null) {
+    orderStatus = ordine.getStato();
+    switch (orderStatus) {
+      case "Spedito":
+        statusClass = "shipped";
+        break;
+      case "In Consegna":
+        statusClass = "pending";
+        break;
+      case "Consegnato":
+        statusClass = "delivered";
+        break;
+      default:
+        statusClass = "unknown";
+        break;
     }
   }
 %>

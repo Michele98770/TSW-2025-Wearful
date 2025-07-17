@@ -68,6 +68,7 @@ CREATE TABLE Ordine (
     idUtente VARCHAR(255) NOT NULL,
     infoConsegna BIGINT UNSIGNED NOT NULL,
     dataOrdine DATETIME DEFAULT CURRENT_TIMESTAMP,
+    stato ENUM('Spedito', 'In Consegna', 'Consegnato'),-- ECCO LA MODIFICA --
     FOREIGN KEY (idUtente) REFERENCES Utente(email),
     FOREIGN KEY (infoConsegna) REFERENCES InfoConsegna(id)
 );

@@ -10,16 +10,17 @@ public class OrdineBean implements Serializable {
     private String idUtente;
     private Long infoConsegna;
     private Date dataOrdine;
+    private String stato;
 
-    public OrdineBean(Long id, String idUtente, Long infoConsegna, Date dataOrdine) {
+    public OrdineBean(Long id, String idUtente, Long infoConsegna, Date dataOrdine, String stato) {
         this.id = id;
         this.idUtente = idUtente;
         this.infoConsegna = infoConsegna;
         this.dataOrdine = dataOrdine;
+        this.stato = stato;
     }
 
     public OrdineBean() {
-
     }
 
     public Long getId() {
@@ -54,8 +55,16 @@ public class OrdineBean implements Serializable {
         this.dataOrdine = dataOrdine;
     }
 
+    public String getStato() {
+        return stato;
+    }
+
+    public void setStato(String stato) {
+        this.stato = stato;
+    }
+
     @Override
     public String toString() {
-        return "Ordine{" + "id=" + id + ", dataOrdine=" + dataOrdine + '}';
+        return "Ordine{" + "id=" + id + ", dataOrdine=" + dataOrdine + ", stato=" + stato + '}';
     }
 }
