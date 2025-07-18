@@ -9,7 +9,6 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.concurrent.TimeUnit" %>
 
 <%
     List<OrdineBean> tuttiGliOrdini = (List<OrdineBean>) request.getAttribute("tuttiGliOrdini");
@@ -28,7 +27,12 @@
 
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.ITALY);
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    Date currentDate = new Date();
+
+    String currentSortBy = request.getAttribute("sortBy") != null ? (String) request.getAttribute("sortBy") : "";
+    String currentSortOrder = request.getAttribute("sortOrder") != null ? (String) request.getAttribute("sortOrder") : "asc";
+
+    String startDateFilter = request.getAttribute("startDateFilter") != null ? (String) request.getAttribute("startDateFilter") : "";
+    String endDateFilter = request.getAttribute("endDateFilter") != null ? (String) request.getAttribute("endDateFilter") : "";
 %>
 
 <!DOCTYPE html>
@@ -47,6 +51,22 @@
 <div class="admin-orders-container">
     <h2>Gestione Ordini</h2>
 
+    <div class="filter-section">
+        <form id="filterForm" method="POST" action="<%= request.getContextPath() %>/OrdiniAdmin">
+            <label for="startDate">Dal:</label>
+            <input type="date" id="startDate" name="startDate" value="<%= startDateFilter %>">
+
+            <label for="endDate">Al:</label>
+            <input type="date" id="endDate" name="endDate" value="<%= endDateFilter %>">
+
+            <button type="submit" class="filter-btn">Filtra per Data</button>
+            <button type="button" class="clear-filter-btn" onclick="clearDateFilter()">Cancella Filtro</button>
+
+            <input type="hidden" name="sortBy" id="hiddenSortBy" value="<%= currentSortBy %>">
+            <input type="hidden" name="sortOrder" id="hiddenSortOrder" value="<%= currentSortOrder %>">
+        </form>
+    </div>
+
     <% if (tuttiGliOrdini.isEmpty()) { %>
     <div class="no-orders">
         <img src="<%= request.getContextPath() %>/img/no_ordini.png" alt="Nessun ordine nel sistema">
@@ -62,11 +82,21 @@
         <table class="orders-table">
             <thead>
             <tr>
-                <th>ID Ordine</th>
-                <th>Cliente</th>
-                <th>Data Ordine</th>
-                <th>Totale</th>
-                <th>Stato</th>
+                <th data-sort-by="id">ID Ordine
+                    <span class="sort-arrow <%= "id".equals(currentSortBy) ? ("asc".equals(currentSortOrder) ? "up" : "down") : "" %>"></span>
+                </th>
+                <th data-sort-by="idUtente">Cliente
+                    <span class="sort-arrow <%= "idUtente".equals(currentSortBy) ? ("asc".equals(currentSortOrder) ? "up" : "down") : "" %>"></span>
+                </th>
+                <th data-sort-by="dataOrdine">Data Ordine
+                    <span class="sort-arrow <%= "dataOrdine".equals(currentSortBy) ? ("asc".equals(currentSortOrder) ? "up" : "down") : "" %>"></span>
+                </th>
+                <th data-sort-by="totale">Totale
+                    <span class="sort-arrow <%= "totale".equals(currentSortBy) ? ("asc".equals(currentSortOrder) ? "up" : "down") : "" %>"></span>
+                </th>
+                <th data-sort-by="stato">Stato
+                    <span class="sort-arrow <%= "stato".equals(currentSortBy) ? ("asc".equals(currentSortOrder) ? "up" : "down") : "" %>"></span>
+                </th>
                 <th>Azione</th>
             </tr>
             </thead>
@@ -122,29 +152,7 @@
 
 <jsp:include page="footer.jsp" />
 
-<script>
-    function updateOrderStatus(selectElement, orderId) {
-        const newStatus = selectElement.value;
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '<%= request.getContextPath() %>/UpdateOrderServlet';
-
-        const orderIdInput = document.createElement('input');
-        orderIdInput.type = 'hidden';
-        orderIdInput.name = 'idOrdine';
-        orderIdInput.value = orderId;
-        form.appendChild(orderIdInput);
-
-        const statusInput = document.createElement('input');
-        statusInput.type = 'hidden';
-        statusInput.name = 'nuovoStato';
-        statusInput.value = newStatus;
-        form.appendChild(statusInput);
-
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>
+<script src="./scripts/ordiniAdmin.js"></script>
 
 </body>
 </html>
